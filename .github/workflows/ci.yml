@@ -1,0 +1,21 @@
+name: Tests and Docker smoke
+on: [push, pull_request]
+permissions:
+  contents: read
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install -r requirements-dev.lock
+      - run: python -m pytest -q
+      - run: docker build -t sana-alignment:test .
+      - name: Docker handshake without external LLM
+        run: |
+          docker run -d --name sana-test -p 127.0.0.1:8000:8000 -e LLM_MODEL=offline-test sana-alignment:test
+          python scripts/smoke.py
+      - if: always()
+        run: docker rm -f sana-test || true

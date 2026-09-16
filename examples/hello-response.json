@@ -1,0 +1,33 @@
+{
+  "schema_version": "0.1.0",
+  "request_id": "ed6ca3e7-f31c-4b1f-8ae3-7e75e26aa15e",
+  "status": "handshake",
+  "observations": [
+    {
+      "kind": "observed_text",
+      "source": "input_message",
+      "quote": "こんにちは",
+      "externally_verified": false
+    }
+  ],
+  "fact": [],
+  "view": {
+    "premises": [],
+    "understanding": "挨拶として受け取りました。",
+    "hypotheses": [],
+    "premise_gaps": [],
+    "unknowns": [],
+    "questions": []
+  },
+  "care": null,
+  "acknowledgment": "こんにちは。",
+  "meta": {
+    "observation_scope": "submitted_material_only",
+    "profile": "workflow-premise-map-v0.1",
+    "frameworks_used": [],
+    "comparison": "not_applicable",
+    "delta_v": null,
+    "execution_authorized": false,
+    "knowledge_sha256": "f2b5ba63b58ab92597019e8a59a391bc15b363b1e0c14a32372ee5af4f01990b"
+  }
+}

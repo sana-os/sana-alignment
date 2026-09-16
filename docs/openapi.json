@@ -1,0 +1,725 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "SANA Premise Alignment API",
+    "description": "Powered by SANA OS — https://sana-os.org/ — workflow premise mapping profile",
+    "version": "0.1.0"
+  },
+  "paths": {
+    "/healthz": {
+      "get": {
+        "summary": "Health",
+        "operationId": "health_healthz_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/align": {
+      "post": {
+        "summary": "Endpoint",
+        "operationId": "endpoint_v1_align_post",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AlignRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AlignResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "AlignRequest": {
+        "properties": {
+          "input_message": {
+            "type": "string",
+            "maxLength": 6000,
+            "minLength": 1,
+            "title": "Input Message"
+          },
+          "ai_interpretation": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 6000,
+                "minLength": 1
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Ai Interpretation"
+          },
+          "context": {
+            "items": {
+              "$ref": "#/components/schemas/Context"
+            },
+            "type": "array",
+            "maxItems": 12,
+            "title": "Context"
+          },
+          "language": {
+            "type": "string",
+            "enum": [
+              "ja",
+              "en"
+            ],
+            "title": "Language",
+            "default": "ja"
+          },
+          "frameworks": {
+            "anyOf": [
+              {
+                "items": {
+                  "type": "string",
+                  "enum": [
+                    "RBM",
+                    "GMM",
+                    "CPM",
+                    "RSM",
+                    "Legitimacy_Layer",
+                    "History_Analysis",
+                    "Value_Formation"
+                  ]
+                },
+                "type": "array",
+                "maxItems": 3
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Frameworks"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "input_message"
+        ],
+        "title": "AlignRequest"
+      },
+      "AlignResponse": {
+        "properties": {
+          "schema_version": {
+            "type": "string",
+            "const": "0.1.0",
+            "title": "Schema Version",
+            "default": "0.1.0"
+          },
+          "request_id": {
+            "type": "string",
+            "title": "Request Id"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "handshake",
+              "unknown",
+              "context_insufficient",
+              "needs_clarification",
+              "mapped",
+              "mapped_with_divergence"
+            ],
+            "title": "Status"
+          },
+          "observations": {
+            "items": {
+              "$ref": "#/components/schemas/Fact"
+            },
+            "type": "array",
+            "title": "Observations"
+          },
+          "fact": {
+            "items": {
+              "$ref": "#/components/schemas/Premise"
+            },
+            "type": "array",
+            "title": "Fact"
+          },
+          "view": {
+            "$ref": "#/components/schemas/View"
+          },
+          "care": {
+            "anyOf": [
+              {
+                "items": {
+                  "$ref": "#/components/schemas/Premise"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Care"
+          },
+          "acknowledgment": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Acknowledgment"
+          },
+          "meta": {
+            "$ref": "#/components/schemas/Meta"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "request_id",
+          "status",
+          "observations",
+          "fact",
+          "view",
+          "care",
+          "meta"
+        ],
+        "title": "AlignResponse"
+      },
+      "Context": {
+        "properties": {
+          "representation": {
+            "type": "string",
+            "enum": [
+              "verbatim",
+              "summary",
+              "unknown"
+            ],
+            "title": "Representation",
+            "default": "unknown"
+          },
+          "response_status": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "answered",
+                  "unknown",
+                  "context_dependent",
+                  "not_applicable",
+                  "declined"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Response Status"
+          },
+          "omitted_information": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 1000
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Omitted Information"
+          },
+          "speaker": {
+            "type": "string",
+            "enum": [
+              "human",
+              "ai",
+              "source"
+            ],
+            "title": "Speaker"
+          },
+          "text": {
+            "type": "string",
+            "maxLength": 6000,
+            "minLength": 1,
+            "title": "Text"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "speaker",
+          "text"
+        ],
+        "title": "Context"
+      },
+      "Evidence": {
+        "properties": {
+          "source": {
+            "type": "string",
+            "maxLength": 60,
+            "minLength": 1,
+            "title": "Source"
+          },
+          "quote": {
+            "type": "string",
+            "maxLength": 6000,
+            "minLength": 1,
+            "title": "Quote"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "source",
+          "quote"
+        ],
+        "title": "Evidence"
+      },
+      "Fact": {
+        "properties": {
+          "kind": {
+            "type": "string",
+            "const": "observed_text",
+            "title": "Kind",
+            "default": "observed_text"
+          },
+          "source": {
+            "type": "string",
+            "title": "Source"
+          },
+          "quote": {
+            "type": "string",
+            "title": "Quote"
+          },
+          "externally_verified": {
+            "type": "boolean",
+            "const": false,
+            "title": "Externally Verified",
+            "default": false
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "source",
+          "quote"
+        ],
+        "title": "Fact"
+      },
+      "Gap": {
+        "properties": {
+          "blocks_execution": {
+            "type": "boolean",
+            "title": "Blocks Execution",
+            "default": true
+          },
+          "human_premise": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 6000,
+                "minLength": 1
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Human Premise"
+          },
+          "ai_premise": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 6000,
+                "minLength": 1
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Ai Premise"
+          },
+          "difference": {
+            "type": "string",
+            "maxLength": 6000,
+            "minLength": 1,
+            "title": "Difference"
+          },
+          "evidence": {
+            "items": {
+              "$ref": "#/components/schemas/Evidence"
+            },
+            "type": "array",
+            "maxItems": 8,
+            "minItems": 1,
+            "title": "Evidence"
+          },
+          "verification_question": {
+            "type": "string",
+            "maxLength": 6000,
+            "minLength": 1,
+            "title": "Verification Question"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "human_premise",
+          "ai_premise",
+          "difference",
+          "evidence",
+          "verification_question"
+        ],
+        "title": "Gap"
+      },
+      "HTTPValidationError": {
+        "properties": {
+          "detail": {
+            "items": {
+              "$ref": "#/components/schemas/ValidationError"
+            },
+            "type": "array",
+            "title": "Detail"
+          }
+        },
+        "type": "object",
+        "title": "HTTPValidationError"
+      },
+      "Hypothesis": {
+        "properties": {
+          "blocks_execution": {
+            "type": "boolean",
+            "title": "Blocks Execution",
+            "default": true
+          },
+          "interpretation": {
+            "type": "string",
+            "maxLength": 6000,
+            "minLength": 1,
+            "title": "Interpretation"
+          },
+          "evidence": {
+            "items": {
+              "$ref": "#/components/schemas/Evidence"
+            },
+            "type": "array",
+            "maxItems": 8,
+            "minItems": 1,
+            "title": "Evidence"
+          },
+          "verification_question": {
+            "type": "string",
+            "maxLength": 6000,
+            "minLength": 1,
+            "title": "Verification Question"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "interpretation",
+          "evidence",
+          "verification_question"
+        ],
+        "title": "Hypothesis"
+      },
+      "Meta": {
+        "properties": {
+          "observation_scope": {
+            "type": "string",
+            "const": "submitted_material_only",
+            "title": "Observation Scope",
+            "default": "submitted_material_only"
+          },
+          "profile": {
+            "type": "string",
+            "const": "workflow-premise-map-v0.1",
+            "title": "Profile",
+            "default": "workflow-premise-map-v0.1"
+          },
+          "frameworks_used": {
+            "items": {
+              "type": "string",
+              "enum": [
+                "RBM",
+                "GMM",
+                "CPM",
+                "RSM",
+                "Legitimacy_Layer",
+                "History_Analysis",
+                "Value_Formation"
+              ]
+            },
+            "type": "array",
+            "title": "Frameworks Used"
+          },
+          "comparison": {
+            "type": "string",
+            "enum": [
+              "provided_ai_interpretation",
+              "engine_hypothesis",
+              "not_applicable"
+            ],
+            "title": "Comparison"
+          },
+          "delta_v": {
+            "type": "null",
+            "title": "Delta V"
+          },
+          "execution_authorized": {
+            "type": "boolean",
+            "const": false,
+            "title": "Execution Authorized",
+            "default": false
+          },
+          "knowledge_sha256": {
+            "type": "string",
+            "title": "Knowledge Sha256"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "frameworks_used",
+          "comparison",
+          "knowledge_sha256"
+        ],
+        "title": "Meta"
+      },
+      "Premise": {
+        "properties": {
+          "statement": {
+            "type": "string",
+            "maxLength": 6000,
+            "minLength": 1,
+            "title": "Statement"
+          },
+          "source": {
+            "type": "string",
+            "enum": [
+              "user_explicit",
+              "user_implied",
+              "provided_source",
+              "agent_inference"
+            ],
+            "title": "Source"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "explicit",
+              "inferred",
+              "unclear"
+            ],
+            "title": "Status"
+          },
+          "support_state": {
+            "type": "string",
+            "enum": [
+              "provided",
+              "unsupported",
+              "disputed",
+              "unknown",
+              "not_applicable"
+            ],
+            "title": "Support State"
+          },
+          "materiality": {
+            "type": "string",
+            "enum": [
+              "low",
+              "medium",
+              "high"
+            ],
+            "title": "Materiality"
+          },
+          "execution_effect": {
+            "type": "string",
+            "maxLength": 6000,
+            "minLength": 1,
+            "title": "Execution Effect"
+          },
+          "evidence": {
+            "items": {
+              "$ref": "#/components/schemas/Evidence"
+            },
+            "type": "array",
+            "maxItems": 8,
+            "minItems": 1,
+            "title": "Evidence"
+          },
+          "externally_verified": {
+            "type": "boolean",
+            "const": false,
+            "title": "Externally Verified",
+            "default": false
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "statement",
+          "source",
+          "status",
+          "support_state",
+          "materiality",
+          "execution_effect",
+          "evidence"
+        ],
+        "title": "Premise"
+      },
+      "ValidationError": {
+        "properties": {
+          "loc": {
+            "items": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "integer"
+                }
+              ]
+            },
+            "type": "array",
+            "title": "Location"
+          },
+          "msg": {
+            "type": "string",
+            "title": "Message"
+          },
+          "type": {
+            "type": "string",
+            "title": "Error Type"
+          },
+          "input": {
+            "title": "Input"
+          },
+          "ctx": {
+            "type": "object",
+            "title": "Context"
+          }
+        },
+        "type": "object",
+        "required": [
+          "loc",
+          "msg",
+          "type"
+        ],
+        "title": "ValidationError"
+      },
+      "View": {
+        "properties": {
+          "premises": {
+            "items": {
+              "$ref": "#/components/schemas/Premise"
+            },
+            "type": "array",
+            "maxItems": 16,
+            "title": "Premises"
+          },
+          "understanding": {
+            "type": "string",
+            "maxLength": 6000,
+            "minLength": 1,
+            "title": "Understanding"
+          },
+          "hypotheses": {
+            "items": {
+              "$ref": "#/components/schemas/Hypothesis"
+            },
+            "type": "array",
+            "maxItems": 8,
+            "title": "Hypotheses"
+          },
+          "premise_gaps": {
+            "items": {
+              "$ref": "#/components/schemas/Gap"
+            },
+            "type": "array",
+            "maxItems": 8,
+            "title": "Premise Gaps"
+          },
+          "unknowns": {
+            "items": {
+              "type": "string",
+              "maxLength": 6000,
+              "minLength": 1
+            },
+            "type": "array",
+            "maxItems": 12,
+            "title": "Unknowns"
+          },
+          "questions": {
+            "items": {
+              "type": "string",
+              "maxLength": 6000,
+              "minLength": 1
+            },
+            "type": "array",
+            "maxItems": 8,
+            "title": "Questions"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "understanding",
+          "hypotheses",
+          "premise_gaps",
+          "unknowns",
+          "questions"
+        ],
+        "title": "View"
+      }
+    }
+  }
+}
