@@ -1,19 +1,19 @@
 {
   "schema_version": "0.4.0",
-  "request_id": "943a0712-fbaf-48f9-91dc-9f8415bad539",
+  "request_id": "875a201c-9551-4cce-875f-42297bf931bb",
   "status": "handshake",
   "observations": [
     {
       "kind": "observed_text",
       "source": "input_message",
-      "quote": "こんにちは",
+      "quote": "Hello",
       "externally_verified": false
     }
   ],
   "fact": [],
   "view": {
     "premises": [],
-    "understanding": "挨拶として受け取りました。",
+    "understanding": "Received as a greeting.",
     "hypotheses": [],
     "premise_gaps": [],
     "unresolved": [],
@@ -21,10 +21,10 @@
     "questions": []
   },
   "care": null,
-  "acknowledgment": "こんにちは。",
+  "acknowledgment": "Hello.",
   "meta": {
-    "requested_language": "ja",
-    "short_reply_language": "ja",
+    "requested_language": "en",
+    "short_reply_language": "en",
     "language_fallback": false,
     "observation_scope": "submitted_material_only",
     "profile": "workflow-premise-map-v0.4",

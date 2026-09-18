@@ -14,10 +14,18 @@ for attempt in range(30):
     except (OSError, AssertionError):
         if attempt == 29: raise
         time.sleep(1)
-c = http.client.HTTPConnection('127.0.0.1',8000,timeout=2)
-c.request('POST','/v1/align',body=json.dumps({'input_message':'こんにちは'}).encode(),headers={'Content-Type':'application/json'})
-r = c.getresponse(); data = json.loads(r.read()); c.close()
-assert r.status == 200, data
-assert data['status']=='handshake' and data['care'] is None
-assert data['meta']['execution_authorized'] is False
+for request, language, acknowledgment in [
+    ({'input_message':'こんにちは'}, 'en', 'Hello.'),
+    ({'input_message':'こんにちは', 'language':'ja'}, 'ja', 'こんにちは。'),
+]:
+    c = http.client.HTTPConnection('127.0.0.1',8000,timeout=2)
+    c.request('POST','/v1/align',body=json.dumps(request,ensure_ascii=False).encode('utf-8'),headers={'Content-Type':'application/json'})
+    r = c.getresponse(); data = json.loads(r.read()); c.close()
+    assert r.status == 200, data
+    assert data['schema_version'] == '0.4.0'
+    assert data['status']=='handshake' and data['care'] is None
+    assert data['meta']['execution_authorized'] is False
+    assert data['meta']['requested_language'] == language
+    assert data['acknowledgment'] == acknowledgment
+    assert data['observations'][0]['quote'] == request['input_message']
 print('HTTP smoke passed (no external model called)')

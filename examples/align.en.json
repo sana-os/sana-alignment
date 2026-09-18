@@ -1,0 +1,5 @@
+{
+  "input_message": "Show customer information in next week's demo. Do not use real customer data.",
+  "ai_interpretation": "Connect to the production customer database in read-only mode and display a list.",
+  "language": "en"
+}

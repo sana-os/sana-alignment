@@ -2,71 +2,85 @@
   {
     "file": "CPM.md",
     "source": "CPM(2).md",
-    "sha256": "e4624dafa7622f451861cbd05a6fb337619dbe9ccb737461b60f7e7fa7f4e5be"
+    "sha256": "e4624dafa7622f451861cbd05a6fb337619dbe9ccb737461b60f7e7fa7f4e5be",
+    "lf_sha256": "c31f8e1626198ee14f700097a7a6f0d8a3fe0d7a43c499593f6867bb5024f863"
   },
   {
     "file": "Legitimacy_Layer.md",
     "source": "Legitimacy_Layer(2).md",
-    "sha256": "df518860a2447cd006f29abb08dd7c1dad40e9bbcf8a9f76b5660ec0eb33eb15"
+    "sha256": "df518860a2447cd006f29abb08dd7c1dad40e9bbcf8a9f76b5660ec0eb33eb15",
+    "lf_sha256": "f154fe775194c11abc6d93dc8dbe7c1c2ea26141b27695c90808e9e0a031ecde"
   },
   {
     "file": "GMM.md",
     "source": "GMM(2).md",
-    "sha256": "ecb8b6dba4ac4f808ba9aa03d89e0a861d7fd267aba50336cdef4f8ca69b1854"
+    "sha256": "ecb8b6dba4ac4f808ba9aa03d89e0a861d7fd267aba50336cdef4f8ca69b1854",
+    "lf_sha256": "7c2bca273e69d10e6727ac1a054f7c33ff64b05f44b26d94702f36e7580d0fea"
   },
   {
     "file": "History_Analysis.md",
     "source": "History_Analysis(2).md",
-    "sha256": "62e7dee829f6f16fbc3d2947c1093a2ee103733c87f981da73cc9a5eb3838316"
+    "sha256": "62e7dee829f6f16fbc3d2947c1093a2ee103733c87f981da73cc9a5eb3838316",
+    "lf_sha256": "830e2d6906375de356528da0e66eebaf40babbd833914d92e3dcbf311e5c7b93"
   },
   {
     "file": "RBM.md",
     "source": "RBM(2).md",
-    "sha256": "caf306c2a0d7671c76349ec8a69c0bb757c0cf16c561972755b63ac82ee29042"
+    "sha256": "caf306c2a0d7671c76349ec8a69c0bb757c0cf16c561972755b63ac82ee29042",
+    "lf_sha256": "cec0c56780c5538a3f38f1b5d73ac29c047fad45fd663c8670b821fa1d4d43d0"
   },
   {
     "file": "Value_Formation.md",
     "source": "Value_Formation(2).md",
-    "sha256": "7e9adad36f53648dad3ad16743dd63f946cbbd5ada5061244fce195adbd0022e"
+    "sha256": "7e9adad36f53648dad3ad16743dd63f946cbbd5ada5061244fce195adbd0022e",
+    "lf_sha256": "3d99f99e78b4c68cbd727231b12d72a5fe49f3766a74aae3875a24615a5fe2d0"
   },
   {
     "file": "Frameworks_README.md",
     "source": "README(7).md",
-    "sha256": "b2cf85673d22ddd0007286f4bee64653d231e7f7333ebef892d2ca1725954f50"
+    "sha256": "b2cf85673d22ddd0007286f4bee64653d231e7f7333ebef892d2ca1725954f50",
+    "lf_sha256": "b2cf85673d22ddd0007286f4bee64653d231e7f7333ebef892d2ca1725954f50"
   },
   {
     "file": "RSM.md",
     "source": "RSM(2).md",
-    "sha256": "ee27597f47abc4ccb080f99d04896fbcf1ff34f457d8d749a7b8a0c7b3d0a338"
+    "sha256": "ee27597f47abc4ccb080f99d04896fbcf1ff34f457d8d749a7b8a0c7b3d0a338",
+    "lf_sha256": "249585ebf8ad98af6d7f9d3fdea3493984da8a51af74b29b5775770253eac31e"
   },
   {
     "file": "Communication_Layer.md",
     "source": "01-Communication_Layer.md",
-    "sha256": "2a99add60ae76feb5defcd7ef51fa4680468ff36a8e4379952bf3fc66c09c43e"
+    "sha256": "2a99add60ae76feb5defcd7ef51fa4680468ff36a8e4379952bf3fc66c09c43e",
+    "lf_sha256": "f848881544201f904517e432591baa513346871239bcf7d04a82fa28ba7106f5"
   },
   {
     "file": "Core_Specification.md",
     "source": "Core_Specification(3).md",
-    "sha256": "5280efcb96483a73d7b6e5fa5ed5f8727286ad464d70294c3d75e4314425d919"
+    "sha256": "5280efcb96483a73d7b6e5fa5ed5f8727286ad464d70294c3d75e4314425d919",
+    "lf_sha256": "ae72a6a46d5b83ed89a96b1020ed2f027d600c38e9301795c8bcddd2ade46442"
   },
   {
     "file": "Integrated_Knowledge.md",
     "source": "Integrated_Knowledge(2).md",
-    "sha256": "e7cab057b1a18a19df19ad4272b4c4237821a501902367bb8e0fcf6de0c0815d"
+    "sha256": "e7cab057b1a18a19df19ad4272b4c4237821a501902367bb8e0fcf6de0c0815d",
+    "lf_sha256": "75c5cae614587e98a05ca55158b0a7ee355ac763ab0d5544bb01dd6a2500095f"
   },
   {
     "file": "Core_Principle.md",
     "source": "02-Core_Principle.md",
-    "sha256": "756de7e674e0f3abfeafffbd4c14dbb02e4768d6b5965db718aaa7f51c8c7f7d"
+    "sha256": "756de7e674e0f3abfeafffbd4c14dbb02e4768d6b5965db718aaa7f51c8c7f7d",
+    "lf_sha256": "2e6d258fb5841872177666a2e0fb8c61033f9922a5f55f915495626bd2d5c661"
   },
   {
     "file": "Core_README.md",
     "source": "README(8).md",
-    "sha256": "d05ef25dbb5646479fd8fc3de98a5e7069f8a49cd92967f10761c551eec95c01"
+    "sha256": "d05ef25dbb5646479fd8fc3de98a5e7069f8a49cd92967f10761c551eec95c01",
+    "lf_sha256": "d05ef25dbb5646479fd8fc3de98a5e7069f8a49cd92967f10761c551eec95c01"
   },
   {
     "file": "LICENSE.md",
     "source": "https://raw.githubusercontent.com/sana-os/sana-os/main/LICENSE.md",
-    "sha256": "cf4af84b24a4eed28e3eaa91cc7f60f791a8a6bfeab3f5f37ec51c2bf21060dd"
+    "sha256": "cf4af84b24a4eed28e3eaa91cc7f60f791a8a6bfeab3f5f37ec51c2bf21060dd",
+    "lf_sha256": "cf4af84b24a4eed28e3eaa91cc7f60f791a8a6bfeab3f5f37ec51c2bf21060dd"
   }
 ]

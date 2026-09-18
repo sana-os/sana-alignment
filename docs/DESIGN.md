@@ -1,4 +1,4 @@
-# Design — workflow-premise-map-v0.1
+# Design — workflow-premise-map-v0.4
 
 ## Goal and boundaries
 
@@ -10,35 +10,38 @@ Flow:
 
 1. Validate request size, field names, and API token when configured.
 2. Exact standalone greetings → deterministic handshake response (zero LLM calls).
-3. Intake LLM → handshake / unclear / context_insufficient / substantive; select optional lenses.
-4. Only substantive inputs → mapping LLM with selected full framework references.
-5. Validate JSON, evidence substrings, attribution constraints and Care support-state.
-6. Derive status in code and return Fact/View/Care, observations, provenance, and metadata.
-7. Caller preserves differences and decides what happens next outside this service.
+3. Extraction LLM → exact clauses and a tentative kind; select optional lenses. No Fact/View/Care classification here.
+4. Validate those source quotations. If any clause, context, or AI proposal is available, continue to mapping regardless of the kind hint. A substantive hint also continues. Otherwise use a short response.
+5. Mapping LLM → classify/compare using original text plus extracted clauses; cite registered evidence IDs and give unknowns an alignment/execution scope.
+6. Resolve evidence IDs to exact quotations; validate structure, attribution, Care support-state, question scope/count and conflict-record consistency.
+7. Derive status in code and return Fact/View/Care, observations, local unknowns, provenance, and completed stages.
+8. Caller preserves differences and decides what happens next outside this service.
 
 A greeting followed by a task is not short-circuited. Context or an AI interpretation disables the local greeting shortcut.
 Meaningless/uninterpretable input is not classified by ASCII, script, or keyword heuristics.
 Non-whitelisted greetings and unknown input require an available LLM; outages are HTTP errors, never semantic judgments.
-The intake kind and materiality remain model judgments. The code cannot prove their semantic correctness.
+Kind hints, extracted coverage, materiality and unknown scope remain model judgments. The code cannot prove their semantic correctness.
 
 ## Loading and source control
 
 System reference order is Core_Principle → Integrated_Knowledge → Communication_Layer.
-The workflow adapter follows these references. The selected lenses follow the adapter.
+Selected lenses follow the Core. The workflow adapter and output-language contract follow all references, so the task-specific output rules remain explicit.
 Core_Specification is developer reference, not part of the LLM prompt.
-No original Principle text is rewritten. Framework original bytes are retained.
+No original Principle or framework wording is rewritten. Git normalized some CRLF line endings to LF during the initial Windows upload. Manifests retain original-byte `sha256` and separate CRLF-to-LF `lf_sha256` values; tests check the latter so line endings do not masquerade as substantive edits. `.gitattributes` makes LF the checkout convention.
 The two Communication Layer attachments were byte-identical.
 Core README and Framework README receive distinct filenames to avoid collision.
 
 The adapter makes uncertain causal explanations hypotheses and preserves provenance. It does not
 convert the frameworks' general causal claims or unresolved citation markers into independently verified facts.
-The final prompt's schema controls serialization, not the user's values.
+The final prompt includes a schema as generation guidance. The server checks structure after generation;
+JSON-object mode does not itself impose schema-constrained decoding. Descriptions annotate the roles,
+not executable semantic rules or a definition of the user's values.
 
 ## Differences from Core Specification v1.0
 
 | Original concept | This implementation | Reason |
 | --- | --- | --- |
-| AUTH → PREMISE → ANALYSIS_GATE → RESPONSE | Stateless intake and mapping | Workflow insertion is the requested first target |
+| AUTH → PREMISE → ANALYSIS_GATE → RESPONSE | Stateless extraction and mapping | Workflow insertion is the requested first target |
 | Session Δv, EWMA update, thresholds | `delta_v=null` | No calibrated observation-to-signal estimator was supplied |
 | Handshake accumulator >=0.6 | ACK for pure greetings | No artificial repeated greetings required by a stateless API |
 | Exposure 0/1/2 | Fixed machine-readable schema; tentative content | Serialization visibility is separated from diagnostic depth |
@@ -59,19 +62,24 @@ It is therefore not an independently selectable framework. CPM metadata is prese
 
 The two public Labs are educational simulators. This API uses their concepts, not their
 preset results or heuristic confidence scores. It is not a reimplementation of the complete DCRL loop.
-Intake identifies gross missing task context; more detailed operational resolution can be upstream.
+Extraction preserves explicit information; mapping separates premise interpretation from readiness to execute.
 
 Fact is a factual *claim*, not verified truth. Observations record exact received text separately.
 Care maps protected interests/values and does not require factual proof.
 Different interpretations can remain. `mapped_with_divergence` is not consensus.
 Minor assumptions may be disclosed without asking the user to confirm everything.
-Only a material blocking hypothesis/gap or unresolved question causes `needs_clarification`.
+Alignment-scope unknowns, blocking hypotheses/gaps, or broad interpretation limits cause `needs_clarification` when some premises remain mapped. With no known portions, broad limits can instead yield `unknown` or `context_insufficient`. A known blocking `constraint_conflict` takes precedence and yields `revision_required`; separate unresolved items remain in the response. Execution-only unknowns do not block alignment. Nonblocking per-entry questions may remain optional. A request or prohibition is placed in Care; observations record the fact that it was said.
 A model can still miss an ambiguity; mapping does not confer authorization.
 
 ## Evidence and trust
 
 Source IDs are `input_message`, `ai_interpretation`, and `context.N`.
-Evidence must be a nonblank exact substring of that source, not a generated paraphrase.
+Extraction evidence must be a nonblank exact substring of that source, not a generated paraphrase.
+The server registers whole-source text and validated extracted clauses with request-local IDs.
+Mapping selects these IDs rather than rewriting quotations. A whole-source entry provides an anchor
+when extraction missed a clause; the original request remains present. Unknown IDs, extra reference
+properties, or direct quotations in the mapping protocol are rejected. Public evidence still has
+the same `source`/`quote` shape after deterministic resolution; no fuzzy quote repair occurs.
 This verifies quotation provenance, NOT logical entailment or external truth.
 `user_explicit` cannot cite AI/source messages, and inferred premises cannot be marked explicit.
 Other attribution and materiality judgments still require evaluation with the chosen model.
@@ -86,7 +94,7 @@ No fallback fabricates a successful premise map. No automatic retry consumes add
 
 POST /v1/align, GET /healthz, GET /docs, GET /openapi.json.
 Request body cap 128 KiB; text fields max 6,000 characters; max 12 context entries;
-combined JSON max 24,000 characters; response body cap 1 MB; at most 4 active alignment requests per worker.
+combined JSON max 24,000 characters; each upstream response body capped at 1 MB; at most 4 active alignment requests per worker.
 A total request timeout includes semaphore wait; provider has network timeouts.
 Provider URL and credentials are configured by the operator, not supplied per request.
 Redirect following is disabled; API key is excluded from model messages.
@@ -102,7 +110,7 @@ The provider receives submitted input/context and its retention rules apply.
 
 Automated mocked-provider tests verify contracts and controls, not LLM understanding.
 Docker is specified but could not be executed in the authoring environment (no Docker executable).
-External model inference is pending operator-supplied configuration. No API secrets were requested in chat.
+The operator demonstrated Docker startup and real llama.cpp inference for 0.1. That run exposed semantic issues motivating 0.2; it does not validate the revised version. See VALIDATION.md for version-specific evidence. No API secrets were requested in chat.
 Tests must be supplemented with representative user tasks before declaring a release candidate.
 
 ## References
@@ -117,7 +125,7 @@ Tests must be supplemented with representative user tasks before declaring a rel
 
 ## Additional papers and continuing context
 
-Four supplied papers are retained unchanged in references/, separately from runtime knowledge.
+Five supplied papers are retained in references/, separately from runtime knowledge; wording is unchanged and original/canonical hashes are recorded.
 Their claims are design arguments, not experimentally established guarantees for this software.
 
 | Reference | Requirement applied | Limit |
@@ -156,7 +164,7 @@ interpretation; unresolved differences remain visible. Unknown/declined answers 
 recursive persuasion. Live-model tests must verify these prompt-level behaviors.
 The deterministic unknown branch remains a generic clarification response, not a full dialogue manager.
 
-Source: https://preferencecompass.info/en/#q=1 and the four supplied papers in references/.
+Source: https://preferencecompass.info/en/#q=1 and the supplied papers in references/.
 
 
 Cognitive Compression and Infrahumanization, Section 6, further motivates distinguishing a
@@ -165,3 +173,166 @@ Unknown discarded information must remain unknown. This service can expose possi
 premises and declared summary loss; it cannot measure a human's actual cognitive compression
 or recover facts never supplied. The presence of a short instruction is not proof of cognitive failure.
 Reintroduction of context is selective and task-dependent; the goal is not maximum questioning.
+
+
+## English default and multilingual output
+
+All API identifiers remain English; UTF-8 handles text in any script without character-set packs.
+`language` defaults to `en` and accepts a documented subset of language-tag syntax.
+The requested language is present in both stage payloads. Extraction returns source quotations
+without translation. The mapping stage receives the generated-prose language rule, while evidence
+is selected by ID and restored verbatim. This is not a language detector or proof of compliance.
+
+Short routes use `app/i18n.py` templates and report their actual template language and fallback.
+Unsupported short-reply languages fall back to English. Substantive output relies on the model;
+its metadata does not certify language compliance. No automatic translation rewrites evidence.
+
+Detailed lenses are off by default, while the Core (including Integrated Knowledge) remains loaded.
+Automatic selection is opt-in (`auto` or legacy explicit null), limited to one justified lens.
+A deadline alone does not establish resource overload, nor does a rule establish a legitimacy crisis.
+Explicit callers may select up to three lenses. Excess automatic selection is a provider error.
+
+## Explicit constraints and question scope
+
+A known conflict with a clear human boundary calls for revising the supplied AI interpretation,
+not for asking the human to restate or waive that boundary. Known conflicts have
+`kind=constraint_conflict`, `blocks_execution=true`, and `verification_question=null`.
+The code rejects inconsistent combinations; it cannot prove that the model chose the correct kind.
+Genuinely ambiguous scope belongs to `missing_premise` and can warrant a focused question.
+
+At most one distinct question is allowed across View and per-entry fields. Identical strings may
+be repeated as references. The server rejects excess questions rather than silently dropping them.
+It does not infer semantic equivalence between differently worded questions. All these contracts
+are in the model's instructions; the per-entry schema also allows null to avoid forced questions.
+No automatic repair call or fallback changes an invalid output into a successful result.
+
+## The Shadow of the Future
+
+The added paper's conditional argument motivates examining an operative time horizon and the
+loss of future options when those premises materially affect the submitted task. The prompt asks
+for such differences only where supported, without assuming future preferences cannot change.
+It adds no reward function, self-preservation objective, cooperation optimizer, or new mandatory lens.
+
+The paper does not establish that the configured model has a stable long horizon, or provide an
+external verification procedure for that property. This adapter therefore claims only a limited
+design implication, not a proof of cooperation, rational agency, alignment, or safety.
+
+
+## 0.2.1 Care schema correction
+
+Care has a dedicated schema with required `support_state: const not_applicable`, shared by
+model drafts and API responses. Explicit source attribution is still represented by `source`,
+`status`, and `evidence`; it does not turn a preference or boundary into a factual proof claim.
+Fact/View retain the broader support-state enum. Invalid Care still returns the existing error
+code rather than being rewritten. JSON-object mode does not impose schema-constrained decoding,
+so model adherence remains subject to live evaluation. The response schema version stays 0.2.0.
+
+
+## 0.2.2 Attribution diagnostics and semantic regression
+
+The model-visible schema now includes conditional rules matching the engine's existing attribution
+checks: `user_explicit` requires explicit status and human evidence; `user_implied` and
+`agent_inference` cannot have explicit status. Human evidence source IDs are derived per request
+from input_message and context entries declared human. This is not a verification of identity.
+These conditions supplement the prompt; JSON-object mode does not enforce conditional decoding.
+
+The engine retains its checks. Attribution errors return a static rule identifier and field path
+under `detail.issue`, without returning the generated text, input, credentials, or full prompt.
+Other errors retain their existing shape. No automatic rewriting or repair call is introduced.
+
+Role-specific field descriptions and an illustrative workshop example distinguish factual claims
+from goals/boundaries, task effects from invented justifications, and premise questions from later
+implementation detail. These are model guidance, not semantic guarantees. In particular, no code
+keyword filter can establish whether a real request does or does not provide a legal rationale.
+
+
+## 0.3.0 Care generation boundary (supersedes the 0.2 Care shape)
+
+The model-facing CareDraft includes the concern, attribution, materiality, and evidence, with
+support_state fixed to not_applicable. It has no execution_effect property and forbids extras.
+The API-facing CarePremise adds execution_effect=null to explicitly report that no separate
+Care effect was assessed. A draft containing that field is rejected, even if its value is null;
+unsupported content is never silently removed from a generated answer to pass validation.
+
+This reduces a redundant generation task that repeatedly introduced implementation suggestions.
+It does not prove semantic grounding: invented permission can still appear in another text field,
+and all fields need live review. A stated alternative stays in Care.statement when supported by
+human input. Material differences in the proposed execution stay in View. Core text is unchanged.
+The response schema and profile advance to 0.3 because consumers must accept null Care effects.
+
+## 0.4.0 Extraction and scoped uncertainty
+
+The former intake classifier is now an extraction stage. It preserves explicit clauses before
+Fact/View/Care classification, reducing the number of different judgments requested in one call.
+The call count remains at most two; neither lower latency nor improved model accuracy is assumed.
+The mapping stage receives both original material and extracted statements. A tentative
+context_insufficient label cannot suppress a supplied AI comparison or extracted constraint.
+
+The internal Draft has a required kind and `view.unresolved`. Each unresolved item has a statement,
+scope, optional evidence, and nullable question. Absent information cannot itself be quoted.
+An execution-scope question is a provider error, not text silently removed to pass validation.
+At most one distinct question is allowed across alignment items, gaps and hypotheses. Outer
+whitespace is ignored for counting/deduplicating questions; the unresolved items remain intact.
+The public `view.unknowns` and `view.questions` are derived from alignment-scope items. Short
+responses use the same representation. Gaps/hypotheses retain their own nullable question fields.
+
+For the transfer regression, a missing document body is an execution input. The external-transfer
+prohibition can already be compared with a supplied upload proposal. Expected output preserves
+the Care boundary and reports a conflict without asking for the body or a new delivery method.
+A separate genuinely ambiguous boundary scope can still coexist with that known conflict.
+Scope selection is a model judgment; these controls do not guarantee it is always correct.
+
+Completion means the relevant premise differences have been surfaced. It does not mean all
+implementation requirements have been collected, the parties agree, or execution is authorized.
+All generated fields need review for invented replacements or rationales, including unresolved
+statements and questions. A negative constraint does not supply its own positive alternative.
+
+The response schema and application are 0.4.0; the profile is workflow-premise-map-v0.4.
+`meta.stages_completed` distinguishes local handshake, extraction-only and extraction-plus-mapping.
+See MIGRATION-0.4.md for client changes and ACCEPTANCE.md for live-model checks.
+
+## 0.4.1 Attribution guidance and empty-comparison guard
+
+The operator's English transfer and demo responses met the targeted checks in single runs. A
+Japanese demo response found the real conflict but also attached an AI-only list-screen choice
+to a human goal, and added an execution requirement as a missing-premise gap with both sides null.
+
+The prompt now distinguishes material alignment issues from later implementation inputs in the
+blocking rule itself. It applies this distinction across gaps, hypotheses and unresolved items.
+Plain goals stay in Care; an AI implementation must not be attached to them through View effects.
+Human evaluations can still be View, and explicitly requested implementations remain valid Care.
+These role and meaning requirements are model guidance, not deterministic semantic checks.
+
+The model-visible gap schema requires at least one nonblank stated position via anyOf. The engine
+enforces the same condition with provider_empty_premise_gap, including a static field path/rule.
+Both-null gaps are rejected, not silently deleted or rewritten into successful responses. Real
+one-sided comparisons remain valid; alignment variables absent from both sides use unresolved.
+This guard cannot prove that a nonempty position is supported. It does not detect arbitrary
+invented alternatives or cross-source meaning contamination; live review is still required.
+
+The application/image is 0.4.1. Public response fields, schema_version 0.4.0 and profile v0.4 remain
+unchanged. No retry, keyword filter, extra model call, or source-document change is introduced.
+
+## 0.4.2 Supplied comparison and engine hypotheses
+
+The operator's later 0.4.1 Dify form run correctly identified the demo's production-data conflict,
+but also prescribed synthetic or anonymized replacement data in a blocking engine hypothesis.
+Its source quotation was exact. Quote provenance alone does not establish that the prescription
+follows from the request; a correct status did not make the whole result acceptable.
+
+The mapping contract now separates two modes. With a supplied ai_interpretation, compare the two
+submitted positions in premise_gaps and keep genuine interpretation limits in unresolved. In this
+mode view.hypotheses must be empty. Without a supplied AI proposal, engine interpretation hypotheses
+remain available; they are tentative readings of the request, not instructions to adopt new plans.
+One-sided gaps, nonblocking differences, and a local unknown alongside a known conflict remain valid.
+
+The request-specific model-visible MappingView schema sets hypotheses.maxItems to zero only for
+comparison mode. The engine rejects a violation with provider_unexpected_comparison_hypothesis and
+a content-free path/rule diagnostic. It does not silently remove the item or retry generation.
+JSON-object mode is not schema-constrained decoding, so the runtime rejection remains necessary.
+
+This prevents a third plan being emitted in the comparison-mode hypothesis field; it cannot prove
+that gaps, unresolved items, understanding or other prose are semantically supported. Moving the
+same invented alternative to another field is still a failure. No keyword filter is used.
+Application/image 0.4.2 retains public response schema_version 0.4.0 and profile v0.4. Existing Dify
+response parsing remains compatible. Core wording and the number of model calls are unchanged.

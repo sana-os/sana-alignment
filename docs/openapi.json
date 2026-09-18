@@ -3,7 +3,7 @@
   "info": {
     "title": "SANA Premise Alignment API",
     "description": "Powered by SANA OS — https://sana-os.org/ — workflow premise mapping profile",
-    "version": "0.1.0"
+    "version": "0.4.2"
   },
   "paths": {
     "/healthz": {
@@ -112,12 +112,12 @@
           },
           "language": {
             "type": "string",
-            "enum": [
-              "ja",
-              "en"
-            ],
+            "maxLength": 35,
+            "minLength": 2,
+            "pattern": "^[A-Za-z]{2,3}(?:-[A-Za-z0-9]{2,8})*$",
             "title": "Language",
-            "default": "ja"
+            "description": "Requested language for generated prose. Quotes stay verbatim. Common language/script/region tags, not full BCP 47 registry validation.",
+            "default": "en"
           },
           "frameworks": {
             "anyOf": [
@@ -138,10 +138,15 @@
                 "maxItems": 3
               },
               {
+                "type": "string",
+                "const": "auto"
+              },
+              {
                 "type": "null"
               }
             ],
-            "title": "Frameworks"
+            "title": "Frameworks",
+            "description": "No detailed lens by default. Use auto (or legacy null) for selection, or a list for explicit lenses."
           }
         },
         "additionalProperties": false,
@@ -155,9 +160,9 @@
         "properties": {
           "schema_version": {
             "type": "string",
-            "const": "0.1.0",
+            "const": "0.4.0",
             "title": "Schema Version",
-            "default": "0.1.0"
+            "default": "0.4.0"
           },
           "request_id": {
             "type": "string",
@@ -169,6 +174,7 @@
               "handshake",
               "unknown",
               "context_insufficient",
+              "revision_required",
               "needs_clarification",
               "mapped",
               "mapped_with_divergence"
@@ -196,7 +202,7 @@
             "anyOf": [
               {
                 "items": {
-                  "$ref": "#/components/schemas/Premise"
+                  "$ref": "#/components/schemas/CarePremise"
                 },
                 "type": "array"
               },
@@ -233,6 +239,82 @@
           "meta"
         ],
         "title": "AlignResponse"
+      },
+      "CarePremise": {
+        "properties": {
+          "statement": {
+            "type": "string",
+            "maxLength": 6000,
+            "minLength": 1,
+            "title": "Statement"
+          },
+          "source": {
+            "type": "string",
+            "enum": [
+              "user_explicit",
+              "user_implied",
+              "provided_source",
+              "agent_inference"
+            ],
+            "title": "Source"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "explicit",
+              "inferred",
+              "unclear"
+            ],
+            "title": "Status",
+            "description": "Explicit means stated by the attributed source. user_explicit requires explicit; user_implied and agent_inference require inferred or unclear."
+          },
+          "support_state": {
+            "type": "string",
+            "const": "not_applicable",
+            "title": "Support State",
+            "description": "Always not_applicable for a goal, value, priority, or constraint. Evidence records who stated it, not proof of a value."
+          },
+          "materiality": {
+            "type": "string",
+            "enum": [
+              "low",
+              "medium",
+              "high"
+            ],
+            "title": "Materiality"
+          },
+          "evidence": {
+            "items": {
+              "$ref": "#/components/schemas/Evidence"
+            },
+            "type": "array",
+            "maxItems": 8,
+            "minItems": 1,
+            "title": "Evidence"
+          },
+          "externally_verified": {
+            "type": "boolean",
+            "const": false,
+            "title": "Externally Verified",
+            "default": false
+          },
+          "execution_effect": {
+            "type": "null",
+            "title": "Execution Effect",
+            "description": "Not assessed for Care. The server supplies null; consult the stated concern and View for premise differences, not an invented implementation plan."
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "statement",
+          "source",
+          "status",
+          "support_state",
+          "materiality",
+          "evidence"
+        ],
+        "title": "CarePremise"
       },
       "Context": {
         "properties": {
@@ -356,9 +438,21 @@
       },
       "Gap": {
         "properties": {
+          "kind": {
+            "type": "string",
+            "enum": [
+              "constraint_conflict",
+              "interpretation_difference",
+              "missing_premise"
+            ],
+            "title": "Kind",
+            "description": "A comparison between the human position and supplied AI proposal, not a list of later implementation needs. missing_premise needs a stated position on at least one side.",
+            "default": "interpretation_difference"
+          },
           "blocks_execution": {
             "type": "boolean",
             "title": "Blocks Execution",
+            "description": "A known conflict or material unresolved alignment issue. Missing later implementation inputs alone do not create a premise gap or a blocking signal here.",
             "default": true
           },
           "human_premise": {
@@ -372,7 +466,8 @@
                 "type": "null"
               }
             ],
-            "title": "Human Premise"
+            "title": "Human Premise",
+            "description": "Human position relevant to this comparison, or null if not stated. Do not import the AI implementation into it. Both sides cannot be null or blank."
           },
           "ai_premise": {
             "anyOf": [
@@ -385,13 +480,15 @@
                 "type": "null"
               }
             ],
-            "title": "Ai Premise"
+            "title": "Ai Premise",
+            "description": "Position in the supplied AI proposal, or null if not stated. Do not invent a replacement proposal to fill this field. Both sides cannot be null or blank."
           },
           "difference": {
             "type": "string",
             "maxLength": 6000,
             "minLength": 1,
-            "title": "Difference"
+            "title": "Difference",
+            "description": "Explain the supported comparison. Do not list unspecified implementation options, invent candidate answers, or treat a missing alternative method as a new requirement."
           },
           "evidence": {
             "items": {
@@ -403,10 +500,18 @@
             "title": "Evidence"
           },
           "verification_question": {
-            "type": "string",
-            "maxLength": 6000,
-            "minLength": 1,
-            "title": "Verification Question"
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 6000,
+                "minLength": 1
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Verification Question",
+            "description": "Null when no new information is needed. Never ask permission to relax an explicit constraint."
           }
         },
         "additionalProperties": false,
@@ -415,8 +520,7 @@
           "human_premise",
           "ai_premise",
           "difference",
-          "evidence",
-          "verification_question"
+          "evidence"
         ],
         "title": "Gap"
       },
@@ -456,23 +560,50 @@
             "title": "Evidence"
           },
           "verification_question": {
-            "type": "string",
-            "maxLength": 6000,
-            "minLength": 1,
-            "title": "Verification Question"
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 6000,
+                "minLength": 1
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Verification Question",
+            "description": "Null when no new information is needed. Never ask permission to relax an explicit constraint."
           }
         },
         "additionalProperties": false,
         "type": "object",
         "required": [
           "interpretation",
-          "evidence",
-          "verification_question"
+          "evidence"
         ],
         "title": "Hypothesis"
       },
       "Meta": {
         "properties": {
+          "requested_language": {
+            "type": "string",
+            "title": "Requested Language"
+          },
+          "short_reply_language": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Short Reply Language"
+          },
+          "language_fallback": {
+            "type": "boolean",
+            "title": "Language Fallback",
+            "default": false
+          },
           "observation_scope": {
             "type": "string",
             "const": "submitted_material_only",
@@ -481,9 +612,20 @@
           },
           "profile": {
             "type": "string",
-            "const": "workflow-premise-map-v0.1",
+            "const": "workflow-premise-map-v0.4",
             "title": "Profile",
-            "default": "workflow-premise-map-v0.1"
+            "default": "workflow-premise-map-v0.4"
+          },
+          "stages_completed": {
+            "items": {
+              "type": "string",
+              "enum": [
+                "extraction",
+                "mapping"
+              ]
+            },
+            "type": "array",
+            "title": "Stages Completed"
           },
           "frameworks_used": {
             "items": {
@@ -528,6 +670,7 @@
         "additionalProperties": false,
         "type": "object",
         "required": [
+          "requested_language",
           "frameworks_used",
           "comparison",
           "knowledge_sha256"
@@ -559,7 +702,8 @@
               "inferred",
               "unclear"
             ],
-            "title": "Status"
+            "title": "Status",
+            "description": "Explicit means stated by the attributed source. user_explicit requires explicit; user_implied and agent_inference require inferred or unclear."
           },
           "support_state": {
             "type": "string",
@@ -581,12 +725,6 @@
             ],
             "title": "Materiality"
           },
-          "execution_effect": {
-            "type": "string",
-            "maxLength": 6000,
-            "minLength": 1,
-            "title": "Execution Effect"
-          },
           "evidence": {
             "items": {
               "$ref": "#/components/schemas/Evidence"
@@ -601,6 +739,13 @@
             "const": false,
             "title": "Externally Verified",
             "default": false
+          },
+          "execution_effect": {
+            "type": "string",
+            "maxLength": 6000,
+            "minLength": 1,
+            "title": "Execution Effect",
+            "description": "Consequence of this attributed premise, not a new requirement. Keep implementation details from an AI proposal on the AI proposal; never attach them to a human goal unless the human supplied them. Do not add an unstated motive, legal/privacy rationale, or guarantee of compliance/safety."
           }
         },
         "additionalProperties": false,
@@ -611,10 +756,60 @@
           "status",
           "support_state",
           "materiality",
-          "execution_effect",
-          "evidence"
+          "evidence",
+          "execution_effect"
         ],
         "title": "Premise"
+      },
+      "UnresolvedPremise": {
+        "properties": {
+          "statement": {
+            "type": "string",
+            "maxLength": 6000,
+            "minLength": 1,
+            "title": "Statement",
+            "description": "One missing or unclear variable, without invented possible answers or replacement requirements."
+          },
+          "scope": {
+            "type": "string",
+            "enum": [
+              "alignment",
+              "execution"
+            ],
+            "title": "Scope",
+            "description": "alignment only if the missing information changes interpretation or premise comparison; execution for later implementation. Missing document content is execution-only when a transfer conflict is already identifiable."
+          },
+          "evidence": {
+            "items": {
+              "$ref": "#/components/schemas/Evidence"
+            },
+            "type": "array",
+            "maxItems": 8,
+            "title": "Evidence",
+            "description": "Supporting text anchors if available; absent information itself cannot be quoted."
+          },
+          "question": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 6000,
+                "minLength": 1
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Question",
+            "description": "A focused comparison question, or null. Execution-only issues and already declined/unknown answers must not cause questions here."
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "statement",
+          "scope"
+        ],
+        "title": "UnresolvedPremise"
       },
       "ValidationError": {
         "properties": {
@@ -664,7 +859,8 @@
             },
             "type": "array",
             "maxItems": 16,
-            "title": "Premises"
+            "title": "Premises",
+            "description": "Interpretations, proposals and framings, with their own attribution. Plain user goals and prohibitions belong in Care; do not repeat them here to attach an AI implementation. Human evaluations or framings can still belong in View. An AI proposal is provided_source, not a user instruction or verified fact."
           },
           "understanding": {
             "type": "string",
@@ -678,7 +874,8 @@
             },
             "type": "array",
             "maxItems": 8,
-            "title": "Hypotheses"
+            "title": "Hypotheses",
+            "description": "Engine interpretation hypotheses only when no ai_interpretation was supplied. With a supplied AI proposal this must be empty; use premise_gaps and unresolved for comparison and genuine unknowns. Never use this field to prescribe an unstated replacement plan."
           },
           "premise_gaps": {
             "items": {
@@ -688,6 +885,14 @@
             "maxItems": 8,
             "title": "Premise Gaps"
           },
+          "unresolved": {
+            "items": {
+              "$ref": "#/components/schemas/UnresolvedPremise"
+            },
+            "type": "array",
+            "maxItems": 12,
+            "title": "Unresolved"
+          },
           "unknowns": {
             "items": {
               "type": "string",
@@ -696,7 +901,8 @@
             },
             "type": "array",
             "maxItems": 12,
-            "title": "Unknowns"
+            "title": "Unknowns",
+            "description": "Alignment-scope unresolved statements, derived by the server."
           },
           "questions": {
             "items": {
@@ -705,8 +911,9 @@
               "minLength": 1
             },
             "type": "array",
-            "maxItems": 8,
-            "title": "Questions"
+            "maxItems": 1,
+            "title": "Questions",
+            "description": "At most one alignment question, derived by the server. Execution-only details never create a question here."
           }
         },
         "additionalProperties": false,

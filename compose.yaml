@@ -1,7 +1,7 @@
 services:
   sana:
     build: .
-    image: sana-alignment:0.1.0
+    image: sana-alignment:0.4.2
     env_file: .env
     ports:
       - "127.0.0.1:8000:8000"
