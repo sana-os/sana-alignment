@@ -1,0 +1,16 @@
+# Optional local override for a self-hosted Dify installation on the same Docker host.
+# Copy to compose.override.yaml only when that file does not already exist.
+# Set DIFY_DOCKER_NETWORK in your local .env if the existing Dify network has another name.
+services:
+  sana:
+    networks:
+      default: {}
+      dify:
+        aliases:
+          - sana-alignment
+
+networks:
+  default: {}
+  dify:
+    external: true
+    name: ${DIFY_DOCKER_NETWORK:-docker_default}

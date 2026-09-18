@@ -41,7 +41,7 @@ def create_app(settings=None, provider_override=None):
             app.state.semaphore = asyncio.Semaphore(4)
             yield
 
-    app = FastAPI(title='SANA Premise Alignment API', version='0.1.0', description='Powered by SANA OS — https://sana-os.org/ — workflow premise mapping profile', lifespan=lifespan)
+    app = FastAPI(title='SANA Premise Alignment API', version='0.4.2', description='Powered by SANA OS — https://sana-os.org/ — workflow premise mapping profile', lifespan=lifespan)
     app.add_middleware(BodyLimit)
 
     @app.exception_handler(RequestValidationError)
@@ -67,7 +67,10 @@ def create_app(settings=None, provider_override=None):
         except TimeoutError:
             raise HTTPException(504, detail={'code': 'alignment_timeout'}) from None
         except ProviderError as e:
-            raise HTTPException(e.status, detail={'code': e.code}) from None
+            detail = {'code': e.code}
+            if e.issue is not None:
+                detail['issue'] = e.issue
+            raise HTTPException(e.status, detail=detail) from None
 
     return app
 

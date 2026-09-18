@@ -1,0 +1,4 @@
+* text=auto eol=lf
+# Manifests retain original hashes and CRLF-to-LF canonical hashes separately.
+knowledge/*.md text eol=lf
+references/*.md text eol=lf

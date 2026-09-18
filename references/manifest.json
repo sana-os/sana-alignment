@@ -1,18 +1,27 @@
 [
   {
     "file": "The_Triangle_of_Intelligence.md",
-    "sha256": "9113d33c28c561a96014e8b5091a96ade497f753a3936688e137815f7eed1ec9"
+    "sha256": "9113d33c28c561a96014e8b5091a96ade497f753a3936688e137815f7eed1ec9",
+    "lf_sha256": "9113d33c28c561a96014e8b5091a96ade497f753a3936688e137815f7eed1ec9"
   },
   {
     "file": "The_Instability_of_Justice_as_an_Objective_Function.md",
-    "sha256": "ac5782ddbd3f69d5c3485ced3f0080fd2f6f825cae1bc4044ba22f88fcfc24cb"
+    "sha256": "ac5782ddbd3f69d5c3485ced3f0080fd2f6f825cae1bc4044ba22f88fcfc24cb",
+    "lf_sha256": "ac5782ddbd3f69d5c3485ced3f0080fd2f6f825cae1bc4044ba22f88fcfc24cb"
   },
   {
     "file": "Separating_the_Interpreter_from_the_Executor.md",
-    "sha256": "3057e489d1da6029b9ff7daddfcf50e17c6d8fb7165cbabca2f7be57e8e6b3f4"
+    "sha256": "3057e489d1da6029b9ff7daddfcf50e17c6d8fb7165cbabca2f7be57e8e6b3f4",
+    "lf_sha256": "3057e489d1da6029b9ff7daddfcf50e17c6d8fb7165cbabca2f7be57e8e6b3f4"
   },
   {
     "file": "Cognitive_Compression_and_Infrahumanization.md",
-    "sha256": "d0f837ec1f9a57ba96d0332399c37559d54901992e4bc54106c800b696056af2"
+    "sha256": "d0f837ec1f9a57ba96d0332399c37559d54901992e4bc54106c800b696056af2",
+    "lf_sha256": "d0f837ec1f9a57ba96d0332399c37559d54901992e4bc54106c800b696056af2"
+  },
+  {
+    "file": "The_Shadow_of_the_Future.md",
+    "sha256": "3209fa60402d9402abb3a620fcb5845461e6155096fc13964314ad242e06289f",
+    "lf_sha256": "3209fa60402d9402abb3a620fcb5845461e6155096fc13964314ad242e06289f"
   }
 ]
