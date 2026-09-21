@@ -1,5 +1,9 @@
 # Dify workflow example
 
+Choose a dedicated guide: [Connection and comparison](DIFY-COMPARISON.md) or
+[LLM Plan and Align](DIFY-PLAN-AND-ALIGN.md). Both now have successful operator-reported
+runs; see the [current evidence index](validation/README.md).
+
 Import [sana-alignment.en.yml](../examples/dify/sana-alignment.en.yml) to call SANA from a Dify
 Workflow. This example returns a premise map and routes its status. It does not execute the task.
 No Dify LLM node or model-provider plugin is required: the SANA API uses its own configured provider.
@@ -7,15 +11,16 @@ No Dify LLM node or model-provider plugin is required: the SANA API uses its own
 ## Basis and compatibility
 
 This is an English derivative of the operator's working `SANA Connection Test.yml` export.
-The export's eight node IDs, seven edges, variable selectors, Python code, output names and three
-terminal branches are preserved. Input labels, descriptions, limits and the API URL setting are
-adapted for distribution. HTTPS certificate verification is enabled; the default local HTTP URL
+The comparison export's eight node IDs, seven edges, variable selectors, output names and three
+terminal branches are preserved. The Python parser accepts response schema 0.5.0;
+Build request now explicitly sends processing_mode=medium. Input labels, descriptions,
+limits and the API URL setting are adapted for distribution. HTTPS certificate verification is enabled; the default local HTTP URL
 is unaffected. Retries remain disabled.
 
 | Version | Meaning |
 | --- | --- |
-| SANA application 0.4.2 | Backend used in the operator's latest tests |
-| SANA response schema 0.4.0 | Required by the response parser; intentionally unchanged |
+| SANA application 0.5.15 | Current publication candidate; earlier 0.4.2 observations below are historical |
+| SANA response schema 0.4.0 / 0.5.0 | Accepted by the updated parser; existing apps must update their Parse response code for 0.5.0, following [migration instructions](MIGRATION-0.5.md) |
 | DSL `version: 0.5.0` | Preserved from the supplied export; not a SANA or Dify application version |
 | Dify 1.10.1-fix.1 | Image tag reported by the operator; broader version compatibility is unverified |
 
@@ -89,6 +94,11 @@ only the **Build request → request_body** variable. That code uses `json.dumps
 and Unicode in user inputs are serialized as JSON without interpolation into a hand-written template.
 Do not surround this variable with another pair of quotes.
 
+Both exports explicitly put `"processing_mode": "medium"` inside the Python
+`payload` object in Build request. Change that value to `low` or `high` when needed;
+it is not an extra start-node input. Do not put it in an exception default value.
+Keep failure handling set to stop (no fallback result). See [mode budgets](PROCESSING-MODES.md).
+
 ## 3. Inputs and defaults
 
 | Input | Required | Limit | Behavior |
@@ -156,11 +166,18 @@ so no submitted task is executed while checking the integration.
 ## Timeouts and troubleshooting
 
 The supplied export's timeouts are retained: connect 10 seconds, read 600 seconds, write 10 seconds;
-automatic retry is off. Dify and its proxy can impose additional limits. With SANA's per-call
-`LLM_TIMEOUT_SECONDS=300`, its total two-call budget can reach 605 seconds, longer than this read
+the HTTP node's automatic retry is off. The explicit medium mode can regenerate
+an invalid mapping once. It reuses extraction; this is
+independent of Dify's HTTP retry and does not repeat the whole workflow. Dify and its
+proxy can impose additional limits. With SANA's per-call
+`LLM_TIMEOUT_SECONDS=300`, its total budget remains 605 seconds across all attempts, longer than this read
 timeout. If that boundary matters, use a lower provider budget such as 280 seconds (565 seconds
-total) or coordinate all HTTP/proxy/workflow limits. The successful operator runs took roughly two
-minutes; that is not a latency guarantee or a measurement of model compute alone.
+total) or coordinate all HTTP/proxy/workflow limits. Early short cases took roughly
+two minutes; a 0.5.15 direct medium long-plan success took about 7.5 minutes. The
+latest successful Dify outputs did not include timing. These are not latency
+guarantees or measurements of model compute alone. Plan and Align also adds a
+planning-model call before the SANA HTTP node. Do not infer which timeout fired
+from the whole-workflow duration; inspect the failed node and response/trace.
 
 - Name-resolution/connectivity errors: check the URL variable and the networks of SANA and Dify's
   request/proxy path. Keep the SSRF proxy policy enabled; inspect its logs for actual rejections.
@@ -169,7 +186,7 @@ minutes; that is not a latency guarantee or a measurement of model compute alone
 - HTTP 422: check field lengths, language tag and that the Raw Text body contains serialized JSON.
 - HTTP 502: inspect the HTTP node response for SANA's `detail.code`; this can be a detected model
   contract violation, not a network failure. **Parse response** intentionally stops on non-200.
-- Schema error: application 0.4.2 still returns response schema 0.4.0. The DSL's own 0.5.0 version
+- Schema error: 0.4.x returns response schema 0.4.0; application 0.5.0 returns schema 0.5.0. Update the parser for migration. The DSL's own 0.5.0 version
   is unrelated. If a later backend changes the response contract, review the parser deliberately.
 
 ## Quality limits still under evaluation

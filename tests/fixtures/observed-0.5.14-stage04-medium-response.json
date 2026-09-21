@@ -1,0 +1,9 @@
+{
+  "detail": {
+    "code": "provider_invalid_scope_dependency",
+    "issue": {
+      "path": "view.unresolved.0",
+      "rule": "alignment_requires_affected_premise_not_open_topic"
+    }
+  }
+}

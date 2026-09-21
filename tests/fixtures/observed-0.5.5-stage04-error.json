@@ -1,0 +1,27 @@
+{
+  "diagnostic_version": "provider-output-3",
+  "application_version": "0.5.5",
+  "run_type": "new_inference",
+  "requested_language": "en",
+  "request_identity": {
+    "ai_characters": 4250,
+    "input_message": "The demo PC is not connected to the internet. Display entirely fictional customer information in the demo. Do not use real customer data."
+  },
+  "outcome": "provider_error",
+  "error": {"code": "provider_invalid_output"},
+  "last_attempted_stage": "Extraction",
+  "completed_stages": [],
+  "evidence_mismatch_count": 0,
+  "evidence_mismatches": [],
+  "provider_validation_errors": [
+    {"stage": "Extraction", "exception": "ValidationError", "violations": [
+      {"path": "evidence", "type": "too_long"}
+    ]}
+  ],
+  "extracted_clauses": null,
+  "reference_review": [],
+  "verification_inputs": {
+    "diagnostic_sha256": "3372b2b2da1a8f08ee57516024721f842a7ddde231840ae25d118b31b103d127",
+    "request_sha256": "feb95a60f6cf826f2a10576cd7d3f27dbe4ef101a3d67641a2e692f55d9f2b42"
+  }
+}

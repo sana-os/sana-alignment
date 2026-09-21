@@ -1,0 +1,8 @@
+{
+  "original_sha256": "78c6c6f28c15773ac03e2b5909139a640db1dce4df511c708d7795bf3a6311a2",
+  "files": {
+    "observed-0.5.15-plan-and-align-response.json": "a0037f485ed560e7374f2f92dd59ed3658b5c959a6734b1b3b83277a005da1cb",
+    "observed-0.5.15-plan-and-align-material.json": "3e43d67aeb2de614b2f9060f3d09baa09bdaa7a3109f295c6820748d2f434468"
+  },
+  "note": "Material reconstructed from concatenated final output with CRLF normalized and separator newlines removed. This is not the exact sent HTTP request. App version follows operator context; mode, call count, timing and runtime version are not present in supplied output. Original unchanged."
+}

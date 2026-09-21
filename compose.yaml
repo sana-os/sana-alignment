@@ -1,11 +1,13 @@
 services:
   sana:
     build: .
-    image: sana-alignment:0.4.2
+    image: sana-alignment:0.5.15
     env_file: .env
     ports:
       - "127.0.0.1:8000:8000"
     restart: unless-stopped
+    volumes:
+      - alignment_traces:/app/traces
     read_only: true
     tmpfs:
       - /tmp
@@ -13,3 +15,6 @@ services:
       - ALL
     security_opt:
       - no-new-privileges:true
+
+volumes:
+  alignment_traces:

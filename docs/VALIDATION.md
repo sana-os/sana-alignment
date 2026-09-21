@@ -1,4 +1,9 @@
-# Validation record — updated 2026-09-18
+# Validation record — historical checkpoints
+
+For current 0.5.15 publication evidence, including retained failures, see the
+[development evidence archive](validation/README.md) and [release notes](RELEASE-0.5.15.md).
+The checkpoint-specific statements below retain their historical scope; a pending
+case here may have a later observation in that archive.
 
 ## English Dify import and operator runs
 

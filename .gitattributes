@@ -2,3 +2,6 @@
 # Manifests retain original hashes and CRLF-to-LF canonical hashes separately.
 knowledge/*.md text eol=lf
 references/*.md text eol=lf
+# Evidence attachments retain original bytes and their recorded SHA256 values.
+docs/validation/archive/attachment-* -text
+docs/validation/archive/console-* -text

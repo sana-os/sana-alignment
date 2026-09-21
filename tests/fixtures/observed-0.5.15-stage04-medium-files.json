@@ -1,0 +1,17 @@
+{
+  "note": "Repository fixtures normalize JSON formatting; uploaded originals are unchanged. No inference was run during this review.",
+  "files": {
+    "trace": {
+      "original_sha256": "7187461a7bf299d1e17052d2974b78470f2b14323e3a7512c8a250e1643fd490",
+      "fixture_sha256": "0d8845a8dbf2835f42a76c3d9323cec1287c42f47dccd5dd81f50ca26d76dd86"
+    },
+    "summary": {
+      "original_sha256": "f9f31c58f969fb47e2811b22e26142b5aa0397e172ac09418f63fe4abc1887da",
+      "fixture_sha256": "c1868ff85305565c7469b5e5b0614bd13f8797351f6b8ea9a35307987afe5a56"
+    },
+    "response": {
+      "original_sha256": "3287809c16b94663ff006e8cfafd3afb0f7159c35f21a920a311a1e15bd26bdc",
+      "fixture_sha256": "c2fbb17a8807af6eebf5b9cf3f4a307ac3240fbe3fc4cfa6c6ff36fe88f4f8e1"
+    }
+  }
+}

@@ -1,0 +1,712 @@
+{
+  "app": {
+    "description": "Generate a proposal, then compare it with the unchanged human request. Select a planning model before running. No task execution.",
+    "icon": "🤖",
+    "icon_background": "#FFEAD5",
+    "mode": "workflow",
+    "name": "SANA Plan and Align",
+    "use_icon_as_answer_icon": false
+  },
+  "dependencies": [],
+  "kind": "app",
+  "version": "0.5.0",
+  "workflow": {
+    "conversation_variables": [],
+    "environment_variables": [
+      {
+        "description": "SANA API origin reachable from Dify; omit a trailing slash and /v1/align.",
+        "id": "170af25f-a15a-4dc1-bcc3-e42edbfb34d9",
+        "name": "SANA_BASE_URL",
+        "selector": [
+          "env",
+          "SANA_BASE_URL"
+        ],
+        "value": "http://sana-alignment:8000",
+        "value_type": "string"
+      }
+    ],
+    "features": {
+      "file_upload": {
+        "allowed_file_extensions": [
+          ".JPG",
+          ".JPEG",
+          ".PNG",
+          ".GIF",
+          ".WEBP",
+          ".SVG"
+        ],
+        "allowed_file_types": [
+          "image"
+        ],
+        "allowed_file_upload_methods": [
+          "local_file",
+          "remote_url"
+        ],
+        "enabled": false,
+        "fileUploadConfig": {
+          "audio_file_size_limit": 50,
+          "batch_count_limit": 5,
+          "file_size_limit": 15,
+          "image_file_size_limit": 10,
+          "video_file_size_limit": 100,
+          "workflow_file_upload_limit": 10
+        },
+        "image": {
+          "enabled": false,
+          "number_limits": 3,
+          "transfer_methods": [
+            "local_file",
+            "remote_url"
+          ]
+        },
+        "number_limits": 3
+      },
+      "opening_statement": "",
+      "retriever_resource": {
+        "enabled": true
+      },
+      "sensitive_word_avoidance": {
+        "enabled": false
+      },
+      "speech_to_text": {
+        "enabled": false
+      },
+      "suggested_questions": [],
+      "suggested_questions_after_answer": {
+        "enabled": false
+      },
+      "text_to_speech": {
+        "enabled": false,
+        "language": "",
+        "voice": ""
+      }
+    },
+    "graph": {
+      "edges": [
+        {
+          "data": {
+            "isInIteration": false,
+            "isInLoop": false,
+            "sourceType": "http-request",
+            "targetType": "code"
+          },
+          "id": "1789656322147-source-1789664522465-target",
+          "source": "1789656322147",
+          "sourceHandle": "source",
+          "target": "1789664522465",
+          "targetHandle": "target",
+          "type": "custom",
+          "zIndex": 0
+        },
+        {
+          "data": {
+            "isInIteration": false,
+            "isInLoop": false,
+            "sourceType": "code",
+            "targetType": "if-else"
+          },
+          "id": "1789664522465-source-1789664629607-target",
+          "source": "1789664522465",
+          "sourceHandle": "source",
+          "target": "1789664629607",
+          "targetHandle": "target",
+          "type": "custom",
+          "zIndex": 0
+        },
+        {
+          "data": {
+            "isInLoop": false,
+            "sourceType": "if-else",
+            "targetType": "end"
+          },
+          "id": "1789664629607-true-1789656355750-target",
+          "source": "1789664629607",
+          "sourceHandle": "true",
+          "target": "1789656355750",
+          "targetHandle": "target",
+          "type": "custom",
+          "zIndex": 0
+        },
+        {
+          "data": {
+            "isInIteration": false,
+            "isInLoop": false,
+            "sourceType": "if-else",
+            "targetType": "end"
+          },
+          "id": "1789664629607-false-1789664766014-target",
+          "source": "1789664629607",
+          "sourceHandle": "false",
+          "target": "1789664766014",
+          "targetHandle": "target",
+          "type": "custom",
+          "zIndex": 0
+        },
+        {
+          "data": {
+            "isInIteration": false,
+            "isInLoop": false,
+            "sourceType": "if-else",
+            "targetType": "end"
+          },
+          "id": "1789664629607-45510196-7400-46c3-94f3-c69cfdd964a3-1789665291549-target",
+          "source": "1789664629607",
+          "sourceHandle": "45510196-7400-46c3-94f3-c69cfdd964a3",
+          "target": "1789665291549",
+          "targetHandle": "target",
+          "type": "custom",
+          "zIndex": 0
+        },
+        {
+          "data": {
+            "isInIteration": false,
+            "isInLoop": false,
+            "sourceType": "code",
+            "targetType": "http-request"
+          },
+          "id": "1789665758720-source-1789656322147-target",
+          "source": "1789665758720",
+          "sourceHandle": "source",
+          "target": "1789656322147",
+          "targetHandle": "target",
+          "type": "custom",
+          "zIndex": 0
+        },
+        {
+          "id": "1789656311774-source-1790000000001-target",
+          "source": "1789656311774",
+          "target": "1790000000001",
+          "sourceHandle": "source",
+          "targetHandle": "target",
+          "type": "custom",
+          "zIndex": 0,
+          "data": {
+            "sourceType": "start",
+            "targetType": "llm",
+            "isInIteration": false,
+            "isInLoop": false
+          }
+        },
+        {
+          "id": "1790000000001-source-1789665758720-target",
+          "source": "1790000000001",
+          "target": "1789665758720",
+          "sourceHandle": "source",
+          "targetHandle": "target",
+          "type": "custom",
+          "zIndex": 0,
+          "data": {
+            "sourceType": "llm",
+            "targetType": "code",
+            "isInIteration": false,
+            "isInLoop": false
+          }
+        }
+      ],
+      "nodes": [
+        {
+          "data": {
+            "selected": false,
+            "title": "Input",
+            "type": "start",
+            "variables": [
+              {
+                "hint": "State the task, known facts and what matters to you.",
+                "label": "Human request",
+                "max_length": 6000,
+                "options": [],
+                "placeholder": "Enter the request and any explicit constraints.",
+                "required": true,
+                "type": "paragraph",
+                "variable": "input_message"
+              },
+              {
+                "default": "en",
+                "hint": "Language tag such as en, ja, es or ar. Evidence quotes remain in their original language.",
+                "label": "Response language",
+                "max_length": 35,
+                "options": [],
+                "placeholder": "en",
+                "required": false,
+                "type": "text-input",
+                "variable": "language"
+              }
+            ],
+            "desc": "Enter the original request. A planning model generates the proposal."
+          },
+          "height": 159,
+          "id": "1789656311774",
+          "position": {
+            "x": 80,
+            "y": 282.8010698775896
+          },
+          "positionAbsolute": {
+            "x": 80,
+            "y": 282.8010698775896
+          },
+          "selected": false,
+          "sourcePosition": "right",
+          "targetPosition": "left",
+          "type": "custom",
+          "width": 242
+        },
+        {
+          "data": {
+            "authorization": {
+              "config": null,
+              "type": "no-auth"
+            },
+            "body": {
+              "data": [
+                {
+                  "id": "key-value-246",
+                  "key": "",
+                  "type": "text",
+                  "value": "{{#1789665758720.request_body#}}"
+                }
+              ],
+              "type": "raw-text"
+            },
+            "headers": "Content-Type:application/json",
+            "method": "post",
+            "params": "",
+            "retry_config": {
+              "max_retries": 3,
+              "retry_enabled": false,
+              "retry_interval": 100
+            },
+            "selected": false,
+            "ssl_verify": true,
+            "timeout": {
+              "connect": 10,
+              "max_connect_timeout": 0,
+              "max_read_timeout": 0,
+              "max_write_timeout": 0,
+              "read": 600,
+              "write": 10
+            },
+            "title": "Align premises",
+            "type": "http-request",
+            "url": "{{#env.SANA_BASE_URL#}}/v1/align",
+            "variables": [],
+            "desc": "Send the request to SANA for premise mapping."
+          },
+          "height": 106,
+          "id": "1789656322147",
+          "position": {
+            "x": 992,
+            "y": 282
+          },
+          "positionAbsolute": {
+            "x": 992,
+            "y": 282
+          },
+          "selected": false,
+          "sourcePosition": "right",
+          "targetPosition": "left",
+          "type": "custom",
+          "width": 241
+        },
+        {
+          "data": {
+            "outputs": [
+              {
+                "value_selector": [
+                  "1789664522465",
+                  "alignment_status"
+                ],
+                "value_type": "string",
+                "variable": "status"
+              },
+              {
+                "value_selector": [
+                  "1789664522465",
+                  "alignment_json"
+                ],
+                "value_type": "string",
+                "variable": "result"
+              },
+              {
+                "variable": "proposed_plan",
+                "value_type": "string",
+                "value_selector": [
+                  "1790000000001",
+                  "text"
+                ]
+              },
+              {
+                "variable": "original_request",
+                "value_type": "string",
+                "value_selector": [
+                  "1789656311774",
+                  "input_message"
+                ]
+              }
+            ],
+            "selected": false,
+            "title": "Revision required",
+            "type": "end",
+            "desc": "Return the map with the detected constraint conflict."
+          },
+          "height": 112,
+          "id": "1789656355750",
+          "position": {
+            "x": 1893,
+            "y": 282
+          },
+          "positionAbsolute": {
+            "x": 1893,
+            "y": 282
+          },
+          "selected": false,
+          "sourcePosition": "right",
+          "targetPosition": "left",
+          "type": "custom",
+          "width": 241
+        },
+        {
+          "data": {
+            "code": "\"\"\"Paste into Dify's Parse response node; keep body/status_code inputs and outputs.\"\"\"\nimport json\n\n\ndef main(body: str, status_code: int) -> dict:\n    if status_code != 200:\n        raise ValueError('SANA HTTP request failed')\n    try:\n        data = json.loads(body)\n    except (json.JSONDecodeError, TypeError):\n        raise ValueError('SANA response is not valid JSON') from None\n    if not isinstance(data, dict) or data.get('schema_version') not in ('0.4.0', '0.5.0'):\n        raise ValueError('Unexpected SANA response schema')\n    allowed = {'handshake', 'unknown', 'context_insufficient', 'revision_required',\n               'needs_clarification', 'mapped', 'mapped_with_divergence'}\n    status = data.get('status')\n    if not isinstance(status, str) or status not in allowed:\n        raise ValueError('Unexpected SANA alignment status')\n    meta = data.get('meta')\n    if not isinstance(meta, dict) or meta.get('execution_authorized') is not False:\n        raise ValueError('Unexpected SANA execution authority')\n    if data['schema_version'] == '0.5.0':\n        view = data.get('view')\n        if (not isinstance(view, dict) or not isinstance(view.get('understanding'), str)\n                or not isinstance(view.get('understanding_evidence'), list)\n                or meta.get('understanding_mode') not in ('source_excerpts', 'short_reply')):\n            raise ValueError('Unexpected SANA overview contract')\n    return {'alignment_status': status, 'alignment_json': json.dumps(data, ensure_ascii=False)}",
+            "code_language": "python3",
+            "outputs": {
+              "alignment_json": {
+                "children": null,
+                "type": "string"
+              },
+              "alignment_status": {
+                "children": null,
+                "type": "string"
+              }
+            },
+            "selected": false,
+            "title": "Parse response",
+            "type": "code",
+            "variables": [
+              {
+                "value_selector": [
+                  "1789656322147",
+                  "body"
+                ],
+                "value_type": "string",
+                "variable": "body"
+              },
+              {
+                "value_selector": [
+                  "1789656322147",
+                  "status_code"
+                ],
+                "value_type": "number",
+                "variable": "status_code"
+              }
+            ],
+            "desc": "Check the HTTP result, response version and status before routing."
+          },
+          "height": 50,
+          "id": "1789664522465",
+          "position": {
+            "x": 1293.8010698775897,
+            "y": 282
+          },
+          "positionAbsolute": {
+            "x": 1293.8010698775897,
+            "y": 282
+          },
+          "selected": false,
+          "sourcePosition": "right",
+          "targetPosition": "left",
+          "type": "custom",
+          "width": 241
+        },
+        {
+          "data": {
+            "cases": [
+              {
+                "case_id": "true",
+                "conditions": [
+                  {
+                    "comparison_operator": "is",
+                    "id": "f1b41840-c30b-4ba2-a9c7-646973a3b711",
+                    "value": "revision_required",
+                    "varType": "string",
+                    "variable_selector": [
+                      "1789664522465",
+                      "alignment_status"
+                    ]
+                  }
+                ],
+                "id": "true",
+                "logical_operator": "and"
+              },
+              {
+                "case_id": "45510196-7400-46c3-94f3-c69cfdd964a3",
+                "conditions": [
+                  {
+                    "comparison_operator": "is",
+                    "id": "3f49672b-64db-4d8f-9d62-6f080604ca65",
+                    "value": "mapped",
+                    "varType": "string",
+                    "variable_selector": [
+                      "1789664522465",
+                      "alignment_status"
+                    ]
+                  }
+                ],
+                "id": "45510196-7400-46c3-94f3-c69cfdd964a3",
+                "logical_operator": "and"
+              }
+            ],
+            "selected": false,
+            "title": "Route by status",
+            "type": "if-else",
+            "desc": "Keep revision, mapped and other alignment outcomes distinct."
+          },
+          "height": 170,
+          "id": "1789664629607",
+          "position": {
+            "x": 1593,
+            "y": 282
+          },
+          "positionAbsolute": {
+            "x": 1593,
+            "y": 282
+          },
+          "selected": false,
+          "sourcePosition": "right",
+          "targetPosition": "left",
+          "type": "custom",
+          "width": 241
+        },
+        {
+          "data": {
+            "outputs": [
+              {
+                "value_selector": [
+                  "1789664522465",
+                  "alignment_status"
+                ],
+                "value_type": "string",
+                "variable": "status"
+              },
+              {
+                "value_selector": [
+                  "1789664522465",
+                  "alignment_json"
+                ],
+                "value_type": "string",
+                "variable": "result"
+              },
+              {
+                "variable": "proposed_plan",
+                "value_type": "string",
+                "value_selector": [
+                  "1790000000001",
+                  "text"
+                ]
+              },
+              {
+                "variable": "original_request",
+                "value_type": "string",
+                "value_selector": [
+                  "1789656311774",
+                  "input_message"
+                ]
+              }
+            ],
+            "selected": false,
+            "title": "Other alignment result",
+            "type": "end",
+            "desc": "Return greetings, uncertainty, clarification or nonblocking divergence with the original status."
+          },
+          "height": 112,
+          "id": "1789664766014",
+          "position": {
+            "x": 1680.71648243875,
+            "y": 575.5904382109527
+          },
+          "positionAbsolute": {
+            "x": 1680.71648243875,
+            "y": 575.5904382109527
+          },
+          "selected": false,
+          "sourcePosition": "right",
+          "targetPosition": "left",
+          "type": "custom",
+          "width": 241
+        },
+        {
+          "data": {
+            "outputs": [
+              {
+                "value_selector": [
+                  "1789664522465",
+                  "alignment_status"
+                ],
+                "value_type": "string",
+                "variable": "status"
+              },
+              {
+                "value_selector": [
+                  "1789664522465",
+                  "alignment_json"
+                ],
+                "value_type": "string",
+                "variable": "result"
+              },
+              {
+                "variable": "proposed_plan",
+                "value_type": "string",
+                "value_selector": [
+                  "1790000000001",
+                  "text"
+                ]
+              },
+              {
+                "variable": "original_request",
+                "value_type": "string",
+                "value_selector": [
+                  "1789656311774",
+                  "input_message"
+                ]
+              }
+            ],
+            "selected": false,
+            "title": "Premise map ready",
+            "type": "end",
+            "desc": "Return the map. This does not grant execution permission."
+          },
+          "height": 112,
+          "id": "1789665291549",
+          "position": {
+            "x": 1913.8278168173301,
+            "y": 447.8181208097643
+          },
+          "positionAbsolute": {
+            "x": 1913.8278168173301,
+            "y": 447.8181208097643
+          },
+          "selected": false,
+          "sourcePosition": "right",
+          "targetPosition": "left",
+          "type": "custom",
+          "width": 241
+        },
+        {
+          "data": {
+            "code": "import json\n\ndef main(\n    input_message: str,\n    ai_interpretation: str = \"\",\n    language: str = \"\"\n) -> dict:\n    if not isinstance(input_message, str) or not input_message.strip():\n        raise ValueError(\"input_message is required\")\n\n    if not isinstance(ai_interpretation, str) or not ai_interpretation.strip():\n        raise ValueError(\"Planning model returned no proposal\")\n    if len(input_message) > 6000 or len(ai_interpretation) > 6000:\n        raise ValueError(\"Request or proposal exceeds 6000 characters; shorten explicitly, never truncate\")\n\n    payload = {\n        \"input_message\": input_message,\n        \"language\": (language or \"\").strip() or \"en\",\n        \"processing_mode\": \"medium\",\n    }\n\n    if ai_interpretation and ai_interpretation.strip():\n        payload[\"ai_interpretation\"] = ai_interpretation\n\n    return {\n        \"request_body\": json.dumps(payload, ensure_ascii=False)\n    }",
+            "code_language": "python3",
+            "outputs": {
+              "request_body": {
+                "children": null,
+                "type": "string"
+              }
+            },
+            "selected": false,
+            "title": "Build request",
+            "type": "code",
+            "variables": [
+              {
+                "value_selector": [
+                  "1789656311774",
+                  "input_message"
+                ],
+                "value_type": "string",
+                "variable": "input_message"
+              },
+              {
+                "value_selector": [
+                  "1790000000001",
+                  "text"
+                ],
+                "value_type": "string",
+                "variable": "ai_interpretation"
+              },
+              {
+                "value_selector": [
+                  "1789656311774",
+                  "language"
+                ],
+                "value_type": "string",
+                "variable": "language"
+              }
+            ],
+            "desc": "Preserve input text and serialize JSON. Blank response language defaults to English."
+          },
+          "height": 50,
+          "id": "1789665758720",
+          "position": {
+            "x": 692,
+            "y": 282
+          },
+          "positionAbsolute": {
+            "x": 692,
+            "y": 282
+          },
+          "selected": false,
+          "sourcePosition": "right",
+          "targetPosition": "left",
+          "type": "custom",
+          "width": 241
+        },
+        {
+          "id": "1790000000001",
+          "type": "custom",
+          "width": 242,
+          "height": 100,
+          "position": {
+            "x": 380,
+            "y": 280
+          },
+          "positionAbsolute": {
+            "x": 380,
+            "y": 280
+          },
+          "sourcePosition": "right",
+          "targetPosition": "left",
+          "selected": false,
+          "data": {
+            "title": "Draft plan — select model",
+            "type": "llm",
+            "desc": "Select your configured chat model. Generate a proposal only; no tools or execution.",
+            "context": {
+              "enabled": false,
+              "variable_selector": []
+            },
+            "model": {
+              "provider": "",
+              "name": "",
+              "mode": "chat",
+              "completion_params": {}
+            },
+            "prompt_template": [
+              {
+                "id": "plan-system",
+                "role": "system",
+                "text": "Draft a concise proposed plan for the user's task. Do not execute the task or claim that any action has happened. Preserve explicit constraints. Separate assumptions and unknowns from stated facts. Do not invent permission, relax prohibitions, or treat anonymization as permission to use real data. For a greeting or unclear input, give a short acknowledgment or state what is unclear; do not invent a task. Respond in the requested language (English when blank). Return only the proposal, not hidden reasoning, within 4000 characters. This proposal will be compared with the original request by a separate premise-alignment service."
+              },
+              {
+                "id": "plan-user",
+                "role": "user",
+                "text": "Response language: {{#1789656311774.language#}}\nOriginal request:\n{{#1789656311774.input_message#}}"
+              }
+            ],
+            "variables": [],
+            "vision": {
+              "enabled": false
+            },
+            "retry_config": {
+              "retry_enabled": false,
+              "max_retries": 0,
+              "retry_interval": 100
+            }
+          }
+        }
+      ],
+      "viewport": {
+        "x": 20.46890994610385,
+        "y": 68.06427447125509,
+        "zoom": 1.248330548901612
+      }
+    },
+    "rag_pipeline_variables": []
+  }
+}

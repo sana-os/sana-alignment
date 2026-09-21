@@ -1,0 +1,1165 @@
+{
+  "diagnostic_version": "provider-output-11",
+  "application_version": "0.5.13",
+  "run_type": "new_inference",
+  "requested_language": "en",
+  "request_identity": {
+    "ai_characters": 4250,
+    "input_message": "The demo PC is not connected to the internet. Display entirely fictional customer information in the demo. Do not use real customer data."
+  },
+  "retry_policy": {
+    "mapping_retries": 1,
+    "max_model_calls": 3,
+    "total_budget_seconds": 605.0,
+    "feedback_violation_limit": 16
+  },
+  "outcome": "success",
+  "result": {
+    "schema_version": "0.5.0",
+    "request_id": "561124f4-28d4-459f-bde0-a28c65c9fc90",
+    "status": "mapped",
+    "observations": [
+      {
+        "kind": "observed_text",
+        "source": "input_message",
+        "quote": "The demo PC is not connected to the internet. Display entirely fictional customer information in the demo. Do not use real customer data.",
+        "externally_verified": false
+      },
+      {
+        "kind": "observed_text",
+        "source": "input_message",
+        "quote": "The demo PC is not connected to the internet.",
+        "externally_verified": false
+      },
+      {
+        "kind": "observed_text",
+        "source": "input_message",
+        "quote": "Display entirely fictional customer information in the demo.",
+        "externally_verified": false
+      },
+      {
+        "kind": "observed_text",
+        "source": "input_message",
+        "quote": "Do not use real customer data.",
+        "externally_verified": false
+      },
+      {
+        "kind": "observed_text",
+        "source": "ai_interpretation",
+        "quote": "- **Environment:** The demo PC has no internet connectivity; all data must be generated locally.",
+        "externally_verified": false
+      },
+      {
+        "kind": "observed_text",
+        "source": "ai_interpretation",
+        "quote": "- **Data Policy:** Only completely fictional (synthetic) customer information may be shown. No real personal data may be used.",
+        "externally_verified": false
+      },
+      {
+        "kind": "observed_text",
+        "source": "ai_interpretation",
+        "quote": "- The demo interface can accept static data supplied as a file (e.g., CSV, JSON) or hard‑coded structures.",
+        "externally_verified": false
+      },
+      {
+        "kind": "observed_text",
+        "source": "ai_interpretation",
+        "quote": "- The user has access to a basic scripting environment (e.g., Python, PowerShell) or can manually edit a text file.",
+        "externally_verified": false
+      },
+      {
+        "kind": "observed_text",
+        "source": "ai_interpretation",
+        "quote": "- No external libraries that require internet download will be needed; any needed libraries are already installed or can be bundled with the demo.",
+        "externally_verified": false
+      },
+      {
+        "kind": "observed_text",
+        "source": "ai_interpretation",
+        "quote": "- Exact format required by the demo (table layout, fields, file type).",
+        "externally_verified": false
+      },
+      {
+        "kind": "observed_text",
+        "source": "ai_interpretation",
+        "quote": "- Whether the demo UI expects a specific number of records.",
+        "externally_verified": false
+      },
+      {
+        "kind": "observed_text",
+        "source": "ai_interpretation",
+        "quote": "- If there are any style or branding constraints (company logo, color scheme).",
+        "externally_verified": false
+      },
+      {
+        "kind": "observed_text",
+        "source": "ai_interpretation",
+        "quote": "*(If any of these are unclear, ask the user for specifics before proceeding.)*",
+        "externally_verified": false
+      }
+    ],
+    "fact": [
+      {
+        "statement": "The demo PC is not connected to the internet.",
+        "source": "user_explicit",
+        "status": "explicit",
+        "support_state": "provided",
+        "materiality": "high",
+        "evidence": [
+          {
+            "source": "input_message",
+            "quote": "The demo PC is not connected to the internet."
+          }
+        ],
+        "externally_verified": false,
+        "execution_effect": null
+      }
+    ],
+    "view": {
+      "premises": [
+        {
+          "statement": "The demo PC has no internet connectivity; all data must be generated locally.",
+          "source": "provided_source",
+          "status": "explicit",
+          "support_state": "provided",
+          "materiality": "high",
+          "evidence": [
+            {
+              "source": "ai_interpretation",
+              "quote": "- **Environment:** The demo PC has no internet connectivity; all data must be generated locally."
+            }
+          ],
+          "externally_verified": false,
+          "execution_effect": null
+        },
+        {
+          "statement": "Only completely fictional (synthetic) customer information may be shown. No real personal data may be used.",
+          "source": "provided_source",
+          "status": "explicit",
+          "support_state": "provided",
+          "materiality": "high",
+          "evidence": [
+            {
+              "source": "ai_interpretation",
+              "quote": "- **Data Policy:** Only completely fictional (synthetic) customer information may be shown. No real personal data may be used."
+            }
+          ],
+          "externally_verified": false,
+          "execution_effect": null
+        },
+        {
+          "statement": "The demo interface can accept static data supplied as a file (e.g., CSV, JSON) or hard‑coded structures.",
+          "source": "provided_source",
+          "status": "explicit",
+          "support_state": "provided",
+          "materiality": "medium",
+          "evidence": [
+            {
+              "source": "ai_interpretation",
+              "quote": "- The demo interface can accept static data supplied as a file (e.g., CSV, JSON) or hard‑coded structures."
+            }
+          ],
+          "externally_verified": false,
+          "execution_effect": null
+        },
+        {
+          "statement": "The user has access to a basic scripting environment (e.g., Python, PowerShell) or can manually edit a text file.",
+          "source": "provided_source",
+          "status": "explicit",
+          "support_state": "provided",
+          "materiality": "medium",
+          "evidence": [
+            {
+              "source": "ai_interpretation",
+              "quote": "- The user has access to a basic scripting environment (e.g., Python, PowerShell) or can manually edit a text file."
+            }
+          ],
+          "externally_verified": false,
+          "execution_effect": null
+        },
+        {
+          "statement": "No external libraries that require internet download will be needed; any needed libraries are already installed or can be bundled with the demo.",
+          "source": "provided_source",
+          "status": "explicit",
+          "support_state": "provided",
+          "materiality": "medium",
+          "evidence": [
+            {
+              "source": "ai_interpretation",
+              "quote": "- No external libraries that require internet download will be needed; any needed libraries are already installed or can be bundled with the demo."
+            }
+          ],
+          "externally_verified": false,
+          "execution_effect": null
+        }
+      ],
+      "understanding": "[input_message]\nThe demo PC is not connected to the internet.\n\n[ai_interpretation]\n- **Environment:** The demo PC has no internet connectivity; all data must be generated locally.\n\n[ai_interpretation]\n- **Data Policy:** Only completely fictional (synthetic) customer information may be shown. No real personal data may be used.",
+      "hypotheses": [],
+      "premise_gaps": [],
+      "unresolved": [
+        {
+          "statement": "Exact format required by the demo (table layout, fields, file type).",
+          "scope": "execution",
+          "evidence": [
+            {
+              "source": "ai_interpretation",
+              "quote": "- Exact format required by the demo (table layout, fields, file type)."
+            }
+          ],
+          "question": null
+        },
+        {
+          "statement": "Whether the demo UI expects a specific number of records.",
+          "scope": "execution",
+          "evidence": [
+            {
+              "source": "ai_interpretation",
+              "quote": "- Whether the demo UI expects a specific number of records."
+            }
+          ],
+          "question": null
+        },
+        {
+          "statement": "Any style or branding constraints (company logo, color scheme).",
+          "scope": "execution",
+          "evidence": [
+            {
+              "source": "ai_interpretation",
+              "quote": "- If there are any style or branding constraints (company logo, color scheme)."
+            }
+          ],
+          "question": null
+        }
+      ],
+      "understanding_evidence": [
+        {
+          "source": "input_message",
+          "quote": "The demo PC is not connected to the internet."
+        },
+        {
+          "source": "ai_interpretation",
+          "quote": "- **Environment:** The demo PC has no internet connectivity; all data must be generated locally."
+        },
+        {
+          "source": "ai_interpretation",
+          "quote": "- **Data Policy:** Only completely fictional (synthetic) customer information may be shown. No real personal data may be used."
+        }
+      ],
+      "unknowns": [],
+      "questions": []
+    },
+    "care": [
+      {
+        "statement": "Display entirely fictional customer information in the demo.",
+        "source": "user_explicit",
+        "status": "explicit",
+        "support_state": "not_applicable",
+        "materiality": "high",
+        "evidence": [
+          {
+            "source": "input_message",
+            "quote": "Display entirely fictional customer information in the demo."
+          }
+        ],
+        "externally_verified": false,
+        "execution_effect": null
+      },
+      {
+        "statement": "Do not use real customer data.",
+        "source": "user_explicit",
+        "status": "explicit",
+        "support_state": "not_applicable",
+        "materiality": "high",
+        "evidence": [
+          {
+            "source": "input_message",
+            "quote": "Do not use real customer data."
+          }
+        ],
+        "externally_verified": false,
+        "execution_effect": null
+      },
+      {
+        "statement": "- **Data Policy:** Only completely fictional (synthetic) customer information may be shown. No real personal data may be used.",
+        "source": "provided_source",
+        "status": "explicit",
+        "support_state": "not_applicable",
+        "materiality": "high",
+        "evidence": [
+          {
+            "source": "ai_interpretation",
+            "quote": "- **Data Policy:** Only completely fictional (synthetic) customer information may be shown. No real personal data may be used."
+          }
+        ],
+        "externally_verified": false,
+        "execution_effect": null
+      }
+    ],
+    "acknowledgment": null,
+    "meta": {
+      "requested_language": "en",
+      "short_reply_language": null,
+      "language_fallback": false,
+      "observation_scope": "submitted_material_only",
+      "profile": "workflow-premise-map-v0.5",
+      "understanding_mode": "source_excerpts",
+      "stages_completed": [
+        "extraction",
+        "mapping"
+      ],
+      "frameworks_used": [],
+      "comparison": "provided_ai_interpretation",
+      "delta_v": null,
+      "execution_authorized": false,
+      "knowledge_sha256": "f2b5ba63b58ab92597019e8a59a391bc15b363b1e0c14a32372ee5af4f01990b"
+    }
+  },
+  "elapsed_seconds": 421.235,
+  "mapping_attempts": [
+    {
+      "attempt": 1,
+      "outcome": "provider_error",
+      "error": {
+        "code": "provider_invalid_gap_dependency",
+        "issue": {
+          "path": "view.premise_gaps.0.ai_premise",
+          "rule": "open_topics_alone_are_not_comparison_positions"
+        },
+        "violations": [
+          {
+            "code": "provider_invalid_gap_dependency",
+            "issue": {
+              "path": "view.premise_gaps.0.ai_premise",
+              "rule": "open_topics_alone_are_not_comparison_positions"
+            },
+            "evidence_refs": [
+              "q0",
+              "q10"
+            ]
+          },
+          {
+            "code": "provider_invalid_gap_dependency",
+            "issue": {
+              "path": "view.premise_gaps.1.ai_premise",
+              "rule": "open_topics_alone_are_not_comparison_positions"
+            },
+            "evidence_refs": [
+              "q0",
+              "q11"
+            ]
+          },
+          {
+            "code": "provider_invalid_gap_dependency",
+            "issue": {
+              "path": "view.premise_gaps.2.ai_premise",
+              "rule": "open_topics_alone_are_not_comparison_positions"
+            },
+            "evidence_refs": [
+              "q0",
+              "q12"
+            ]
+          }
+        ]
+      },
+      "retry_decision": "retry",
+      "elapsed_seconds": 171.309,
+      "candidate_review": {
+        "validated": false,
+        "scope": "candidate_labels_and_ids_only",
+        "source_counts": {
+          "fact": 1,
+          "view.premises": 9,
+          "view.premise_gaps": 3
+        },
+        "per_group_limit": 16,
+        "evidence_limit_per_item": 8,
+        "support_labels": [
+          {
+            "path": "fact.0",
+            "source": "user_explicit",
+            "status": "explicit",
+            "support_state": "provided",
+            "evidence_refs": [
+              "q2"
+            ]
+          },
+          {
+            "path": "view.premises.0",
+            "source": "provided_source",
+            "status": "explicit",
+            "support_state": "provided",
+            "evidence_refs": [
+              "q5"
+            ]
+          },
+          {
+            "path": "view.premises.1",
+            "source": "provided_source",
+            "status": "explicit",
+            "support_state": "provided",
+            "evidence_refs": [
+              "q6"
+            ]
+          },
+          {
+            "path": "view.premises.2",
+            "source": "provided_source",
+            "status": "explicit",
+            "support_state": "provided",
+            "evidence_refs": [
+              "q7"
+            ]
+          },
+          {
+            "path": "view.premises.3",
+            "source": "provided_source",
+            "status": "explicit",
+            "support_state": "provided",
+            "evidence_refs": [
+              "q8"
+            ]
+          },
+          {
+            "path": "view.premises.4",
+            "source": "provided_source",
+            "status": "explicit",
+            "support_state": "provided",
+            "evidence_refs": [
+              "q9"
+            ]
+          },
+          {
+            "path": "view.premises.5",
+            "source": "provided_source",
+            "status": "explicit",
+            "support_state": "unknown",
+            "evidence_refs": [
+              "q10"
+            ]
+          },
+          {
+            "path": "view.premises.6",
+            "source": "provided_source",
+            "status": "explicit",
+            "support_state": "unknown",
+            "evidence_refs": [
+              "q11"
+            ]
+          },
+          {
+            "path": "view.premises.7",
+            "source": "provided_source",
+            "status": "explicit",
+            "support_state": "unknown",
+            "evidence_refs": [
+              "q12"
+            ]
+          },
+          {
+            "path": "view.premises.8",
+            "source": "provided_source",
+            "status": "explicit",
+            "support_state": "provided",
+            "evidence_refs": [
+              "q13"
+            ]
+          }
+        ],
+        "gap_positions": [
+          {
+            "path": "view.premise_gaps.0",
+            "dependency_present": true,
+            "kind": "missing_premise",
+            "human_premise": null,
+            "ai_premise": "q10"
+          },
+          {
+            "path": "view.premise_gaps.1",
+            "dependency_present": true,
+            "kind": "missing_premise",
+            "human_premise": null,
+            "ai_premise": "q11"
+          },
+          {
+            "path": "view.premise_gaps.2",
+            "dependency_present": true,
+            "kind": "missing_premise",
+            "human_premise": null,
+            "ai_premise": "q12"
+          }
+        ]
+      },
+      "scope_decisions": [
+        {
+          "path": "view.premise_gaps.0",
+          "dependency": {
+            "kind": "goal_meaning",
+            "target_ref": "q10"
+          },
+          "evidence_refs": [
+            "q0",
+            "q10"
+          ],
+          "target_extraction_function": "unknown",
+          "target_is_explicit_unknown": true
+        },
+        {
+          "path": "view.premise_gaps.1",
+          "dependency": {
+            "kind": "goal_meaning",
+            "target_ref": "q11"
+          },
+          "evidence_refs": [
+            "q0",
+            "q11"
+          ],
+          "target_extraction_function": "unknown",
+          "target_is_explicit_unknown": true
+        },
+        {
+          "path": "view.premise_gaps.2",
+          "dependency": {
+            "kind": "goal_meaning",
+            "target_ref": "q12"
+          },
+          "evidence_refs": [
+            "q0",
+            "q12"
+          ],
+          "target_extraction_function": "unknown",
+          "target_is_explicit_unknown": true
+        }
+      ]
+    },
+    {
+      "attempt": 2,
+      "outcome": "success",
+      "retry_decision": "not_needed",
+      "elapsed_seconds": 164.275,
+      "candidate_review": {
+        "validated": false,
+        "scope": "candidate_labels_and_ids_only",
+        "source_counts": {
+          "fact": 1,
+          "view.premises": 5,
+          "view.premise_gaps": 0
+        },
+        "per_group_limit": 16,
+        "evidence_limit_per_item": 8,
+        "support_labels": [
+          {
+            "path": "fact.0",
+            "source": "user_explicit",
+            "status": "explicit",
+            "support_state": "provided",
+            "evidence_refs": [
+              "q2"
+            ]
+          },
+          {
+            "path": "view.premises.0",
+            "source": "provided_source",
+            "status": "explicit",
+            "support_state": "provided",
+            "evidence_refs": [
+              "q5"
+            ]
+          },
+          {
+            "path": "view.premises.1",
+            "source": "provided_source",
+            "status": "explicit",
+            "support_state": "provided",
+            "evidence_refs": [
+              "q6"
+            ]
+          },
+          {
+            "path": "view.premises.2",
+            "source": "provided_source",
+            "status": "explicit",
+            "support_state": "provided",
+            "evidence_refs": [
+              "q7"
+            ]
+          },
+          {
+            "path": "view.premises.3",
+            "source": "provided_source",
+            "status": "explicit",
+            "support_state": "provided",
+            "evidence_refs": [
+              "q8"
+            ]
+          },
+          {
+            "path": "view.premises.4",
+            "source": "provided_source",
+            "status": "explicit",
+            "support_state": "provided",
+            "evidence_refs": [
+              "q9"
+            ]
+          }
+        ],
+        "gap_positions": []
+      },
+      "scope_decisions": [
+        {
+          "path": "view.unresolved.0",
+          "dependency": {
+            "kind": "execution_detail",
+            "target_ref": null
+          },
+          "evidence_refs": [
+            "q10"
+          ],
+          "target_extraction_function": null,
+          "target_is_explicit_unknown": false
+        },
+        {
+          "path": "view.unresolved.1",
+          "dependency": {
+            "kind": "execution_detail",
+            "target_ref": null
+          },
+          "evidence_refs": [
+            "q11"
+          ],
+          "target_extraction_function": null,
+          "target_is_explicit_unknown": false
+        },
+        {
+          "path": "view.unresolved.2",
+          "dependency": {
+            "kind": "execution_detail",
+            "target_ref": null
+          },
+          "evidence_refs": [
+            "q12"
+          ],
+          "target_extraction_function": null,
+          "target_is_explicit_unknown": false
+        }
+      ]
+    }
+  ],
+  "retry_count": 1,
+  "model_call_count": 3,
+  "last_attempted_stage": "Draft",
+  "generated_stages": [
+    "Extraction",
+    "Draft"
+  ],
+  "completed_stages": [
+    "Extraction",
+    "Draft"
+  ],
+  "evidence_mismatch_count": 0,
+  "evidence_mismatches": [],
+  "provider_validation_errors": [],
+  "extracted_clauses": [
+    {
+      "source": "input_message",
+      "quote": "The demo PC is not connected to the internet.",
+      "function": "state"
+    },
+    {
+      "source": "input_message",
+      "quote": "Display entirely fictional customer information in the demo.",
+      "function": "request"
+    },
+    {
+      "source": "input_message",
+      "quote": "Do not use real customer data.",
+      "function": "concern"
+    },
+    {
+      "source": "ai_interpretation",
+      "quote": "- **Environment:** The demo PC has no internet connectivity; all data must be generated locally.",
+      "function": "mixed"
+    },
+    {
+      "source": "ai_interpretation",
+      "quote": "- **Data Policy:** Only completely fictional (synthetic) customer information may be shown. No real personal data may be used.",
+      "function": "concern"
+    },
+    {
+      "source": "ai_interpretation",
+      "quote": "- The demo interface can accept static data supplied as a file (e.g., CSV, JSON) or hard‑coded structures.",
+      "function": "assumption"
+    },
+    {
+      "source": "ai_interpretation",
+      "quote": "- The user has access to a basic scripting environment (e.g., Python, PowerShell) or can manually edit a text file.",
+      "function": "assumption"
+    },
+    {
+      "source": "ai_interpretation",
+      "quote": "- No external libraries that require internet download will be needed; any needed libraries are already installed or can be bundled with the demo.",
+      "function": "assumption"
+    },
+    {
+      "source": "ai_interpretation",
+      "quote": "- Exact format required by the demo (table layout, fields, file type).",
+      "function": "unknown"
+    },
+    {
+      "source": "ai_interpretation",
+      "quote": "- Whether the demo UI expects a specific number of records.",
+      "function": "unknown"
+    },
+    {
+      "source": "ai_interpretation",
+      "quote": "- If there are any style or branding constraints (company logo, color scheme).",
+      "function": "unknown"
+    },
+    {
+      "source": "ai_interpretation",
+      "quote": "*(If any of these are unclear, ask the user for specifics before proceeding.)*",
+      "function": "proposal"
+    }
+  ],
+  "scope_decisions": [
+    {
+      "path": "view.unresolved.0",
+      "dependency": {
+        "kind": "execution_detail",
+        "target_ref": null
+      },
+      "evidence_refs": [
+        "q10"
+      ],
+      "target_extraction_function": null,
+      "target_is_explicit_unknown": false
+    },
+    {
+      "path": "view.unresolved.1",
+      "dependency": {
+        "kind": "execution_detail",
+        "target_ref": null
+      },
+      "evidence_refs": [
+        "q11"
+      ],
+      "target_extraction_function": null,
+      "target_is_explicit_unknown": false
+    },
+    {
+      "path": "view.unresolved.2",
+      "dependency": {
+        "kind": "execution_detail",
+        "target_ref": null
+      },
+      "evidence_refs": [
+        "q12"
+      ],
+      "target_extraction_function": null,
+      "target_is_explicit_unknown": false
+    }
+  ],
+  "reference_review": [
+    {
+      "ref": "q0",
+      "source": "input_message",
+      "quote": "The demo PC is not connected to the internet. Display entirely fictional customer information in the demo. Do not use real customer data.",
+      "extraction_function": null,
+      "care_eligible": false,
+      "explicit_unknown": false,
+      "excluded_from_fact": true,
+      "context": null
+    },
+    {
+      "ref": "q1",
+      "source": "ai_interpretation",
+      "quote": "**Proposed Plan for Displaying Entirely Fictional Customer Information in an Offline Demo**\n\n---\n\n### 1. Clarify Requirements (Stated Facts)\n- **Environment:** The demo PC has no internet connectivity; all data must be generated locally.\n- **Data Policy:** Only completely fictional (synthetic) customer information may be shown. No real personal data may be used.\n\n### 2. Assumptions\n- The demo interface can accept static data supplied as a file (e.g., CSV, JSON) or hard‑coded structures.\n- The user has access to a basic scripting environment (e.g., Python, PowerShell) or can manually edit a text file.\n- No external libraries that require internet download will be needed; any needed libraries are already installed or can be bundled with the demo.\n\n### 3. Unknowns\n- Exact format required by the demo (table layout, fields, file type).\n- Whether the demo UI expects a specific number of records.\n- If there are any style or branding constraints (company logo, color scheme).\n\n*(If any of these are unclear, ask the user for specifics before proceeding.)*\n\n### 4. Steps to Generate Fictional Customer Data Offline\n\n1. **Define Data Schema**  \n   Identify the fields the demo needs, e.g.:  \n   - Customer ID (numeric)  \n   - First Name  \n   - Last Name  \n   - Email Address  \n   - Phone Number  \n   - Street Address  \n   - City, State, ZIP  \n   - Account Creation Date  \n\n2. **Create Lists of Synthetic Elements**  \n   - **Names:** Use generic placeholder names (e.g., “John Doe”, “Jane Smith”) or combine randomly selected first‑name and last‑name lists that are known to be fictitious (e.g., “Ada Bright”, “Liam Oak”).  \n   - **Domains:** Use non‑existent domains such as `example.com`, `demo.test`, `sample.org`.  \n   - **Addresses:** Construct addresses using generic street names (“123 Main St”, “456 Oak Avenue”) and placeholder city/state combos.  \n   - **Phone Numbers:** Use the US “555” exchange (e.g., `555‑0123`) or any other reserved test number range.  \n\n3. **Generate Records Locally**  \n   - **Option A – Simple Script (Python example):**  \n     ```python\n     import random, json, datetime\n\n     first_names = [\"Ada\", \"Liam\", \"Mia\", \"Noah\", \"Olivia\"]\n     last_names  = [\"Bright\", \"Oak\", \"River\", \"Stone\", \"Vale\"]\n     streets     = [\"Main St\", \"Oak Ave\", \"Pine Rd\", \"Maple Blvd\"]\n     cities      = [\"Springfield\", \"Riverton\", \"Lakeview\"]\n     states      = [\"CA\", \"NY\", \"TX\"]\n     \n     def fake_customer(i):\n         fn = random.choice(first_names)\n         ln = random.choice(last_names)\n         email = f\"{fn.lower()}.{ln.lower()}@example.com\"\n         phone = f\"555-{random.randint(1000,9999)}\"\n         address = f\"{random.randint(100,999)} {random.choice(streets)}\"\n         city = random.choice(cities)\n         state = random.choice(states)\n         zip_code = f\"{random.randint(10000,99999)}\"\n         created = (datetime.date.today() -\n                    datetime.timedelta(days=random.randint(0,365))).isoformat()\n         return {\n             \"customer_id\": i,\n             \"first_name\": fn,\n             \"last_name\": ln,\n             \"email\": email,\n             \"phone\": phone,\n             \"address\": address,\n             \"city\": city,\n             \"state\": state,\n             \"zip\": zip_code,\n             \"created_at\": created\n         }\n\n     data = [fake_customer(i) for i in range(1, 21)]  # generate 20 records\n     with open(\"demo_customers.json\", \"w\") as f:\n         json.dump(data, f, indent=2)\n     ```\n   - **Option B – Manual Creation:** Populate a spreadsheet with the same synthetic values and export to CSV/JSON.\n\n4. **Validate Fictionality**  \n   - Verify that every name, email domain, address, and phone number uses the reserved/test patterns listed above.  \n   - Run a quick grep/search to ensure no real‑world identifiers (e.g., actual company domains) appear.\n\n5. **Load Data into Demo**  \n   - Place the generated file (`demo_customers.json` or `.csv`) in the location expected by the demo application.  \n   - If the demo reads from a hard‑coded list, replace that list with the generated records.\n\n6. **Document the Process**  \n   - Include a brief README on the demo PC explaining that the data is synthetic, how it was generated, and that it can be regenerated offline if needed.\n\n",
+      "extraction_function": null,
+      "care_eligible": false,
+      "explicit_unknown": false,
+      "excluded_from_fact": true,
+      "context": null
+    },
+    {
+      "ref": "q2",
+      "source": "input_message",
+      "quote": "The demo PC is not connected to the internet.",
+      "extraction_function": "state",
+      "care_eligible": false,
+      "explicit_unknown": false,
+      "excluded_from_fact": false,
+      "context": {
+        "heading_paths": [
+          []
+        ],
+        "enclosing_lines": [
+          "The demo PC is not connected to the internet. Display entirely fictional customer information in the demo. Do not use real customer data."
+        ]
+      }
+    },
+    {
+      "ref": "q3",
+      "source": "input_message",
+      "quote": "Display entirely fictional customer information in the demo.",
+      "extraction_function": "request",
+      "care_eligible": true,
+      "explicit_unknown": false,
+      "excluded_from_fact": true,
+      "context": {
+        "heading_paths": [
+          []
+        ],
+        "enclosing_lines": [
+          "The demo PC is not connected to the internet. Display entirely fictional customer information in the demo. Do not use real customer data."
+        ]
+      }
+    },
+    {
+      "ref": "q4",
+      "source": "input_message",
+      "quote": "Do not use real customer data.",
+      "extraction_function": "concern",
+      "care_eligible": true,
+      "explicit_unknown": false,
+      "excluded_from_fact": true,
+      "context": {
+        "heading_paths": [
+          []
+        ],
+        "enclosing_lines": [
+          "The demo PC is not connected to the internet. Display entirely fictional customer information in the demo. Do not use real customer data."
+        ]
+      }
+    },
+    {
+      "ref": "q5",
+      "source": "ai_interpretation",
+      "quote": "- **Environment:** The demo PC has no internet connectivity; all data must be generated locally.",
+      "extraction_function": "mixed",
+      "care_eligible": false,
+      "explicit_unknown": false,
+      "excluded_from_fact": true,
+      "context": {
+        "heading_paths": [
+          [
+            "### 1. Clarify Requirements (Stated Facts)"
+          ]
+        ]
+      }
+    },
+    {
+      "ref": "q6",
+      "source": "ai_interpretation",
+      "quote": "- **Data Policy:** Only completely fictional (synthetic) customer information may be shown. No real personal data may be used.",
+      "extraction_function": "concern",
+      "care_eligible": true,
+      "explicit_unknown": false,
+      "excluded_from_fact": true,
+      "context": {
+        "heading_paths": [
+          [
+            "### 1. Clarify Requirements (Stated Facts)"
+          ]
+        ]
+      }
+    },
+    {
+      "ref": "q7",
+      "source": "ai_interpretation",
+      "quote": "- The demo interface can accept static data supplied as a file (e.g., CSV, JSON) or hard‑coded structures.",
+      "extraction_function": "assumption",
+      "care_eligible": false,
+      "explicit_unknown": false,
+      "excluded_from_fact": true,
+      "context": {
+        "heading_paths": [
+          [
+            "### 2. Assumptions"
+          ]
+        ]
+      }
+    },
+    {
+      "ref": "q8",
+      "source": "ai_interpretation",
+      "quote": "- The user has access to a basic scripting environment (e.g., Python, PowerShell) or can manually edit a text file.",
+      "extraction_function": "assumption",
+      "care_eligible": false,
+      "explicit_unknown": false,
+      "excluded_from_fact": true,
+      "context": {
+        "heading_paths": [
+          [
+            "### 2. Assumptions"
+          ]
+        ]
+      }
+    },
+    {
+      "ref": "q9",
+      "source": "ai_interpretation",
+      "quote": "- No external libraries that require internet download will be needed; any needed libraries are already installed or can be bundled with the demo.",
+      "extraction_function": "assumption",
+      "care_eligible": false,
+      "explicit_unknown": false,
+      "excluded_from_fact": true,
+      "context": {
+        "heading_paths": [
+          [
+            "### 2. Assumptions"
+          ]
+        ]
+      }
+    },
+    {
+      "ref": "q10",
+      "source": "ai_interpretation",
+      "quote": "- Exact format required by the demo (table layout, fields, file type).",
+      "extraction_function": "unknown",
+      "care_eligible": false,
+      "explicit_unknown": true,
+      "excluded_from_fact": true,
+      "context": {
+        "heading_paths": [
+          [
+            "### 3. Unknowns"
+          ]
+        ]
+      }
+    },
+    {
+      "ref": "q11",
+      "source": "ai_interpretation",
+      "quote": "- Whether the demo UI expects a specific number of records.",
+      "extraction_function": "unknown",
+      "care_eligible": false,
+      "explicit_unknown": true,
+      "excluded_from_fact": true,
+      "context": {
+        "heading_paths": [
+          [
+            "### 3. Unknowns"
+          ]
+        ]
+      }
+    },
+    {
+      "ref": "q12",
+      "source": "ai_interpretation",
+      "quote": "- If there are any style or branding constraints (company logo, color scheme).",
+      "extraction_function": "unknown",
+      "care_eligible": false,
+      "explicit_unknown": true,
+      "excluded_from_fact": true,
+      "context": {
+        "heading_paths": [
+          [
+            "### 3. Unknowns"
+          ]
+        ]
+      }
+    },
+    {
+      "ref": "q13",
+      "source": "ai_interpretation",
+      "quote": "*(If any of these are unclear, ask the user for specifics before proceeding.)*",
+      "extraction_function": "proposal",
+      "care_eligible": false,
+      "explicit_unknown": false,
+      "excluded_from_fact": true,
+      "context": {
+        "heading_paths": [
+          [
+            "### 3. Unknowns"
+          ]
+        ]
+      }
+    }
+  ],
+  "draft_review": {
+    "care": [
+      {
+        "statement": "Display entirely fictional customer information in the demo.",
+        "source": "user_explicit",
+        "status": "explicit",
+        "support_state": "not_applicable",
+        "materiality": "high",
+        "evidence": [
+          {
+            "source": "input_message",
+            "quote": "Display entirely fictional customer information in the demo."
+          }
+        ],
+        "externally_verified": false
+      },
+      {
+        "statement": "Do not use real customer data.",
+        "source": "user_explicit",
+        "status": "explicit",
+        "support_state": "not_applicable",
+        "materiality": "high",
+        "evidence": [
+          {
+            "source": "input_message",
+            "quote": "Do not use real customer data."
+          }
+        ],
+        "externally_verified": false
+      },
+      {
+        "statement": "- **Data Policy:** Only completely fictional (synthetic) customer information may be shown. No real personal data may be used.",
+        "source": "provided_source",
+        "status": "explicit",
+        "support_state": "not_applicable",
+        "materiality": "high",
+        "evidence": [
+          {
+            "source": "ai_interpretation",
+            "quote": "- **Data Policy:** Only completely fictional (synthetic) customer information may be shown. No real personal data may be used."
+          }
+        ],
+        "externally_verified": false
+      }
+    ],
+    "unresolved": [
+      {
+        "statement": "Exact format required by the demo (table layout, fields, file type).",
+        "scope": "execution",
+        "evidence": [
+          {
+            "source": "ai_interpretation",
+            "quote": "- Exact format required by the demo (table layout, fields, file type)."
+          }
+        ],
+        "question": null
+      },
+      {
+        "statement": "Whether the demo UI expects a specific number of records.",
+        "scope": "execution",
+        "evidence": [
+          {
+            "source": "ai_interpretation",
+            "quote": "- Whether the demo UI expects a specific number of records."
+          }
+        ],
+        "question": null
+      },
+      {
+        "statement": "Any style or branding constraints (company logo, color scheme).",
+        "scope": "execution",
+        "evidence": [
+          {
+            "source": "ai_interpretation",
+            "quote": "- If there are any style or branding constraints (company logo, color scheme)."
+          }
+        ],
+        "question": null
+      }
+    ],
+    "premise_gaps": [],
+    "hypotheses": [],
+    "questions_with_paths": [],
+    "distinct_questions_counted_by_engine": 0
+  },
+  "support_review": [
+    {
+      "path": "fact.0",
+      "statement": "The demo PC is not connected to the internet.",
+      "source": "user_explicit",
+      "status": "explicit",
+      "support_state": "provided",
+      "evidence": [
+        {
+          "source": "input_message",
+          "quote": "The demo PC is not connected to the internet.",
+          "extraction_functions": [
+            "state"
+          ]
+        }
+      ]
+    },
+    {
+      "path": "view.premises.0",
+      "statement": "The demo PC has no internet connectivity; all data must be generated locally.",
+      "source": "provided_source",
+      "status": "explicit",
+      "support_state": "provided",
+      "evidence": [
+        {
+          "source": "ai_interpretation",
+          "quote": "- **Environment:** The demo PC has no internet connectivity; all data must be generated locally.",
+          "extraction_functions": [
+            "mixed"
+          ]
+        }
+      ]
+    },
+    {
+      "path": "view.premises.1",
+      "statement": "Only completely fictional (synthetic) customer information may be shown. No real personal data may be used.",
+      "source": "provided_source",
+      "status": "explicit",
+      "support_state": "provided",
+      "evidence": [
+        {
+          "source": "ai_interpretation",
+          "quote": "- **Data Policy:** Only completely fictional (synthetic) customer information may be shown. No real personal data may be used.",
+          "extraction_functions": [
+            "concern"
+          ]
+        }
+      ]
+    },
+    {
+      "path": "view.premises.2",
+      "statement": "The demo interface can accept static data supplied as a file (e.g., CSV, JSON) or hard‑coded structures.",
+      "source": "provided_source",
+      "status": "explicit",
+      "support_state": "provided",
+      "evidence": [
+        {
+          "source": "ai_interpretation",
+          "quote": "- The demo interface can accept static data supplied as a file (e.g., CSV, JSON) or hard‑coded structures.",
+          "extraction_functions": [
+            "assumption"
+          ]
+        }
+      ]
+    },
+    {
+      "path": "view.premises.3",
+      "statement": "The user has access to a basic scripting environment (e.g., Python, PowerShell) or can manually edit a text file.",
+      "source": "provided_source",
+      "status": "explicit",
+      "support_state": "provided",
+      "evidence": [
+        {
+          "source": "ai_interpretation",
+          "quote": "- The user has access to a basic scripting environment (e.g., Python, PowerShell) or can manually edit a text file.",
+          "extraction_functions": [
+            "assumption"
+          ]
+        }
+      ]
+    },
+    {
+      "path": "view.premises.4",
+      "statement": "No external libraries that require internet download will be needed; any needed libraries are already installed or can be bundled with the demo.",
+      "source": "provided_source",
+      "status": "explicit",
+      "support_state": "provided",
+      "evidence": [
+        {
+          "source": "ai_interpretation",
+          "quote": "- No external libraries that require internet download will be needed; any needed libraries are already installed or can be bundled with the demo.",
+          "extraction_functions": [
+            "assumption"
+          ]
+        }
+      ]
+    }
+  ],
+  "verification_inputs": {
+    "diagnostic_sha256": "79d81b415dc09803a68c81e5cea6f957f5a381087b95d2d403819bef5d9682ec",
+    "request_sha256": "feb95a60f6cf826f2a10576cd7d3f27dbe4ef101a3d67641a2e692f55d9f2b42"
+  }
+}

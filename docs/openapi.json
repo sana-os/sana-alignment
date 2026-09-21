@@ -3,7 +3,7 @@
   "info": {
     "title": "SANA Premise Alignment API",
     "description": "Powered by SANA OS — https://sana-os.org/ — workflow premise mapping profile",
-    "version": "0.4.2"
+    "version": "0.5.15"
   },
   "paths": {
     "/healthz": {
@@ -89,6 +89,23 @@
             "minLength": 1,
             "title": "Input Message"
           },
+          "processing_mode": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "low",
+                  "medium",
+                  "high"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Processing Mode",
+            "description": "Processing allowance, not an accuracy score. low: no mapping correction; medium: at most one; high: at most two. Omitted uses server configuration. All modes retain the same validation and total deadline."
+          },
           "ai_interpretation": {
             "anyOf": [
               {
@@ -160,9 +177,9 @@
         "properties": {
           "schema_version": {
             "type": "string",
-            "const": "0.4.0",
+            "const": "0.5.0",
             "title": "Schema Version",
-            "default": "0.4.0"
+            "default": "0.5.0"
           },
           "request_id": {
             "type": "string",
@@ -246,7 +263,8 @@
             "type": "string",
             "maxLength": 6000,
             "minLength": 1,
-            "title": "Statement"
+            "title": "Statement",
+            "description": "An exact original clause expressing a requested outcome, goal, preference, priority or boundary, selected from extraction request/concern anchors and cited in this item evidence. Never convert a reported condition into a directive, even under an inferred label. Original language is preserved. Practical implications belong in View with tentative attribution, if relevant, not invented Care."
           },
           "source": {
             "type": "string",
@@ -467,7 +485,7 @@
               }
             ],
             "title": "Human Premise",
-            "description": "Human position relevant to this comparison, or null if not stated. Do not import the AI implementation into it. Both sides cannot be null or blank."
+            "description": "Exact cited human position selected for this comparison, or null if not stated. A description of what the human did not specify is not a stated position. Both sides cannot be null or blank."
           },
           "ai_premise": {
             "anyOf": [
@@ -481,14 +499,14 @@
               }
             ],
             "title": "Ai Premise",
-            "description": "Position in the supplied AI proposal, or null if not stated. Do not invent a replacement proposal to fill this field. Both sides cannot be null or blank."
+            "description": "Exact cited position in the supplied AI proposal, or null if not stated. Includes the selected clause qualifications and alternatives. Both sides cannot be null or blank."
           },
           "difference": {
             "type": "string",
-            "maxLength": 6000,
+            "maxLength": 14000,
             "minLength": 1,
             "title": "Difference",
-            "description": "Explain the supported comparison. Do not list unspecified implementation options, invent candidate answers, or treat a missing alternative method as a new requirement."
+            "description": "Server-rendered comparison kind and exact source-labelled positions, preserving alternatives and qualifications. A null side means no position was selected from submitted material, not proof of absence elsewhere. This is an extractive comparison, not a free-form explanation or independently verified conclusion."
           },
           "evidence": {
             "items": {
@@ -612,9 +630,18 @@
           },
           "profile": {
             "type": "string",
-            "const": "workflow-premise-map-v0.4",
+            "const": "workflow-premise-map-v0.5",
             "title": "Profile",
-            "default": "workflow-premise-map-v0.4"
+            "default": "workflow-premise-map-v0.5"
+          },
+          "understanding_mode": {
+            "type": "string",
+            "enum": [
+              "source_excerpts",
+              "short_reply"
+            ],
+            "title": "Understanding Mode",
+            "default": "source_excerpts"
           },
           "stages_completed": {
             "items": {
@@ -714,7 +741,8 @@
               "unknown",
               "not_applicable"
             ],
-            "title": "Support State"
+            "title": "Support State",
+            "description": "Support for this statement at its stated scope within submitted material, not external truth. provided: cited material supplies a basis, including faithful attributed reports of plans/assumptions; unsupported: assertion exceeds supplied support; disputed: submitted material explicitly contests it; unknown: support/truth of the assessed proposition is undetermined; not_applicable: goal/value/requirement represented as such. Reporting a plan assumption is not establishing its truth. Do not assign unsupported merely because the source is AI or externally_verified is false."
           },
           "materiality": {
             "type": "string",
@@ -741,11 +769,18 @@
             "default": false
           },
           "execution_effect": {
-            "type": "string",
-            "maxLength": 6000,
-            "minLength": 1,
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 6000,
+                "minLength": 1
+              },
+              {
+                "type": "null"
+              }
+            ],
             "title": "Execution Effect",
-            "description": "Consequence of this attributed premise, not a new requirement. Keep implementation details from an AI proposal on the AI proposal; never attach them to a human goal unless the human supplied them. Do not add an unstated motive, legal/privacy rationale, or guarantee of compliance/safety."
+            "description": "Null unless an intended effect is explicitly quoted in this premise evidence. A non-null value is the exact cited source quote, not a generated prediction, verified consequence or completed action. Its original language is preserved."
           }
         },
         "additionalProperties": false,
@@ -756,8 +791,7 @@
           "status",
           "support_state",
           "materiality",
-          "evidence",
-          "execution_effect"
+          "evidence"
         ],
         "title": "Premise"
       },
@@ -864,9 +898,10 @@
           },
           "understanding": {
             "type": "string",
-            "maxLength": 6000,
+            "maxLength": 32000,
             "minLength": 1,
-            "title": "Understanding"
+            "title": "Understanding",
+            "description": "Source-labelled original excerpts for mapped results, or a localized short reply for greeting/uninterpretable input. Not a newly authored interpretation. Consult premises, gaps and unresolved for analysis."
           },
           "hypotheses": {
             "items": {
@@ -892,6 +927,15 @@
             "type": "array",
             "maxItems": 12,
             "title": "Unresolved"
+          },
+          "understanding_evidence": {
+            "items": {
+              "$ref": "#/components/schemas/Evidence"
+            },
+            "type": "array",
+            "maxItems": 5,
+            "title": "Understanding Evidence",
+            "description": "Exact excerpts rendered in understanding; empty for localized short replies."
           },
           "unknowns": {
             "items": {

@@ -1,0 +1,116 @@
+{
+  "diagnostic_version": "1",
+  "application_version": "0.5.2",
+  "run_type": "new_inference",
+  "requested_language": "en",
+  "outcome": "provider_error",
+  "error": {
+    "code": "provider_ungrounded_evidence"
+  },
+  "last_attempted_stage": "Extraction",
+  "completed_stages": [
+    "Extraction"
+  ],
+  "evidence_mismatch_count": 14,
+  "source_text": "**Proposed Plan for Displaying Entirely Fictional Customer Information in an Offline Demo**\n\n---\n\n### 1. Clarify Requirements (Stated Facts)\n- **Environment:** The demo PC has no internet connectivity; all data must be generated locally.\n- **Data Policy:** Only completely fictional (synthetic) customer information may be shown. No real personal data may be used.\n\n### 2. Assumptions\n- The demo interface can accept static data supplied as a file (e.g., CSV, JSON) or hard‑coded structures.\n- The user has access to a basic scripting environment (e.g., Python, PowerShell) or can manually edit a text file.\n- No external libraries that require internet download will be needed; any needed libraries are already installed or can be bundled with the demo.\n\n### 3. Unknowns\n- Exact format required by the demo (table layout, fields, file type).\n- Whether the demo UI expects a specific number of records.\n- If there are any style or branding constraints (company logo, color scheme).\n\n*(If any of these are unclear, ask the user for specifics before proceeding.)*\n\n### 4. Steps to Generate Fictional Customer Data Offline\n\n1. **Define Data Schema**  \n   Identify the fields the demo needs, e.g.:  \n   - Customer ID (numeric)  \n   - First Name  \n   - Last Name  \n   - Email Address  \n   - Phone Number  \n   - Street Address  \n   - City, State, ZIP  \n   - Account Creation Date  \n\n2. **Create Lists of Synthetic Elements**  \n   - **Names:** Use generic placeholder names (e.g., “John Doe”, “Jane Smith”) or combine randomly selected first‑name and last‑name lists that are known to be fictitious (e.g., “Ada Bright”, “Liam Oak”).  \n   - **Domains:** Use non‑existent domains such as `example.com`, `demo.test`, `sample.org`.  \n   - **Addresses:** Construct addresses using generic street names (“123 Main St”, “456 Oak Avenue”) and placeholder city/state combos.  \n   - **Phone Numbers:** Use the US “555” exchange (e.g., `555‑0123`) or any other reserved test number range.  \n\n3. **Generate Records Locally**  \n   - **Option A – Simple Script (Python example):**  \n     ```python\n     import random, json, datetime\n\n     first_names = [\"Ada\", \"Liam\", \"Mia\", \"Noah\", \"Olivia\"]\n     last_names  = [\"Bright\", \"Oak\", \"River\", \"Stone\", \"Vale\"]\n     streets     = [\"Main St\", \"Oak Ave\", \"Pine Rd\", \"Maple Blvd\"]\n     cities      = [\"Springfield\", \"Riverton\", \"Lakeview\"]\n     states      = [\"CA\", \"NY\", \"TX\"]\n     \n     def fake_customer(i):\n         fn = random.choice(first_names)\n         ln = random.choice(last_names)\n         email = f\"{fn.lower()}.{ln.lower()}@example.com\"\n         phone = f\"555-{random.randint(1000,9999)}\"\n         address = f\"{random.randint(100,999)} {random.choice(streets)}\"\n         city = random.choice(cities)\n         state = random.choice(states)\n         zip_code = f\"{random.randint(10000,99999)}\"\n         created = (datetime.date.today() -\n                    datetime.timedelta(days=random.randint(0,365))).isoformat()\n         return {\n             \"customer_id\": i,\n             \"first_name\": fn,\n             \"last_name\": ln,\n             \"email\": email,\n             \"phone\": phone,\n             \"address\": address,\n             \"city\": city,\n             \"state\": state,\n             \"zip\": zip_code,\n             \"created_at\": created\n         }\n\n     data = [fake_customer(i) for i in range(1, 21)]  # generate 20 records\n     with open(\"demo_customers.json\", \"w\") as f:\n         json.dump(data, f, indent=2)\n     ```\n   - **Option B – Manual Creation:** Populate a spreadsheet with the same synthetic values and export to CSV/JSON.\n\n4. **Validate Fictionality**  \n   - Verify that every name, email domain, address, and phone number uses the reserved/test patterns listed above.  \n   - Run a quick grep/search to ensure no real‑world identifiers (e.g., actual company domains) appear.\n\n5. **Load Data into Demo**  \n   - Place the generated file (`demo_customers.json` or `.csv`) in the location expected by the demo application.  \n   - If the demo reads from a hard‑coded list, replace that list with the generated records.\n\n6. **Document the Process**  \n   - Include a brief README on the demo PC explaining that the data is synthetic, how it was generated, and that it can be regenerated offline if needed.\n\n### 5. Deliverables (to be provided to the user)\n- A concise **step‑by‑step guide** (as above) in a text file or markdown.\n- Example **sample output** (e.g., first three fictional customer entries) to illustrate format.\n- Optional **script file** (`generate_demo_customers.py`) ready to run on the offline PC.\n\n### 6. Next Actions\n- Confirm the required file format and number of records with the user.  \n- Provide the appropriate script/template based on the confirmed format.  \n\n--- \n\n*All steps rely solely on locally available resources and produce only entirely fictional data, satisfying the request and the constraint that no real customer information be used.*",
+  "evidence_mismatches": [
+    {
+      "stage": "Extraction",
+      "path": "evidence.3",
+      "reason": "quote_not_exact_substring",
+      "source": "ai_interpretation",
+      "received_quote": "Environment: The demo PC has no internet connectivity; all data must be generated locally."
+    },
+    {
+      "stage": "Extraction",
+      "path": "evidence.4",
+      "reason": "quote_not_exact_substring",
+      "source": "ai_interpretation",
+      "received_quote": "Data Policy: Only completely fictional (synthetic) customer information may be shown. No real personal data may be used."
+    },
+    {
+      "stage": "Extraction",
+      "path": "evidence.11",
+      "reason": "quote_not_exact_substring",
+      "source": "ai_interpretation",
+      "received_quote": "Define Data Schema – Identify the fields the demo needs, e.g., Customer ID, First Name, Last Name, Email Address, Phone Number, Street Address, City, State, ZIP, Account Creation Date."
+    },
+    {
+      "stage": "Extraction",
+      "path": "evidence.12",
+      "reason": "quote_not_exact_substring",
+      "source": "ai_interpretation",
+      "received_quote": "Create Lists of Synthetic Elements – use generic placeholder names, non‑existent domains (example.com, demo.test), generic street names, and US “555” exchange phone numbers."
+    },
+    {
+      "stage": "Extraction",
+      "path": "evidence.13",
+      "reason": "quote_not_exact_substring",
+      "source": "ai_interpretation",
+      "received_quote": "Option A – Simple Script (Python example) to generate 20 synthetic records and save to a JSON file."
+    },
+    {
+      "stage": "Extraction",
+      "path": "evidence.14",
+      "reason": "quote_not_exact_substring",
+      "source": "ai_interpretation",
+      "received_quote": "Option B – Manual Creation – Populate a spreadsheet with synthetic values and export to CSV/JSON."
+    },
+    {
+      "stage": "Extraction",
+      "path": "evidence.15",
+      "reason": "quote_not_exact_substring",
+      "source": "ai_interpretation",
+      "received_quote": "Validate Fictionality – verify that every name, email domain, address, and phone number uses the reserved/test patterns."
+    },
+    {
+      "stage": "Extraction",
+      "path": "evidence.16",
+      "reason": "quote_not_exact_substring",
+      "source": "ai_interpretation",
+      "received_quote": "Load Data into Demo – place the generated file in the location expected by the demo application."
+    },
+    {
+      "stage": "Extraction",
+      "path": "evidence.17",
+      "reason": "quote_not_exact_substring",
+      "source": "ai_interpretation",
+      "received_quote": "Document the Process – include a brief README on the demo PC explaining that the data is synthetic and how it was generated."
+    },
+    {
+      "stage": "Extraction",
+      "path": "evidence.18",
+      "reason": "quote_not_exact_substring",
+      "source": "ai_interpretation",
+      "received_quote": "Deliverables – a concise step‑by‑step guide in a text file or markdown."
+    },
+    {
+      "stage": "Extraction",
+      "path": "evidence.19",
+      "reason": "quote_not_exact_substring",
+      "source": "ai_interpretation",
+      "received_quote": "Deliverables – example sample output (e.g., first three fictional customer entries) to illustrate format."
+    },
+    {
+      "stage": "Extraction",
+      "path": "evidence.20",
+      "reason": "quote_not_exact_substring",
+      "source": "ai_interpretation",
+      "received_quote": "Deliverables – optional script file (`generate_demo_customers.py`) ready to run on the offline PC."
+    },
+    {
+      "stage": "Extraction",
+      "path": "evidence.21",
+      "reason": "quote_not_exact_substring",
+      "source": "ai_interpretation",
+      "received_quote": "Next Actions – Confirm the required file format and number of records with the user."
+    },
+    {
+      "stage": "Extraction",
+      "path": "evidence.22",
+      "reason": "quote_not_exact_substring",
+      "source": "ai_interpretation",
+      "received_quote": "Next Actions – Provide the appropriate script/template based on the confirmed format."
+    }
+  ]
+}

@@ -1,0 +1,418 @@
+PS D:\GitHub\sana-alignment-release-check> if ((Get-FileHash -LiteralPath $requestPath -Algorithm SHA256).Hash -ne $expected) {
+>>     throw '段階2の配布ファイルと一致しません。'
+>> }
+PS D:\GitHub\sana-alignment-release-check>
+PS D:\GitHub\sana-alignment-release-check> $request = Get-Content -LiteralPath $requestPath -Raw -Encoding UTF8 |
+>>     ConvertFrom-Json
+PS D:\GitHub\sana-alignment-release-check> Write-Host "対象: $requestPath"
+対象: D:\GitHub\sana-alignment-0.5.3-length-ladder\02.en.json
+PS D:\GitHub\sana-alignment-release-check> Write-Host "AI文章の文字数: $($request.ai_interpretation.Length)（期待値: 1063）"
+AI文章の文字数: 1063（期待値: 1063）
+PS D:\GitHub\sana-alignment-release-check> $scriptPath = (Read-Host 'diagnose_provider_output.pyのフルパス').Trim('"')
+diagnose_provider_output.pyのフルパス: "D:\GitHub\sana-alignment-0.5.2-update\diagnose_provider_output.py"
+PS D:\GitHub\sana-alignment-release-check> $payload = @{
+>>     script = [Convert]::ToBase64String([IO.File]::ReadAllBytes($scriptPath))
+>>     request = [Convert]::ToBase64String([IO.File]::ReadAllBytes($requestPath))
+>> } | ConvertTo-Json -Compress
+PS D:\GitHub\sana-alignment-release-check> $payload | docker compose exec -T -w /app sana python -c $runner
+{
+  "diagnostic_version": "provider-output-1",
+  "application_version": "0.5.3",
+  "run_type": "new_inference",
+  "requested_language": "en",
+  "outcome": "success",
+  "result": {
+    "schema_version": "0.5.0",
+    "request_id": "649533fc-89d9-46f3-9209-e8e66a3331ca",
+    "status": "mapped_with_divergence",
+    "observations": [
+      {
+        "kind": "observed_text",
+        "source": "input_message",
+        "quote": "The demo PC is not connected to the internet. Display entirely fictional customer information in the demo. Do not use real customer data.",
+        "externally_verified": false
+      },
+      {
+        "kind": "observed_text",
+        "source": "input_message",
+        "quote": "The demo PC is not connected to the internet.",
+        "externally_verified": false
+      },
+      {
+        "kind": "observed_text",
+        "source": "input_message",
+        "quote": "Display entirely fictional customer information in the demo.",
+        "externally_verified": false
+      },
+      {
+        "kind": "observed_text",
+        "source": "input_message",
+        "quote": "Do not use real customer data.",
+        "externally_verified": false
+      },
+      {
+        "kind": "observed_text",
+        "source": "ai_interpretation",
+        "quote": "**Proposed Plan for Displaying Entirely Fictional Customer Information in an Offline Demo**",
+        "externally_verified": false
+      },
+      {
+        "kind": "observed_text",
+        "source": "ai_interpretation",
+        "quote": "---",
+        "externally_verified": false
+      },
+      {
+        "kind": "observed_text",
+        "source": "ai_interpretation",
+        "quote": "### 1. Clarify Requirements (Stated Facts)",
+        "externally_verified": false
+      },
+      {
+        "kind": "observed_text",
+        "source": "ai_interpretation",
+        "quote": "- **Environment:** The demo PC has no internet connectivity; all data must be generated locally.",
+        "externally_verified": false
+      },
+      {
+        "kind": "observed_text",
+        "source": "ai_interpretation",
+        "quote": "- **Data Policy:** Only completely fictional (synthetic) customer information may be shown. No real personal data may be used.",
+        "externally_verified": false
+      },
+      {
+        "kind": "observed_text",
+        "source": "ai_interpretation",
+        "quote": "### 2. Assumptions",
+        "externally_verified": false
+      },
+      {
+        "kind": "observed_text",
+        "source": "ai_interpretation",
+        "quote": "- The demo interface can accept static data supplied as a file (e.g., CSV, JSON) or hard‑coded structures.",
+        "externally_verified": false
+      },
+      {
+        "kind": "observed_text",
+        "source": "ai_interpretation",
+        "quote": "- The user has access to a basic scripting environment (e.g., Python, PowerShell) or can manually edit a text file.",
+        "externally_verified": false
+      },
+      {
+        "kind": "observed_text",
+        "source": "ai_interpretation",
+        "quote": "- No external libraries that require internet download will be needed; any needed libraries are already installed or can be bundled with the demo.",
+        "externally_verified": false
+      },
+      {
+        "kind": "observed_text",
+        "source": "ai_interpretation",
+        "quote": "### 3. Unknowns",
+        "externally_verified": false
+      },
+      {
+        "kind": "observed_text",
+        "source": "ai_interpretation",
+        "quote": "- Exact format required by the demo (table layout, fields, file type).",
+        "externally_verified": false
+      },
+      {
+        "kind": "observed_text",
+        "source": "ai_interpretation",
+        "quote": "- Whether the demo UI expects a specific number of records.",
+        "externally_verified": false
+      },
+      {
+        "kind": "observed_text",
+        "source": "ai_interpretation",
+        "quote": "- If there are any style or branding constraints (company logo, color scheme).",
+        "externally_verified": false
+      },
+      {
+        "kind": "observed_text",
+        "source": "ai_interpretation",
+        "quote": "*(If any of these are unclear, ask the user for specifics before proceeding.)*",
+        "externally_verified": false
+      }
+    ],
+    "fact": [
+      {
+        "statement": "The demo PC is not connected to the internet.",
+        "source": "user_explicit",
+        "status": "explicit",
+        "support_state": "provided",
+        "materiality": "high",
+        "evidence": [
+          {
+            "source": "input_message",
+            "quote": "The demo PC is not connected to the internet."
+          }
+        ],
+        "externally_verified": false,
+        "execution_effect": null
+      }
+    ],
+    "view": {
+      "premises": [
+        {
+          "statement": "Environment: The demo PC has no internet connectivity; all data must be generated locally.",
+          "source": "provided_source",
+          "status": "explicit",
+          "support_state": "provided",
+          "materiality": "high",
+          "evidence": [
+            {
+              "source": "ai_interpretation",
+              "quote": "- **Environment:** The demo PC has no internet connectivity; all data must be generated locally."
+            }
+          ],
+          "externally_verified": false,
+          "execution_effect": null
+        },
+        {
+          "statement": "Data Policy: Only completely fictional (synthetic) customer information may be shown. No real personal data may be used.",
+          "source": "provided_source",
+          "status": "explicit",
+          "support_state": "provided",
+          "materiality": "high",
+          "evidence": [
+            {
+              "source": "ai_interpretation",
+              "quote": "- **Data Policy:** Only completely fictional (synthetic) customer information may be shown. No real personal data may be used."
+            }
+          ],
+          "externally_verified": false,
+          "execution_effect": null
+        },
+        {
+          "statement": "The demo interface can accept static data supplied as a file (e.g., CSV, JSON) or hard‑coded structures.",
+          "source": "provided_source",
+          "status": "explicit",
+          "support_state": "provided",
+          "materiality": "medium",
+          "evidence": [
+            {
+              "source": "ai_interpretation",
+              "quote": "- The demo interface can accept static data supplied as a file (e.g., CSV, JSON) or hard‑coded structures."
+            }
+          ],
+          "externally_verified": false,
+          "execution_effect": null
+        },
+        {
+          "statement": "The user has access to a basic scripting environment (e.g., Python, PowerShell) or can manually edit a text file.",
+          "source": "provided_source",
+          "status": "explicit",
+          "support_state": "provided",
+          "materiality": "medium",
+          "evidence": [
+            {
+              "source": "ai_interpretation",
+              "quote": "- The user has access to a basic scripting environment (e.g., Python, PowerShell) or can manually edit a text file."
+            }
+          ],
+          "externally_verified": false,
+          "execution_effect": null
+        },
+        {
+          "statement": "No external libraries that require internet download will be needed; any needed libraries are already installed or can be bundled with the demo.",
+          "source": "provided_source",
+          "status": "explicit",
+          "support_state": "provided",
+          "materiality": "medium",
+          "evidence": [
+            {
+              "source": "ai_interpretation",
+              "quote": "- No external libraries that require internet download will be needed; any needed libraries are already installed or can be bundled with the demo."
+            }
+          ],
+          "externally_verified": false,
+          "execution_effect": null
+        }
+      ],
+      "understanding": "[input_message]\nThe demo PC is not connected to the internet.\n\n[input_message]\nDisplay entirely fictional customer information in the demo.\n\n[ai_interpretation]\n- **Environment:** The demo PC has no internet connectivity; all data must be generated locally.",
+      "hypotheses": [],
+      "premise_gaps": [
+        {
+          "kind": "interpretation_difference",
+          "blocks_execution": false,
+          "human_premise": null,
+          "ai_premise": "The demo interface can accept static data supplied as a file (e.g., CSV, JSON) or hard‑coded structures.",
+          "difference": "The AI assumes the demo UI can ingest static files, which the user did not specify.",
+          "evidence": [
+            {
+              "source": "input_message",
+              "quote": "Display entirely fictional customer information in the demo."
+            },
+            {
+              "source": "ai_interpretation",
+              "quote": "- The demo interface can accept static data supplied as a file (e.g., CSV, JSON) or hard‑coded structures."
+            }
+          ],
+          "verification_question": null
+        },
+        {
+          "kind": "interpretation_difference",
+          "blocks_execution": false,
+          "human_premise": null,
+          "ai_premise": "The user has access to a basic scripting environment (e.g., Python, PowerShell) or can manually edit a text file.",
+          "difference": "The AI assumes a scripting environment is available, which was not mentioned by the user.",
+          "evidence": [
+            {
+              "source": "input_message",
+              "quote": "Display entirely fictional customer information in the demo."
+            },
+            {
+              "source": "ai_interpretation",
+              "quote": "- The user has access to a basic scripting environment (e.g., Python, PowerShell) or can manually edit a text file."
+            }
+          ],
+          "verification_question": null
+        },
+        {
+          "kind": "interpretation_difference",
+          "blocks_execution": false,
+          "human_premise": null,
+          "ai_premise": "No external libraries that require internet download will be needed; any needed libraries are already installed or can be bundled with the demo.",
+          "difference": "The AI assumes no additional libraries are required, a detail not provided by the user.",
+          "evidence": [
+            {
+              "source": "input_message",
+              "quote": "Display entirely fictional customer information in the demo."
+            },
+            {
+              "source": "ai_interpretation",
+              "quote": "- No external libraries that require internet download will be needed; any needed libraries are already installed or can be bundled with the demo."
+            }
+          ],
+          "verification_question": null
+        }
+      ],
+      "unresolved": [
+        {
+          "statement": "Exact format required by the demo (table layout, fields, file type) is unknown.",
+          "scope": "execution",
+          "evidence": [
+            {
+              "source": "ai_interpretation",
+              "quote": "- Exact format required by the demo (table layout, fields, file type)."
+            }
+          ],
+          "question": null
+        },
+        {
+          "statement": "Number of records expected by the demo UI is unknown.",
+          "scope": "execution",
+          "evidence": [
+            {
+              "source": "ai_interpretation",
+              "quote": "- Whether the demo UI expects a specific number of records."
+            }
+          ],
+          "question": null
+        },
+        {
+          "statement": "Style or branding constraints (company logo, color scheme) are unknown.",
+          "scope": "execution",
+          "evidence": [
+            {
+              "source": "ai_interpretation",
+              "quote": "- If there are any style or branding constraints (company logo, color scheme)."
+            }
+          ],
+          "question": null
+        }
+      ],
+      "understanding_evidence": [
+        {
+          "source": "input_message",
+          "quote": "The demo PC is not connected to the internet."
+        },
+        {
+          "source": "input_message",
+          "quote": "Display entirely fictional customer information in the demo."
+        },
+        {
+          "source": "ai_interpretation",
+          "quote": "- **Environment:** The demo PC has no internet connectivity; all data must be generated locally."
+        }
+      ],
+      "unknowns": [],
+      "questions": []
+    },
+    "care": [
+      {
+        "statement": "Display entirely fictional customer information in the demo.",
+        "source": "user_explicit",
+        "status": "explicit",
+        "support_state": "not_applicable",
+        "materiality": "high",
+        "evidence": [
+          {
+            "source": "input_message",
+            "quote": "Display entirely fictional customer information in the demo."
+          }
+        ],
+        "externally_verified": false,
+        "execution_effect": null
+      },
+      {
+        "statement": "Do not use real customer data.",
+        "source": "user_explicit",
+        "status": "explicit",
+        "support_state": "not_applicable",
+        "materiality": "high",
+        "evidence": [
+          {
+            "source": "input_message",
+            "quote": "Do not use real customer data."
+          }
+        ],
+        "externally_verified": false,
+        "execution_effect": null
+      },
+      {
+        "statement": "- **Data Policy:** Only completely fictional (synthetic) customer information may be shown. No real personal data may be used.",
+        "source": "provided_source",
+        "status": "explicit",
+        "support_state": "not_applicable",
+        "materiality": "high",
+        "evidence": [
+          {
+            "source": "ai_interpretation",
+            "quote": "- **Data Policy:** Only completely fictional (synthetic) customer information may be shown. No real personal data may be used."
+          }
+        ],
+        "externally_verified": false,
+        "execution_effect": null
+      }
+    ],
+    "acknowledgment": null,
+    "meta": {
+      "requested_language": "en",
+      "short_reply_language": null,
+      "language_fallback": false,
+      "observation_scope": "submitted_material_only",
+      "profile": "workflow-premise-map-v0.5",
+      "understanding_mode": "source_excerpts",
+      "stages_completed": [
+        "extraction",
+        "mapping"
+      ],
+      "frameworks_used": [],
+      "comparison": "provided_ai_interpretation",
+      "delta_v": null,
+      "execution_authorized": false,
+      "knowledge_sha256": "f2b5ba63b58ab92597019e8a59a391bc15b363b1e0c14a32372ee5af4f01990b"
+    }
+  },
+  "last_attempted_stage": "Draft",
+  "completed_stages": [
+    "Extraction",
+    "Draft"
+  ],
+  "evidence_mismatch_count": 0,
+  "evidence_mismatches": [],
+  "provider_validation_errors": []
+}
+PS D:\GitHub\sana-alignment-release-check>

@@ -1,0 +1,5 @@
+{
+  "input_message": "Do not connect the demo PC to the internet. Display entirely fictional customer information in the demo. Do not use real customer data.",
+  "ai_interpretation": "Keep the demo PC disconnected from the internet and display entirely fictional customer information using local resources, without using real customer data. The required fields and record count are unspecified.",
+  "language": "en"
+}

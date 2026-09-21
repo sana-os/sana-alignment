@@ -1,0 +1,20 @@
+{
+  "application_version": "0.5.14",
+  "processing_mode": "medium",
+  "source_sha256": "feb95a60f6cf826f2a10576cd7d3f27dbe4ef101a3d67641a2e692f55d9f2b42",
+  "sent_request_sha256": "507e5ce9e6f1be45fa1ae37fca19e3eef0c46b9d9e9706b31e6660af7792ac45",
+  "http_status": "502",
+  "curl_exit": 0,
+  "elapsed_seconds": 497.821,
+  "request_id": "36e70a85-dbe5-4af1-af01-fb3d0b4e7173",
+  "trace_status": "saved",
+  "status": null,
+  "error": {
+    "code": "provider_invalid_scope_dependency",
+    "issue": {
+      "path": "view.unresolved.0",
+      "rule": "alignment_requires_affected_premise_not_open_topic"
+    }
+  },
+  "server_trace_copied": true
+}

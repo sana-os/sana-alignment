@@ -30,10 +30,12 @@ def output_language_rule(language):
     return f'''
 OUTPUT LANGUAGE CONTRACT (applies after all reference documents):
 Requested language tag: {language}.
-Write ALL generated prose in that language: statement, execution_effect, understanding,
+Write ALL generated prose in that language: statement,
 interpretation, human_premise, ai_premise, difference, unknowns and all questions.
 JSON keys, enum values, identifiers and code tokens remain unchanged.
-Evidence.quote and observations are the sole prose exceptions: copy them EXACTLY in the
-source language. Do not translate evidence or confuse it with generated explanations.
+Care.statement is an original concern quote selected by ID, not generated prose.
+Evidence.quote, observations, Care.statement, non-null execution_effect quotes and understanding excerpts
+retain their original source language. execution_effect is null or an evidence ID;
+understanding selects evidence IDs, with no generated summary text. Do not translate them.
 Before returning JSON, check every generated text field for language consistency.
 '''

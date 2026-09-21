@@ -2,10 +2,11 @@ import asyncio
 import hmac
 from contextlib import asynccontextmanager
 import httpx
-from fastapi import FastAPI, Header, HTTPException
+from fastapi import FastAPI, Header, HTTPException, Response
 from fastapi.exceptions import RequestValidationError
 from fastapi.responses import JSONResponse
-from .engine import align
+from .engine import align, KNOWLEDGE_HASH
+from .run_trace import ACTIVE_TRACE, RunTrace, TraceStore, save_trace
 from .models import AlignRequest, AlignResponse
 from .provider import Provider, ProviderError, Settings
 
@@ -39,9 +40,10 @@ def create_app(settings=None, provider_override=None):
         async with httpx.AsyncClient(follow_redirects=False, limits=httpx.Limits(max_connections=20)) as client:
             app.state.provider = provider_override or Provider(app.state.settings, client)
             app.state.semaphore = asyncio.Semaphore(4)
+            app.state.trace_store = TraceStore(app.state.settings.trace_dir)
             yield
 
-    app = FastAPI(title='SANA Premise Alignment API', version='0.4.2', description='Powered by SANA OS — https://sana-os.org/ — workflow premise mapping profile', lifespan=lifespan)
+    app = FastAPI(title='SANA Premise Alignment API', version='0.5.15', description='Powered by SANA OS — https://sana-os.org/ — workflow premise mapping profile', lifespan=lifespan)
     app.add_middleware(BodyLimit)
 
     @app.exception_handler(RequestValidationError)
@@ -56,21 +58,37 @@ def create_app(settings=None, provider_override=None):
         return {'status': 'ok', 'provider_connectivity': 'not_checked'}
 
     @app.post('/v1/align', response_model=AlignResponse)
-    async def endpoint(req: AlignRequest, authorization: str | None = Header(default=None)):
+    async def endpoint(req: AlignRequest, response: Response, authorization: str | None = Header(default=None)):
         token = app.state.settings.service_token
         if token and not hmac.compare_digest((authorization or '').encode(), ('Bearer ' + token).encode()):
             raise HTTPException(401, detail={'code': 'unauthorized'})
+        settings = app.state.settings
+        trace = RunTrace(req, settings, app.version, KNOWLEDGE_HASH)
+        token = ACTIVE_TRACE.set(trace if settings.trace_level != 'off' else None)
+        result, error, status = None, None, 500
         try:
-            async with asyncio.timeout(app.state.settings.timeout * 2 + 5):
+            async with asyncio.timeout(settings.timeout * 2 + 5):
                 async with app.state.semaphore:
-                    return await align(req, app.state.provider)
+                    result = await align(req, app.state.provider, mapping_retries=trace.retries,
+                        mapping_attempts=trace.attempts, request_id=trace.request_id)
+        except asyncio.CancelledError:
+            error = {'code': 'alignment_cancelled'}
+            raise
         except TimeoutError:
-            raise HTTPException(504, detail={'code': 'alignment_timeout'}) from None
+            error, status = {'code': 'alignment_timeout'}, 504
         except ProviderError as e:
-            detail = {'code': e.code}
+            error, status = {'code': e.code}, e.status
             if e.issue is not None:
-                detail['issue'] = e.issue
-            raise HTTPException(e.status, detail=detail) from None
+                error['issue'] = e.issue
+        finally:
+            ACTIVE_TRACE.reset(token)
+            saved = save_trace(app.state.trace_store, trace, trace.finish(result, error))
+        headers = {'X-SANA-Request-ID': trace.request_id,
+                   'X-SANA-Processing-Mode': trace.mode, 'X-SANA-Trace-Status': saved}
+        if error is not None:
+            return JSONResponse({'detail': error}, status_code=status, headers=headers)
+        response.headers.update(headers)
+        return result
 
     return app
 

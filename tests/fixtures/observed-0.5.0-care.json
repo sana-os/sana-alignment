@@ -1,0 +1,48 @@
+{
+  "request_id": "9f793a32-7e57-4187-bd9c-9334cdc05c38",
+  "application_version": "0.5.0",
+  "fixture_kind": "selected exact response excerpts, not the full response or internal extraction",
+  "request_fixture": "examples/quality/offline.en.json",
+  "fact": {
+    "statement": "The demo PC is not connected to the internet.",
+    "source": "user_explicit",
+    "status": "explicit",
+    "support_state": "provided",
+    "materiality": "high",
+    "evidence": [{"source": "input_message", "quote": "The demo PC is not connected to the internet."}],
+    "externally_verified": false,
+    "execution_effect": null
+  },
+  "care": [
+    {
+      "statement": "Display entirely fictional customer information in the demo.",
+      "source": "user_explicit",
+      "status": "explicit",
+      "support_state": "not_applicable",
+      "materiality": "high",
+      "evidence": [{"source": "input_message", "quote": "Display entirely fictional customer information in the demo."}],
+      "externally_verified": false,
+      "execution_effect": null
+    },
+    {
+      "statement": "Do not use real customer data.",
+      "source": "user_explicit",
+      "status": "explicit",
+      "support_state": "not_applicable",
+      "materiality": "high",
+      "evidence": [{"source": "input_message", "quote": "Do not use real customer data."}],
+      "externally_verified": false,
+      "execution_effect": null
+    },
+    {
+      "statement": "The demo PC must operate without internet access.",
+      "source": "user_explicit",
+      "status": "explicit",
+      "support_state": "not_applicable",
+      "materiality": "high",
+      "evidence": [{"source": "input_message", "quote": "The demo PC is not connected to the internet."}],
+      "externally_verified": false,
+      "execution_effect": null
+    }
+  ]
+}

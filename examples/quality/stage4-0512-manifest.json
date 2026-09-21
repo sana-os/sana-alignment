@@ -1,0 +1,8 @@
+{
+  "application_version": "0.5.12",
+  "diagnostic_version": "provider-output-10",
+  "stage": 4,
+  "ai_characters": 4250,
+  "diagnostic_sha256": "8f233b953ef87305712525016b746256a7863560ecb469f40d5d7a8aab1c9c93",
+  "request_sha256": "feb95a60f6cf826f2a10576cd7d3f27dbe4ef101a3d67641a2e692f55d9f2b42"
+}

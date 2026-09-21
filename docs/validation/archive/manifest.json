@@ -1,0 +1,215 @@
+{
+  "scope": "Available SANA test-result JSON and console/output text attachments only. Unrelated reference manuscripts, screenshots, credentials and local configuration are not included. Identical uploads share one archived file. Filenames preserve attachment naming, not inferred execution dates.",
+  "records": [
+    {
+      "source_attachment": "01.response.json",
+      "archive_file": "attachment-01.response.json",
+      "sha256": "d86894415176da6cdfcfc00e716c26d47d6e2c1a73387f94544c8b33e56de3f9",
+      "bytes": 3980,
+      "kind": "raw_operator_attachment"
+    },
+    {
+      "source_attachment": "02.response.json",
+      "archive_file": "attachment-02.response.json",
+      "sha256": "a3ee12fedd6afde6d922450765fa7343579aaf44d330314cc0bdd9c89eeb01ce",
+      "bytes": 45,
+      "kind": "raw_operator_attachment"
+    },
+    {
+      "source_attachment": "03.response.json",
+      "archive_file": "attachment-03.response.json",
+      "sha256": "0921729fc4d15102222a15d9beb59462220cdc99ff7cf2c8dc6eb702acb03514",
+      "bytes": 13828,
+      "kind": "raw_operator_attachment"
+    },
+    {
+      "source_attachment": "04.diagnostic(1).json",
+      "archive_file": "attachment-04.diagnostic-1.json",
+      "sha256": "37b3509b68b659a816093d0a846a2f26bbb8df37ec3b8a1dd684f5025cfb029f",
+      "bytes": 56558,
+      "kind": "raw_operator_attachment"
+    },
+    {
+      "source_attachment": "04.diagnostic(2).json",
+      "archive_file": "attachment-04.diagnostic-2.json",
+      "sha256": "fb9f111b02d21c7e53290f29e07e75cf2528f58e2cc444b50a7fd6df8da4d4d2",
+      "bytes": 52592,
+      "kind": "raw_operator_attachment"
+    },
+    {
+      "source_attachment": "04.diagnostic(3).json",
+      "archive_file": "attachment-04.diagnostic-3.json",
+      "sha256": "29dc36ce63a105afc48d3567a1cf9d1a4ddac9d4ca1179e732bb86ba8224e1d1",
+      "bytes": 57032,
+      "kind": "raw_operator_attachment"
+    },
+    {
+      "source_attachment": "04.diagnostic(4).json",
+      "archive_file": "attachment-04.diagnostic-4.json",
+      "sha256": "f0eeaa0c5e6acd68702c25f2c5a7e3b7e96545ae288351980cae91210c094b41",
+      "bytes": 26345,
+      "kind": "raw_operator_attachment"
+    },
+    {
+      "source_attachment": "04.diagnostic(5).json",
+      "archive_file": "attachment-04.diagnostic-5.json",
+      "sha256": "ca8c64b54e1dc5797b62eaed675e2555fde4df2f9a7cfca32771219aa5f392f7",
+      "bytes": 34917,
+      "kind": "raw_operator_attachment"
+    },
+    {
+      "source_attachment": "04.diagnostic(6).json",
+      "archive_file": "attachment-04.diagnostic-6.json",
+      "sha256": "139a3b39e4e4df9ef03616d2f24d14c3289ea3162e8f490816f0214f76ef66ee",
+      "bytes": 81943,
+      "kind": "raw_operator_attachment"
+    },
+    {
+      "source_attachment": "04.diagnostic(7).json",
+      "archive_file": "attachment-04.diagnostic-7.json",
+      "sha256": "c64d1fbf890d35dfefcb8a01a39493fa73bc2c2c53fb75af1eefbcf9a86a0c95",
+      "bytes": 41010,
+      "kind": "raw_operator_attachment"
+    },
+    {
+      "source_attachment": "04.diagnostic.json",
+      "archive_file": "attachment-04.diagnostic.json",
+      "sha256": "b2008ce57840a6882b09744220e41736b9a29e0a92825206b41049dedcde3a15",
+      "bytes": 38595,
+      "kind": "raw_operator_attachment"
+    },
+    {
+      "source_attachment": "04.response(1).json",
+      "archive_file": "attachment-04.response-1.json",
+      "sha256": "57e879c136aa74805d9eb9ace6304c1fd4588d55570c9e2f386f77d3404268ef",
+      "bytes": 51,
+      "kind": "raw_operator_attachment"
+    },
+    {
+      "source_attachment": "04.response.json",
+      "archive_file": "attachment-04.response.json",
+      "sha256": "892358b952ee47b8fe8a283dbd3d69eeda5d74e4e7ef9009dd41817767dc44d0",
+      "bytes": 141,
+      "kind": "raw_operator_attachment"
+    },
+    {
+      "source_attachment": "response(1).json",
+      "archive_file": "attachment-response-1.json",
+      "sha256": "3287809c16b94663ff006e8cfafd3afb0f7159c35f21a920a311a1e15bd26bdc",
+      "bytes": 29590,
+      "kind": "raw_operator_attachment"
+    },
+    {
+      "source_attachment": "response.json",
+      "archive_file": "attachment-response.json",
+      "sha256": "485ebddf824373b0546a34712c1df796b5ef49dff7e54d3eac749ea66a65b1b4",
+      "bytes": 152,
+      "kind": "raw_operator_attachment"
+    },
+    {
+      "source_attachment": "summary(1).json",
+      "archive_file": "attachment-summary-1.json",
+      "sha256": "f9f31c58f969fb47e2811b22e26142b5aa0397e172ac09418f63fe4abc1887da",
+      "bytes": 522,
+      "kind": "raw_operator_attachment"
+    },
+    {
+      "source_attachment": "summary.json",
+      "archive_file": "attachment-summary.json",
+      "sha256": "455556eb8f660c7bcd64771aa35f4d1b842c173472639b1700c1314c80952b32",
+      "bytes": 817,
+      "kind": "raw_operator_attachment"
+    },
+    {
+      "source_attachment": "trace(1).json",
+      "archive_file": "attachment-trace-1.json",
+      "sha256": "a23940dd75fb352d2efedf572efcb8aed7fe35a3ae20f97f86b4a281ab358b3c",
+      "bytes": 37660,
+      "kind": "raw_operator_attachment"
+    },
+    {
+      "source_attachment": "trace(2).json",
+      "archive_file": "attachment-trace-2.json",
+      "sha256": "7187461a7bf299d1e17052d2974b78470f2b14323e3a7512c8a250e1643fd490",
+      "bytes": 43737,
+      "kind": "raw_operator_attachment"
+    },
+    {
+      "source_attachment": "trace.json",
+      "archive_file": "attachment-trace.json",
+      "sha256": "0f0092df35ca1739f99b15938ce41631779d6f5ac182440df91aaf847ec13216",
+      "bytes": 15634,
+      "kind": "raw_operator_attachment"
+    },
+    {
+      "source_attachment": "貼り付けられたテキスト（1 点）(20260918-190908).txt",
+      "archive_file": "console-20260918-190908.txt",
+      "sha256": "0477aa421eefcd9e5d76162ae1a0d5d4e76106b9e20a6f4266788a5ce39780ba",
+      "bytes": 11106,
+      "kind": "raw_operator_attachment"
+    },
+    {
+      "source_attachment": "貼り付けられたテキスト（1 点）(20260918-194946).txt",
+      "archive_file": "console-20260918-194946.txt",
+      "sha256": "d13caa1dfe6c162dd1024200b9b38bea622ac5e5836490fcd756ad4a888d6bcc",
+      "bytes": 16811,
+      "kind": "raw_operator_attachment"
+    },
+    {
+      "source_attachment": "貼り付けられたテキスト（1 点）(20260919-064422).txt",
+      "archive_file": "console-20260919-064422.txt",
+      "sha256": "865b401ca27651fac41e08af449ff6c62a7554cc4a3a724c4289fd239730eac4",
+      "bytes": 77087,
+      "kind": "raw_operator_attachment"
+    },
+    {
+      "source_attachment": "貼り付けられたテキスト（1 点）(20260919-071737).txt",
+      "archive_file": "console-20260919-071737.txt",
+      "sha256": "dbed5a7941641f014e56e494bbecfcd44656a53aff1df316931b4ddca02782ed",
+      "bytes": 30441,
+      "kind": "raw_operator_attachment"
+    },
+    {
+      "source_attachment": "貼り付けられたテキスト（1 点）(20260919-090327).txt",
+      "archive_file": "console-20260919-090327.txt",
+      "sha256": "28cb0a5c19bc14333a80d0627d4595fb345ff7d1bc12f62376b011769234f847",
+      "bytes": 22099,
+      "kind": "raw_operator_attachment"
+    },
+    {
+      "source_attachment": "貼り付けられたテキスト（1 点）(20260919-091814).txt",
+      "archive_file": "console-20260919-091814.txt",
+      "sha256": "6c399af90b2f54243965f4d01acf37e0c88d5de773d838b6f5b893e0c709b758",
+      "bytes": 16745,
+      "kind": "raw_operator_attachment"
+    },
+    {
+      "source_attachment": "貼り付けられたテキスト（1 点）(20260919-152409).txt",
+      "archive_file": "console-20260919-152409.txt",
+      "sha256": "7798da2fba79f41fa2b670ac9aaa84c393f9f43cd77e009cc751f72cd791d58d",
+      "bytes": 41062,
+      "kind": "raw_operator_attachment"
+    },
+    {
+      "source_attachment": "貼り付けられたテキスト（1 点）(20260919-153603).txt",
+      "archive_file": "console-20260919-152409.txt",
+      "sha256": "7798da2fba79f41fa2b670ac9aaa84c393f9f43cd77e009cc751f72cd791d58d",
+      "bytes": 41062,
+      "kind": "raw_operator_attachment"
+    },
+    {
+      "source_attachment": "貼り付けられたテキスト（1 点）(20260920-174958).txt",
+      "archive_file": "console-20260920-174958.txt",
+      "sha256": "1428ae077c2edac981ef982074e2147c4a725b818540192de0c6a879fb8de5f5",
+      "bytes": 15833,
+      "kind": "raw_operator_attachment"
+    },
+    {
+      "source_attachment": "貼り付けられたテキスト（1 点）(20260921-060725).txt",
+      "archive_file": "console-20260921-060725.txt",
+      "sha256": "78c6c6f28c15773ac03e2b5909139a640db1dce4df511c708d7795bf3a6311a2",
+      "bytes": 20039,
+      "kind": "raw_operator_attachment"
+    }
+  ]
+}

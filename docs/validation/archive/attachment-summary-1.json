@@ -1,0 +1,14 @@
+{
+    "application_version":  "0.5.15",
+    "processing_mode":  "medium",
+    "source_sha256":  "feb95a60f6cf826f2a10576cd7d3f27dbe4ef101a3d67641a2e692f55d9f2b42",
+    "sent_request_sha256":  "507e5ce9e6f1be45fa1ae37fca19e3eef0c46b9d9e9706b31e6660af7792ac45",
+    "http_status":  "200",
+    "curl_exit":  0,
+    "elapsed_seconds":  452.997,
+    "request_id":  "381b25ff-59e8-4263-b217-1cdcab98b812",
+    "trace_status":  "saved",
+    "status":  "mapped",
+    "error":  null,
+    "server_trace_copied":  true
+}
