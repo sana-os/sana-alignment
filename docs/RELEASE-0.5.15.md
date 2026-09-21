@@ -68,10 +68,12 @@ on the integration. No timeout or retry budget was silently increased for releas
   provider versions when evaluating a new environment.
 - Do not commit local .env, compose.override.yaml or the live traces directory.
   The curated archive is deliberately included, with provenance and scope limits.
-- Before declaring an open-source code license, the owner must resolve the existing
-  README note that the application-code license is unselected. This preparation
-  does not choose or change that license. knowledge/LICENSE.md retains its original
-  source terms; these must not be silently treated as a newly selected code license.
+- The owner selected MIT for the newly written application code and accompanying
+  application documentation, scripts, tests and Dify integration examples. See
+  LICENSE and the README license section. Public project/author credit and a
+  website link are appreciated but optional for these components. Original
+  knowledge materials and reference papers retain their separate source terms;
+  knowledge/LICENSE.md, including its attribution conditions, is unchanged.
 
 Suggested release title: **SANA Premise Alignment 0.5.15 — bounded retries and Dify workflows**.
 Suggested tag after review/merge: `v0.5.15`. Preparing these files does not create

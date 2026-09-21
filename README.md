@@ -351,6 +351,20 @@ or proven guarantees. Preference Compass informs handling of uncertainty and con
 no questionnaire or personality scoring is included.
 
 This is a derivative workflow profile, not full Core Specification compliance.
-Original source terms are in [SANA OS License v1.0](knowledge/LICENSE.md).
-A license for the newly written application code still needs the owner's selection;
-this repository does not implicitly grant an MIT or other license for it.
+
+## License
+
+The newly written application code, accompanying application documentation,
+scripts, tests and Dify integration examples are licensed under the
+[MIT License](LICENSE). Copyright and license notices must be retained as
+specified in that license. The copyright holder is identified as SANA OS Project.
+
+A public credit to the project/author and a link to https://sana-os.org are
+appreciated but optional for these MIT-licensed components. No additional
+visible credit or website link is required by this application-code license.
+
+The original SANA OS materials in `knowledge/` retain their separate
+[SANA OS License v1.0](knowledge/LICENSE.md), including its existing attribution
+conditions. The papers in `references/` and other third-party or quoted source
+materials retain their applicable source terms. The application-code MIT grant
+does not relicense those materials. Dependencies retain their own licenses.
