@@ -1,0 +1,22 @@
+{
+  "fixture_kind": "selected exact excerpts from the operator's fresh diagnostic inference",
+  "diagnostic_version": "care-coverage-1",
+  "application_version": "0.5.1",
+  "run_type": "new_inference",
+  "request_id": "3f8ae8e6-88e0-46ed-a7b5-6c8d54d51b1f",
+  "request_fixture": "examples/quality/offline.ja.json",
+  "status": "mapped",
+  "care_statements": ["実在の顧客データは使用しないでください。"],
+  "extracted_clauses": [
+    {"source": "input_message", "quote": "デモ用PCはインターネットに接続されていません。", "function": "state"},
+    {"source": "input_message", "quote": "完全に架空の顧客情報を表示してください。", "function": "proposal"},
+    {"source": "input_message", "quote": "実在の顧客データは使用しないでください。", "function": "concern"},
+    {"source": "ai_interpretation", "quote": "そのPC上のローカル資源で、インターネット接続に依存せず、実在の顧客データを使わずに完全に架空の顧客情報を表示する。", "function": "proposal"},
+    {"source": "ai_interpretation", "quote": "必要な項目と件数は未指定である。", "function": "state"}
+  ],
+  "care_trace_excerpt": [
+    {"ref": "q3", "source": "input_message", "quote": "完全に架空の顧客情報を表示してください。", "extraction_function": "proposal", "care_eligible": false, "selected_as_care": false},
+    {"ref": "q4", "source": "input_message", "quote": "実在の顧客データは使用しないでください。", "extraction_function": "concern", "care_eligible": true, "selected_as_care": true}
+  ],
+  "eligible_but_not_selected": []
+}

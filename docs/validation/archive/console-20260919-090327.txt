@@ -1,0 +1,541 @@
+PS D:\GitHub\sana-alignment-release-check>
+PS D:\GitHub\sana-alignment-release-check> $payload = @{
+>>     script = [Convert]::ToBase64String([IO.File]::ReadAllBytes($scriptPath))
+>>     request = [Convert]::ToBase64String([IO.File]::ReadAllBytes($requestPath))
+>> } | ConvertTo-Json -Compress
+PS D:\GitHub\sana-alignment-release-check> $runner = @'
+>> import asyncio,base64,json,sys
+>> import httpx
+>> packet=json.load(sys.stdin)
+>> scope={'__name__':'provider_diagnostic'}
+>> exec(compile(base64.b64decode(packet['script']),'diagnose_provider_output.py','exec'),scope)
+>> async def run():
+>>     request=scope['AlignRequest'].model_validate_json(base64.b64decode(packet['request']).decode('utf-8-sig'))
+>>     settings=scope['Settings'].from_env()
+>>     async with httpx.AsyncClient(follow_redirects=False) as client:
+>>         report=await scope['diagnose'](request,scope['Provider'](settings,client),settings.timeout)
+>>     print(json.dumps(report,ensure_ascii=False,indent=2))
+>> asyncio.run(run())
+>> '@
+PS D:\GitHub\sana-alignment-release-check>
+PS D:\GitHub\sana-alignment-release-check> $payload | docker compose exec -T -w /app sana python -c $runner
+{
+  "diagnostic_version": "provider-output-1",
+  "application_version": "0.5.3",
+  "run_type": "new_inference",
+  "requested_language": "en",
+  "outcome": "success",
+  "result": {
+    "schema_version": "0.5.0",
+    "request_id": "8e5e4349-c672-4e2c-ba33-3352d6eec5b1",
+    "status": "needs_clarification",
+    "observations": [
+      {
+        "kind": "observed_text",
+        "source": "input_message",
+        "quote": "The demo PC is not connected to the internet. Display entirely fictional customer information in the demo. Do not use real customer data.",
+        "externally_verified": false
+      },
+      {
+        "kind": "observed_text",
+        "source": "input_message",
+        "quote": "The demo PC is not connected to the internet.",
+        "externally_verified": false
+      },
+      {
+        "kind": "observed_text",
+        "source": "input_message",
+        "quote": "Display entirely fictional customer information in the demo.",
+        "externally_verified": false
+      },
+      {
+        "kind": "observed_text",
+        "source": "input_message",
+        "quote": "Do not use real customer data.",
+        "externally_verified": false
+      },
+      {
+        "kind": "observed_text",
+        "source": "ai_interpretation",
+        "quote": "- **Environment:** The demo PC has no internet connectivity; all data must be generated locally.",
+        "externally_verified": false
+      },
+      {
+        "kind": "observed_text",
+        "source": "ai_interpretation",
+        "quote": "- **Data Policy:** Only completely fictional (synthetic) customer information may be shown. No real personal data may be used.",
+        "externally_verified": false
+      },
+      {
+        "kind": "observed_text",
+        "source": "ai_interpretation",
+        "quote": "- The demo interface can accept static data supplied as a file (e.g., CSV, JSON) or hard‑coded structures.",
+        "externally_verified": false
+      },
+      {
+        "kind": "observed_text",
+        "source": "ai_interpretation",
+        "quote": "- The user has access to a basic scripting environment (e.g., Python, PowerShell) or can manually edit a text file.",
+        "externally_verified": false
+      },
+      {
+        "kind": "observed_text",
+        "source": "ai_interpretation",
+        "quote": "- No external libraries that require internet download will be needed; any needed libraries are already installed or can be bundled with the demo.",
+        "externally_verified": false
+      },
+      {
+        "kind": "observed_text",
+        "source": "ai_interpretation",
+        "quote": "- Exact format required by the demo (table layout, fields, file type).",
+        "externally_verified": false
+      },
+      {
+        "kind": "observed_text",
+        "source": "ai_interpretation",
+        "quote": "- Whether the demo UI expects a specific number of records.",
+        "externally_verified": false
+      },
+      {
+        "kind": "observed_text",
+        "source": "ai_interpretation",
+        "quote": "- If there are any style or branding constraints (company logo, color scheme).",
+        "externally_verified": false
+      },
+      {
+        "kind": "observed_text",
+        "source": "ai_interpretation",
+        "quote": "*(If any of these are unclear, ask the user for specifics before proceeding.)*",
+        "externally_verified": false
+      },
+      {
+        "kind": "observed_text",
+        "source": "ai_interpretation",
+        "quote": "- **Names:** Use generic placeholder names (e.g., “John Doe”, “Jane Smith”) or combine randomly selected first‑name and last‑name lists that are known to be fictitious (e.g., “Ada Bright”, “Liam Oak”).",
+        "externally_verified": false
+      },
+      {
+        "kind": "observed_text",
+        "source": "ai_interpretation",
+        "quote": "- **Domains:** Use non‑existent domains such as `example.com`, `demo.test`, `sample.org`.",
+        "externally_verified": false
+      },
+      {
+        "kind": "observed_text",
+        "source": "ai_interpretation",
+        "quote": "- **Addresses:** Construct addresses using generic street names (“123 Main St”, “456 Oak Avenue”) and placeholder city/state combos.",
+        "externally_verified": false
+      },
+      {
+        "kind": "observed_text",
+        "source": "ai_interpretation",
+        "quote": "- **Phone Numbers:** Use the US “555” exchange (e.g., `555‑0123`) or any other reserved test number range.",
+        "externally_verified": false
+      },
+      {
+        "kind": "observed_text",
+        "source": "ai_interpretation",
+        "quote": "- **Option A – Simple Script (Python example):**",
+        "externally_verified": false
+      },
+      {
+        "kind": "observed_text",
+        "source": "ai_interpretation",
+        "quote": "- **Option B – Manual Creation:** Populate a spreadsheet with the same synthetic values and export to CSV/JSON.",
+        "externally_verified": false
+      },
+      {
+        "kind": "observed_text",
+        "source": "ai_interpretation",
+        "quote": "- Verify that every name, email domain, address, and phone number uses the reserved/test patterns listed above.",
+        "externally_verified": false
+      },
+      {
+        "kind": "observed_text",
+        "source": "ai_interpretation",
+        "quote": "- Run a quick grep/search to ensure no real‑world identifiers (e.g., actual company domains) appear.",
+        "externally_verified": false
+      },
+      {
+        "kind": "observed_text",
+        "source": "ai_interpretation",
+        "quote": "- Place the generated file (`demo_customers.json` or `.csv`) in the location expected by the demo application.",
+        "externally_verified": false
+      },
+      {
+        "kind": "observed_text",
+        "source": "ai_interpretation",
+        "quote": "- If the demo reads from a hard‑coded list, replace that list with the generated records.",
+        "externally_verified": false
+      },
+      {
+        "kind": "observed_text",
+        "source": "ai_interpretation",
+        "quote": "- Include a brief README on the demo PC explaining that the data is synthetic, how it was generated, and that it can be regenerated offline if needed.",
+        "externally_verified": false
+      },
+      {
+        "kind": "observed_text",
+        "source": "ai_interpretation",
+        "quote": "- A concise **step‑by‑step guide** (as above) in a text file or markdown.",
+        "externally_verified": false
+      },
+      {
+        "kind": "observed_text",
+        "source": "ai_interpretation",
+        "quote": "- Example **sample output** (e.g., first three fictional customer entries) to illustrate format.",
+        "externally_verified": false
+      },
+      {
+        "kind": "observed_text",
+        "source": "ai_interpretation",
+        "quote": "- Optional **script file** (`generate_demo_customers.py`) ready to run on the offline PC.",
+        "externally_verified": false
+      },
+      {
+        "kind": "observed_text",
+        "source": "ai_interpretation",
+        "quote": "- Confirm the required file format and number of records with the user.",
+        "externally_verified": false
+      },
+      {
+        "kind": "observed_text",
+        "source": "ai_interpretation",
+        "quote": "- Provide the appropriate script/template based on the confirmed format.",
+        "externally_verified": false
+      },
+      {
+        "kind": "observed_text",
+        "source": "ai_interpretation",
+        "quote": "*All steps rely solely on locally available resources and produce only entirely fictional data, satisfying the request and the constraint that no real customer information be used.*",
+        "externally_verified": false
+      }
+    ],
+    "fact": [
+      {
+        "statement": "The demo PC is not connected to the internet.",
+        "source": "user_explicit",
+        "status": "explicit",
+        "support_state": "provided",
+        "materiality": "high",
+        "evidence": [
+          {
+            "source": "input_message",
+            "quote": "The demo PC is not connected to the internet."
+          }
+        ],
+        "externally_verified": false,
+        "execution_effect": null
+      }
+    ],
+    "view": {
+      "premises": [
+        {
+          "statement": "Environment: The demo PC has no internet connectivity; all data must be generated locally.",
+          "source": "provided_source",
+          "status": "explicit",
+          "support_state": "provided",
+          "materiality": "high",
+          "evidence": [
+            {
+              "source": "ai_interpretation",
+              "quote": "- **Environment:** The demo PC has no internet connectivity; all data must be generated locally."
+            }
+          ],
+          "externally_verified": false,
+          "execution_effect": null
+        },
+        {
+          "statement": "Data Policy: Only completely fictional (synthetic) customer information may be shown. No real personal data may be used.",
+          "source": "provided_source",
+          "status": "explicit",
+          "support_state": "provided",
+          "materiality": "high",
+          "evidence": [
+            {
+              "source": "ai_interpretation",
+              "quote": "- **Data Policy:** Only completely fictional (synthetic) customer information may be shown. No real personal data may be used."
+            }
+          ],
+          "externally_verified": false,
+          "execution_effect": null
+        },
+        {
+          "statement": "Assumption: The demo interface can accept static data supplied as a file (e.g., CSV, JSON) or hard‑coded structures.",
+          "source": "provided_source",
+          "status": "explicit",
+          "support_state": "provided",
+          "materiality": "medium",
+          "evidence": [
+            {
+              "source": "ai_interpretation",
+              "quote": "- The demo interface can accept static data supplied as a file (e.g., CSV, JSON) or hard‑coded structures."
+            }
+          ],
+          "externally_verified": false,
+          "execution_effect": null
+        },
+        {
+          "statement": "Assumption: The user has access to a basic scripting environment (e.g., Python, PowerShell) or can manually edit a text file.",
+          "source": "provided_source",
+          "status": "explicit",
+          "support_state": "provided",
+          "materiality": "medium",
+          "evidence": [
+            {
+              "source": "ai_interpretation",
+              "quote": "- The user has access to a basic scripting environment (e.g., Python, PowerShell) or can manually edit a text file."
+            }
+          ],
+          "externally_verified": false,
+          "execution_effect": null
+        },
+        {
+          "statement": "Assumption: No external libraries that require internet download will be needed; any needed libraries are already installed or can be bundled with the demo.",
+          "source": "provided_source",
+          "status": "explicit",
+          "support_state": "provided",
+          "materiality": "medium",
+          "evidence": [
+            {
+              "source": "ai_interpretation",
+              "quote": "- No external libraries that require internet download will be needed; any needed libraries are already installed or can be bundled with the demo."
+            }
+          ],
+          "externally_verified": false,
+          "execution_effect": null
+        },
+        {
+          "statement": "Unclear: Exact format required by the demo (table layout, fields, file type).",
+          "source": "provided_source",
+          "status": "explicit",
+          "support_state": "provided",
+          "materiality": "low",
+          "evidence": [
+            {
+              "source": "ai_interpretation",
+              "quote": "- Exact format required by the demo (table layout, fields, file type)."
+            }
+          ],
+          "externally_verified": false,
+          "execution_effect": null
+        },
+        {
+          "statement": "Unclear: Whether the demo UI expects a specific number of records.",
+          "source": "provided_source",
+          "status": "explicit",
+          "support_state": "provided",
+          "materiality": "low",
+          "evidence": [
+            {
+              "source": "ai_interpretation",
+              "quote": "- Whether the demo UI expects a specific number of records."
+            }
+          ],
+          "externally_verified": false,
+          "execution_effect": null
+        },
+        {
+          "statement": "Unclear: If there are any style or branding constraints (company logo, color scheme).",
+          "source": "provided_source",
+          "status": "explicit",
+          "support_state": "provided",
+          "materiality": "low",
+          "evidence": [
+            {
+              "source": "ai_interpretation",
+              "quote": "- If there are any style or branding constraints (company logo, color scheme)."
+            }
+          ],
+          "externally_verified": false,
+          "execution_effect": null
+        }
+      ],
+      "understanding": "[input_message]\nThe demo PC is not connected to the internet.\n\n[ai_interpretation]\n- **Environment:** The demo PC has no internet connectivity; all data must be generated locally.\n\n[ai_interpretation]\n- **Data Policy:** Only completely fictional (synthetic) customer information may be shown. No real personal data may be used.",
+      "hypotheses": [],
+      "premise_gaps": [
+        {
+          "kind": "missing_premise",
+          "blocks_execution": true,
+          "human_premise": null,
+          "ai_premise": "The demo interface can accept static data supplied as a file (e.g., CSV, JSON) or hard‑coded structures.",
+          "difference": "The AI assumes the demo can ingest static files, which the user did not state; this creates an unknown requirement for the implementation.",
+          "evidence": [
+            {
+              "source": "input_message",
+              "quote": "The demo PC is not connected to the internet. Display entirely fictional customer information in the demo. Do not use real customer data."
+            },
+            {
+              "source": "ai_interpretation",
+              "quote": "- The demo interface can accept static data supplied as a file (e.g., CSV, JSON) or hard‑coded structures."
+            }
+          ],
+          "verification_question": null
+        },
+        {
+          "kind": "missing_premise",
+          "blocks_execution": true,
+          "human_premise": null,
+          "ai_premise": "The user has access to a basic scripting environment (e.g., Python, PowerShell) or can manually edit a text file.",
+          "difference": "The AI presumes a scripting environment is available, which the user has not confirmed.",
+          "evidence": [
+            {
+              "source": "input_message",
+              "quote": "The demo PC is not connected to the internet. Display entirely fictional customer information in the demo. Do not use real customer data."
+            },
+            {
+              "source": "ai_interpretation",
+              "quote": "- The user has access to a basic scripting environment (e.g., Python, PowerShell) or can manually edit a text file."
+            }
+          ],
+          "verification_question": null
+        }
+      ],
+      "unresolved": [
+        {
+          "statement": "Exact format required by the demo (table layout, fields, file type).",
+          "scope": "alignment",
+          "evidence": [
+            {
+              "source": "ai_interpretation",
+              "quote": "- Exact format required by the demo (table layout, fields, file type)."
+            }
+          ],
+          "question": null
+        },
+        {
+          "statement": "Whether the demo UI expects a specific number of records.",
+          "scope": "alignment",
+          "evidence": [
+            {
+              "source": "ai_interpretation",
+              "quote": "- Whether the demo UI expects a specific number of records."
+            }
+          ],
+          "question": null
+        },
+        {
+          "statement": "If there are any style or branding constraints (company logo, color scheme).",
+          "scope": "alignment",
+          "evidence": [
+            {
+              "source": "ai_interpretation",
+              "quote": "- If there are any style or branding constraints (company logo, color scheme)."
+            }
+          ],
+          "question": null
+        }
+      ],
+      "understanding_evidence": [
+        {
+          "source": "input_message",
+          "quote": "The demo PC is not connected to the internet."
+        },
+        {
+          "source": "ai_interpretation",
+          "quote": "- **Environment:** The demo PC has no internet connectivity; all data must be generated locally."
+        },
+        {
+          "source": "ai_interpretation",
+          "quote": "- **Data Policy:** Only completely fictional (synthetic) customer information may be shown. No real personal data may be used."
+        }
+      ],
+      "unknowns": [
+        "Exact format required by the demo (table layout, fields, file type).",
+        "Whether the demo UI expects a specific number of records.",
+        "If there are any style or branding constraints (company logo, color scheme)."
+      ],
+      "questions": []
+    },
+    "care": [
+      {
+        "statement": "Display entirely fictional customer information in the demo.",
+        "source": "user_explicit",
+        "status": "explicit",
+        "support_state": "not_applicable",
+        "materiality": "high",
+        "evidence": [
+          {
+            "source": "input_message",
+            "quote": "Display entirely fictional customer information in the demo."
+          }
+        ],
+        "externally_verified": false,
+        "execution_effect": null
+      },
+      {
+        "statement": "Do not use real customer data.",
+        "source": "user_explicit",
+        "status": "explicit",
+        "support_state": "not_applicable",
+        "materiality": "high",
+        "evidence": [
+          {
+            "source": "input_message",
+            "quote": "Do not use real customer data."
+          }
+        ],
+        "externally_verified": false,
+        "execution_effect": null
+      },
+      {
+        "statement": "- **Data Policy:** Only completely fictional (synthetic) customer information may be shown. No real personal data may be used.",
+        "source": "provided_source",
+        "status": "explicit",
+        "support_state": "not_applicable",
+        "materiality": "high",
+        "evidence": [
+          {
+            "source": "ai_interpretation",
+            "quote": "- **Data Policy:** Only completely fictional (synthetic) customer information may be shown. No real personal data may be used."
+          }
+        ],
+        "externally_verified": false,
+        "execution_effect": null
+      },
+      {
+        "statement": "- Confirm the required file format and number of records with the user.",
+        "source": "provided_source",
+        "status": "explicit",
+        "support_state": "not_applicable",
+        "materiality": "high",
+        "evidence": [
+          {
+            "source": "ai_interpretation",
+            "quote": "- Confirm the required file format and number of records with the user."
+          }
+        ],
+        "externally_verified": false,
+        "execution_effect": null
+      }
+    ],
+    "acknowledgment": null,
+    "meta": {
+      "requested_language": "en",
+      "short_reply_language": null,
+      "language_fallback": false,
+      "observation_scope": "submitted_material_only",
+      "profile": "workflow-premise-map-v0.5",
+      "understanding_mode": "source_excerpts",
+      "stages_completed": [
+        "extraction",
+        "mapping"
+      ],
+      "frameworks_used": [],
+      "comparison": "provided_ai_interpretation",
+      "delta_v": null,
+      "execution_authorized": false,
+      "knowledge_sha256": "f2b5ba63b58ab92597019e8a59a391bc15b363b1e0c14a32372ee5af4f01990b"
+    }
+  },
+  "last_attempted_stage": "Draft",
+  "completed_stages": [
+    "Extraction",
+    "Draft"
+  ],
+  "evidence_mismatch_count": 0,
+  "evidence_mismatches": [],
+  "provider_validation_errors": []
+}
+PS D:\GitHub\sana-alignment-release-check>
+PS D:\GitHub\sana-alignment-release-check>

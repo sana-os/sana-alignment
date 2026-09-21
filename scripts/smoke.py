@@ -22,7 +22,7 @@ for request, language, acknowledgment in [
     c.request('POST','/v1/align',body=json.dumps(request,ensure_ascii=False).encode('utf-8'),headers={'Content-Type':'application/json'})
     r = c.getresponse(); data = json.loads(r.read()); c.close()
     assert r.status == 200, data
-    assert data['schema_version'] == '0.4.0'
+    assert data['schema_version'] == '0.5.0'
     assert data['status']=='handshake' and data['care'] is None
     assert data['meta']['execution_authorized'] is False
     assert data['meta']['requested_language'] == language

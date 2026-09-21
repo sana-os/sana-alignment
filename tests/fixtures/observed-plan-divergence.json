@@ -1,0 +1,427 @@
+{
+  "schema_version": "0.4.0",
+  "request_id": "55204382-1814-4eec-91ce-4d78e53da747",
+  "status": "mapped_with_divergence",
+  "observations": [
+    {
+      "kind": "observed_text",
+      "source": "input_message",
+      "quote": "HelloThe demo PC is not connected to the internet. Display entirely fictional customer information in the demo. Do not use real customer data.",
+      "externally_verified": false
+    },
+    {
+      "kind": "observed_text",
+      "source": "input_message",
+      "quote": "HelloThe demo PC is not connected to the internet.",
+      "externally_verified": false
+    },
+    {
+      "kind": "observed_text",
+      "source": "input_message",
+      "quote": "Display entirely fictional customer information in the demo.",
+      "externally_verified": false
+    },
+    {
+      "kind": "observed_text",
+      "source": "input_message",
+      "quote": "Do not use real customer data.",
+      "externally_verified": false
+    },
+    {
+      "kind": "observed_text",
+      "source": "ai_interpretation",
+      "quote": "The demo PC has **no internet connection**.",
+      "externally_verified": false
+    },
+    {
+      "kind": "observed_text",
+      "source": "ai_interpretation",
+      "quote": "The requirement is to **display entirely fictional customer information**; **no real customer data** may be used.",
+      "externally_verified": false
+    },
+    {
+      "kind": "observed_text",
+      "source": "ai_interpretation",
+      "quote": "The demo environment has a UI or console where customer records can be shown.",
+      "externally_verified": false
+    },
+    {
+      "kind": "observed_text",
+      "source": "ai_interpretation",
+      "quote": "The format of the customer information (e.g., fields required) is not explicitly defined; typical fields include name, address, phone, email, and account details.",
+      "externally_verified": false
+    },
+    {
+      "kind": "observed_text",
+      "source": "ai_interpretation",
+      "quote": "The user (or developer) can edit or add static data files on the demo PC.",
+      "externally_verified": false
+    },
+    {
+      "kind": "observed_text",
+      "source": "ai_interpretation",
+      "quote": "Exact number of fictional customers to generate.",
+      "externally_verified": false
+    },
+    {
+      "kind": "observed_text",
+      "source": "ai_interpretation",
+      "quote": "Specific fields or data schema needed for the demo.",
+      "externally_verified": false
+    },
+    {
+      "kind": "observed_text",
+      "source": "ai_interpretation",
+      "quote": "Preferred method of data storage (e.g., JSON, CSV, embedded in code).",
+      "externally_verified": false
+    },
+    {
+      "kind": "observed_text",
+      "source": "ai_interpretation",
+      "quote": "Whether the demo should randomize data on each run or keep a fixed dataset.",
+      "externally_verified": false
+    },
+    {
+      "kind": "observed_text",
+      "source": "ai_interpretation",
+      "quote": "List required fields (e.g., `CustomerID`, `FirstName`, `LastName`, `StreetAddress`, `City`, `State`, `ZIP`, `PhoneNumber`, `Email`, `AccountStatus`).",
+      "externally_verified": false
+    },
+    {
+      "kind": "observed_text",
+      "source": "ai_interpretation",
+      "quote": "Manually craft a small set of 5‑10 fictional customer records that conform to the schema.",
+      "externally_verified": false
+    },
+    {
+      "kind": "observed_text",
+      "source": "ai_interpretation",
+      "quote": "Use generic placeholder names (e.g., “John Doe”, “Jane Smith”) and fictitious addresses (e.g., “1234 Elm Street, Anytown, CA 90210”).",
+      "externally_verified": false
+    },
+    {
+      "kind": "observed_text",
+      "source": "ai_interpretation",
+      "quote": "Ensure all contact information follows realistic patterns but does not correspond to any real individual or business.",
+      "externally_verified": false
+    },
+    {
+      "kind": "observed_text",
+      "source": "ai_interpretation",
+      "quote": "Save the data in a file format that the demo application can read without network access (e.g., `customers.json` or `customers.csv`) placed in a known directory on the demo PC.",
+      "externally_verified": false
+    },
+    {
+      "kind": "observed_text",
+      "source": "ai_interpretation",
+      "quote": "Verify file permissions allow the demo application to read the file.",
+      "externally_verified": false
+    },
+    {
+      "kind": "observed_text",
+      "source": "ai_interpretation",
+      "quote": "Add or modify code to load the local file at startup.",
+      "externally_verified": false
+    },
+    {
+      "kind": "observed_text",
+      "source": "ai_interpretation",
+      "quote": "Parse the file according to the defined schema and populate the UI components (tables, lists, detail panels).",
+      "externally_verified": false
+    },
+    {
+      "kind": "observed_text",
+      "source": "ai_interpretation",
+      "quote": "Include error handling for missing or malformed files, defaulting to an empty list if necessary.",
+      "externally_verified": false
+    },
+    {
+      "kind": "observed_text",
+      "source": "ai_interpretation",
+      "quote": "Render the fictional customers in the UI exactly as real data would appear (e.g., sortable table, searchable list).",
+      "externally_verified": false
+    },
+    {
+      "kind": "observed_text",
+      "source": "ai_interpretation",
+      "quote": "Optionally, provide a “Refresh” button that simply re‑reads the static file (no external calls).",
+      "externally_verified": false
+    },
+    {
+      "kind": "observed_text",
+      "source": "ai_interpretation",
+      "quote": "Disconnect the PC from any network to confirm that the demo runs solely on local resources.",
+      "externally_verified": false
+    },
+    {
+      "kind": "observed_text",
+      "source": "ai_interpretation",
+      "quote": "Verify that all displayed information matches the fabricated dataset and that no real data is inadvertently loaded.",
+      "externally_verified": false
+    },
+    {
+      "kind": "observed_text",
+      "source": "ai_interpretation",
+      "quote": "Add a brief note in the demo’s README or comments indicating that the dataset is wholly fictional and intended for demonstration only.",
+      "externally_verified": false
+    },
+    {
+      "kind": "observed_text",
+      "source": "ai_interpretation",
+      "quote": "Mention that the demo does not require internet connectivity.",
+      "externally_verified": false
+    },
+    {
+      "kind": "observed_text",
+      "source": "ai_interpretation",
+      "quote": "Cross‑check each fabricated record to ensure names, addresses, phone numbers, and emails are not traceable to real persons or entities.",
+      "externally_verified": false
+    },
+    {
+      "kind": "observed_text",
+      "source": "ai_interpretation",
+      "quote": "Confirm that the demo code contains no hard‑coded URLs or external API calls.",
+      "externally_verified": false
+    }
+  ],
+  "fact": [
+    {
+      "statement": "The demo PC is not connected to the internet.",
+      "source": "user_explicit",
+      "status": "explicit",
+      "support_state": "provided",
+      "materiality": "high",
+      "evidence": [
+        {
+          "source": "input_message",
+          "quote": "HelloThe demo PC is not connected to the internet."
+        }
+      ],
+      "externally_verified": false,
+      "execution_effect": "The demo must operate without any network connectivity."
+    },
+    {
+      "statement": "Display entirely fictional customer information in the demo.",
+      "source": "user_explicit",
+      "status": "explicit",
+      "support_state": "provided",
+      "materiality": "high",
+      "evidence": [
+        {
+          "source": "input_message",
+          "quote": "Display entirely fictional customer information in the demo."
+        }
+      ],
+      "externally_verified": false,
+      "execution_effect": "The demo will show only fabricated customer records."
+    },
+    {
+      "statement": "Do not use real customer data.",
+      "source": "user_explicit",
+      "status": "explicit",
+      "support_state": "provided",
+      "materiality": "high",
+      "evidence": [
+        {
+          "source": "input_message",
+          "quote": "Do not use real customer data."
+        }
+      ],
+      "externally_verified": false,
+      "execution_effect": "Only synthetic data may be used in the demonstration."
+    }
+  ],
+  "view": {
+    "premises": [
+      {
+        "statement": "Assume the demo environment has a UI or console where customer records can be shown.",
+        "source": "provided_source",
+        "status": "inferred",
+        "support_state": "provided",
+        "materiality": "medium",
+        "evidence": [
+          {
+            "source": "ai_interpretation",
+            "quote": "The demo environment has a UI or console where customer records can be shown."
+          }
+        ],
+        "externally_verified": false,
+        "execution_effect": "UI components will be used to render the fictional customer data."
+      },
+      {
+        "statement": "Assume typical customer fields such as name, address, phone, email, and account details.",
+        "source": "provided_source",
+        "status": "inferred",
+        "support_state": "provided",
+        "materiality": "medium",
+        "evidence": [
+          {
+            "source": "ai_interpretation",
+            "quote": "The format of the customer information (e.g., fields required) is not explicitly defined; typical fields include name, address, phone, email, and account details."
+          }
+        ],
+        "externally_verified": false,
+        "execution_effect": "The data schema will include these common fields."
+      },
+      {
+        "statement": "Assume the developer can edit or add static data files on the demo PC.",
+        "source": "provided_source",
+        "status": "inferred",
+        "support_state": "provided",
+        "materiality": "medium",
+        "evidence": [
+          {
+            "source": "ai_interpretation",
+            "quote": "The user (or developer) can edit or add static data files on the demo PC."
+          }
+        ],
+        "externally_verified": false,
+        "execution_effect": "Static files can be created/modified to hold the fictional records."
+      },
+      {
+        "statement": "Assume the number of fictional customers to generate is not specified.",
+        "source": "provided_source",
+        "status": "inferred",
+        "support_state": "provided",
+        "materiality": "low",
+        "evidence": [
+          {
+            "source": "ai_interpretation",
+            "quote": "Exact number of fictional customers to generate."
+          }
+        ],
+        "externally_verified": false,
+        "execution_effect": "The plan proposes a sample set of 5‑10 records."
+      },
+      {
+        "statement": "Assume the preferred method of data storage (e.g., JSON, CSV, embedded) is not specified.",
+        "source": "provided_source",
+        "status": "inferred",
+        "support_state": "provided",
+        "materiality": "low",
+        "evidence": [
+          {
+            "source": "ai_interpretation",
+            "quote": "Preferred method of data storage (e.g., JSON, CSV, embedded in code)."
+          }
+        ],
+        "externally_verified": false,
+        "execution_effect": "The plan leaves the choice of file format open."
+      },
+      {
+        "statement": "Assume whether the demo should randomize data on each run or keep a fixed dataset is not specified.",
+        "source": "provided_source",
+        "status": "inferred",
+        "support_state": "provided",
+        "materiality": "low",
+        "evidence": [
+          {
+            "source": "ai_interpretation",
+            "quote": "Whether the demo should randomize data on each run or keep a fixed dataset."
+          }
+        ],
+        "externally_verified": false,
+        "execution_effect": "Both static and randomised options are mentioned as possibilities."
+      }
+    ],
+    "understanding": "The user requests an offline demo that shows only synthetic customer information, prohibiting any real personal data. The AI plan outlines steps to define a schema, create a static fictional dataset, store it locally, load it into the UI, and verify offline operation, while noting several unspecified details (number of records, exact fields, storage format, and randomisation).",
+    "hypotheses": [],
+    "premise_gaps": [
+      {
+        "kind": "missing_premise",
+        "blocks_execution": false,
+        "human_premise": "User did not specify the exact number of fictional customers to generate.",
+        "ai_premise": null,
+        "difference": "The request lacks a concrete count of synthetic records; the AI plan assumes a sample size of 5‑10.",
+        "evidence": [
+          {
+            "source": "input_message",
+            "quote": "Display entirely fictional customer information in the demo."
+          }
+        ],
+        "verification_question": null
+      },
+      {
+        "kind": "missing_premise",
+        "blocks_execution": false,
+        "human_premise": "User did not specify which customer fields are required for the demo.",
+        "ai_premise": null,
+        "difference": "The request does not detail the data schema; the AI plan assumes typical fields such as name, address, phone, etc.",
+        "evidence": [
+          {
+            "source": "input_message",
+            "quote": "Display entirely fictional customer information in the demo."
+          }
+        ],
+        "verification_question": null
+      }
+    ],
+    "unresolved": [],
+    "unknowns": [],
+    "questions": []
+  },
+  "care": [
+    {
+      "statement": "The demo must run without an internet connection.",
+      "source": "user_explicit",
+      "status": "explicit",
+      "support_state": "not_applicable",
+      "materiality": "high",
+      "evidence": [
+        {
+          "source": "input_message",
+          "quote": "HelloThe demo PC is not connected to the internet."
+        }
+      ],
+      "externally_verified": false,
+      "execution_effect": null
+    },
+    {
+      "statement": "Only entirely fictional customer information may be displayed.",
+      "source": "user_explicit",
+      "status": "explicit",
+      "support_state": "not_applicable",
+      "materiality": "high",
+      "evidence": [
+        {
+          "source": "input_message",
+          "quote": "Display entirely fictional customer information in the demo."
+        }
+      ],
+      "externally_verified": false,
+      "execution_effect": null
+    },
+    {
+      "statement": "Real customer data must not be used under any circumstances.",
+      "source": "user_explicit",
+      "status": "explicit",
+      "support_state": "not_applicable",
+      "materiality": "high",
+      "evidence": [
+        {
+          "source": "input_message",
+          "quote": "Do not use real customer data."
+        }
+      ],
+      "externally_verified": false,
+      "execution_effect": null
+    }
+  ],
+  "acknowledgment": null,
+  "meta": {
+    "requested_language": "en",
+    "short_reply_language": null,
+    "language_fallback": false,
+    "observation_scope": "submitted_material_only",
+    "profile": "workflow-premise-map-v0.4",
+    "stages_completed": [
+      "extraction",
+      "mapping"
+    ],
+    "frameworks_used": [],
+    "comparison": "provided_ai_interpretation",
+    "delta_v": null,
+    "execution_authorized": false,
+    "knowledge_sha256": "f2b5ba63b58ab92597019e8a59a391bc15b363b1e0c14a32372ee5af4f01990b"
+  }
+}

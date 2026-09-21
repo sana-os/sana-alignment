@@ -1,0 +1,67 @@
+PS D:\GitHub\sana-alignment-release-check> docker compose config --quiet
+PS D:\GitHub\sana-alignment-release-check> if ($LASTEXITCODE -ne 0) { throw 'Compose設定の確認に失敗しました。' }
+PS D:\GitHub\sana-alignment-release-check> Set-Location D:\GitHub\sana-alignment-test
+PS D:\GitHub\sana-alignment-test>
+PS D:\GitHub\sana-alignment-test> docker compose down
+[+] Running 2/2
+ ✔ Container sana-alignment-test-sana-1  Removed                                                                                                                            1.4s
+ ✔ Network sana-alignment-test_default   Removed                                                                                                                            0.4s
+PS D:\GitHub\sana-alignment-test> if ($LASTEXITCODE -ne 0) { throw '旧SANAコンテナの停止に失敗しました。' }
+PS D:\GitHub\sana-alignment-test>
+PS D:\GitHub\sana-alignment-test> Set-Location D:\GitHub\sana-alignment-release-check
+PS D:\GitHub\sana-alignment-release-check>
+PS D:\GitHub\sana-alignment-release-check> docker compose up --build -d
+[+] Building 8.3s (13/13) FINISHED
+ => [internal] load local bake definitions                                                                                                                                  0.0s
+ => => reading from stdin 555B                                                                                                                                              0.0s
+ => [internal] load build definition from Dockerfile                                                                                                                        0.1s
+ => => transferring dockerfile: 550B                                                                                                                                        0.0s
+ => [internal] load metadata for docker.io/library/python:3.12-slim                                                                                                         1.2s
+ => [internal] load .dockerignore                                                                                                                                           0.1s
+ => => transferring context: 100B                                                                                                                                           0.0s
+ => [1/6] FROM docker.io/library/python:3.12-slim@sha256:78387bc3881b8273120a12ebe6c1ab22b018ccc2c9adf565ae1ac9b536e184ea                                                   0.1s
+ => => resolve docker.io/library/python:3.12-slim@sha256:78387bc3881b8273120a12ebe6c1ab22b018ccc2c9adf565ae1ac9b536e184ea                                                   0.1s
+ => [internal] load build context                                                                                                                                           0.2s
+ => => transferring context: 133.26kB                                                                                                                                       0.1s
+ => CACHED [2/6] WORKDIR /app                                                                                                                                               0.0s
+ => [3/6] COPY requirements.txt .                                                                                                                                           0.1s
+ => [4/6] RUN pip install --no-cache-dir -r requirements.txt && useradd --uid 10001 --create-home sana                                                                      4.4s
+ => [5/6] COPY app ./app                                                                                                                                                    0.1s
+ => [6/6] COPY knowledge ./knowledge                                                                                                                                        0.1s
+ => exporting to image                                                                                                                                                      1.5s
+ => => exporting layers                                                                                                                                                     0.8s
+ => => exporting manifest sha256:898dfe4fc953a96f04493734e20620635a6a9763bc55ff151705e47c5e9967d0                                                                           0.0s
+ => => exporting config sha256:26414689dfcd2d37fe7e91d892d52b50f467ca51e7051530785465d72b24cf87                                                                             0.0s
+ => => exporting attestation manifest sha256:b363488c63dbae3dc7d3161c8cf5721f5524d9768164788c22611046913fe747                                                               0.1s
+ => => exporting manifest list sha256:6d8eb903567b2ea4eda053af1367766ff27e469a39df14494d8ea4b407bc810f                                                                      0.0s
+ => => naming to docker.io/library/sana-alignment:0.4.2                                                                                                                     0.0s
+ => => unpacking to docker.io/library/sana-alignment:0.4.2                                                                                                                  0.4s
+ => resolving provenance for metadata file                                                                                                                                  0.0s
+[+] Running 3/3
+ ✔ sana-alignment:0.4.2                           Built                                                                                                                     0.0s
+ ✔ Network sana-alignment-release-check_default   Created                                                                                                                   0.0s
+ ✔ Container sana-alignment-release-check-sana-1  Started                                                                                                                   0.6s
+PS D:\GitHub\sana-alignment-release-check> if ($LASTEXITCODE -ne 0) { throw '公開版のビルドまたは起動に失敗しました。' }
+PS D:\GitHub\sana-alignment-release-check>
+PS D:\GitHub\sana-alignment-release-check> docker compose ps
+NAME                                  IMAGE                  COMMAND                   SERVICE   CREATED        STATUS                                     PORTS
+sana-alignment-release-check-sana-1   sana-alignment:0.4.2   "uvicorn app.main:ap…"   sana      1 second ago   Up Less than a second (health: starting)   127.0.0.1:8000->8000/tcp
+PS D:\GitHub\sana-alignment-release-check> curl.exe --max-time 10 http://localhost:8000/healthz
+curl: (52) Empty reply from server
+PS D:\GitHub\sana-alignment-release-check> (Invoke-RestMethod -Uri 'http://localhost:8000/openapi.json' -TimeoutSec 10).info.version
+0.4.2
+PS D:\GitHub\sana-alignment-release-check>
+PS D:\GitHub\sana-alignment-release-check> curl.exe --max-time 10 `
+>>     http://localhost:8000/v1/align `
+>>     -H "Content-Type: application/json" `
+>>     --data-binary "@examples/hello.en.json"
+{"schema_version":"0.4.0","request_id":"30f509a0-1a09-4484-9147-85c67925e74e","status":"handshake","observations":[{"kind":"observed_text","source":"input_message","quote":"Hello","externally_verified":false}],"fact":[],"view":{"premises":[],"understanding":"Received as a greeting.","hypotheses":[],"premise_gaps":[],"unresolved":[],"unknowns":[],"questions":[]},"care":null,"acknowledgment":"Hello.","meta":{"requested_language":"en","short_reply_language":"en","language_fallback":false,"observation_scope":"submitted_material_only","profile":"workflow-premise-map-v0.4","stages_completed":[],"frameworks_used":[],"comparison":"not_applicable","delta_v":null,"execution_authorized":false,"knowledge_sha256":"f2b5ba63b58ab92597019e8a59a391bc15b363b1e0c14a32372ee5af4f01990b"}}
+PS D:\GitHub\sana-alignment-release-check>
+PS D:\GitHub\sana-alignment-release-check> curl.exe --max-time 620 `
+>>     http://localhost:8000/v1/align `
+>>     -H "Content-Type: application/json" `
+>>     --data-binary "@examples/align.en.json"
+{"schema_version":"0.4.0","request_id":"154ee32c-b6ac-4d3e-b246-3005d9126b7d","status":"revision_required","observations":[{"kind":"observed_text","source":"input_message","quote":"Show customer information in next week's demo. Do not use real customer data.","externally_verified":false},{"kind":"observed_text","source":"ai_interpretation","quote":"Connect to the production customer database in read-only mode and display a list.","externally_verified":false}],"fact":[],"view":{"premises":[],"understanding":"The user requests a demo showing customer information but explicitly prohibits the use of real customer data. The AI interpretation proposes connecting to the production customer database, which would provide real data, creating a direct conflict with the user's constraint.","hypotheses":[],"premise_gaps":[{"kind":"constraint_conflict","blocks_execution":true,"human_premise":"Do not use real customer data.","ai_premise":"Connect to the production customer database in read-only mode and display a list.","difference":"The AI proposal would retrieve and display actual customer records from the production database, which violates the user's explicit constraint that no real customer data may be used in the demo.","evidence":[{"source":"input_message","quote":"Show customer information in next week's demo. Do not use real customer data."},{"source":"ai_interpretation","quote":"Connect to the production customer database in read-only mode and display a list."}],"verification_question":null}],"unresolved":[],"unknowns":[],"questions":[]},"care":[{"statement":"Show customer information in next week's demo.","source":"user_explicit","status":"explicit","support_state":"not_applicable","materiality":"high","evidence":[{"source":"input_message","quote":"Show customer information in next week's demo. Do not use real customer data."}],"externally_verified":false,"execution_effect":null},{"statement":"Do not use real customer data.","source":"user_explicit","status":"explicit","support_state":"not_applicable","materiality":"high","evidence":[{"source":"input_message","quote":"Show customer information in next week's demo. Do not use real customer data."}],"externally_verified":false,"execution_effect":null}],"acknowledgment":null,"meta":{"requested_language":"en","short_reply_language":null,"language_fallback":false,"observation_scope":"submitted_material_only","profile":"workflow-premise-map-v0.4","stages_completed":["extraction","mapping"],"frameworks_used":[],"comparison":"provided_ai_interpretation","delta_v":null,"execution_authorized":false,"knowledge_sha256":"f2b5ba63b58ab92597019e8a59a391bc15b363b1e0c14a32372ee5af4f01990b"}}
+PS D:\GitHub\sana-alignment-release-check>
+PS D:\GitHub\sana-alignment-release-check>
+PS D:\GitHub\sana-alignment-release-check>

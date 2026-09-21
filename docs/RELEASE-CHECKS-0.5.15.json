@@ -1,0 +1,57 @@
+{
+  "application_version": "0.5.15",
+  "response_schema_version": "0.5.0",
+  "scope": "Local publication preparation; no additional live model inference, Docker or Dify import performed.",
+  "tests": {
+    "command": "python -m pytest tests -q --tb=short",
+    "dependencies": "requirements-dev.lock",
+    "passed": 388,
+    "failed": 0,
+    "warnings": 2,
+    "seconds": 3.52,
+    "warnings_summary": [
+      "Starlette TestClient/httpx deprecation",
+      "anyio BlockingPortal alias deprecation"
+    ]
+  },
+  "earlier_local_checks": [
+    {
+      "environment": "ad hoc uv --with pytest/fastapi/httpx/pydantic/pyyaml, not the project dependency list",
+      "passed": 327,
+      "failed": 58,
+      "note": "Incomplete ad hoc environment; failures included ImportError. Full initial traceback not retained. This is not the pinned-dependency release verdict."
+    },
+    {
+      "environment": "requirements.txt plus pytest and PyYAML",
+      "passed": 385,
+      "failed": 0,
+      "warnings": 2,
+      "seconds": 4.02
+    }
+  ],
+  "workflows": [
+    {
+      "workflow": "sana-alignment.en.yml",
+      "status_routes": 7,
+      "observed_responses_preserved": 3
+    },
+    {
+      "workflow": "sana-plan-and-align.en.yml",
+      "status_routes": 7,
+      "observed_responses_preserved": 3
+    }
+  ],
+  "archive": {
+    "attachments": 30,
+    "distinct_files": 29
+  },
+  "unverified": [
+    "Current GitHub CI",
+    "Live import of final packaged workflow exports",
+    "Live high-mode behavior",
+    "General model accuracy/success rate",
+    "Exact Dify mode/call counts/timing for final-output-only observations"
+  ],
+  "patch_verification": "The revised publication patch is checked against a reconstructed baseline: the delivered 0.5.15 tree, with the four Dify publication files reported absent removed and docs/DIFY.md replaced by the operator-supplied file. Application and reverse-application are checked, and resulting file bytes are compared with the release tree. Other local files have not been independently read; the operator must run git apply --check on the complete patch before applying it.",
+  "test_log_sha256": "7b4f71864ab93c6be8c70113e81a29e075194740be4aa8e11535d231126a5c66"
+}

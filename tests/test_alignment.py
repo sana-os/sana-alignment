@@ -10,7 +10,8 @@ from app.main import create_app
 from app.models import AlignRequest, Draft, Extraction as Intake
 from app.provider import Provider, ProviderError, Settings
 
-SETTINGS = Settings('https://provider.test/v1', 'test', 'secret-key', '', True, 1)
+# Existing contract tests exercise a single attempt; retry tests opt in separately.
+SETTINGS = Settings('https://provider.test/v1', 'test', 'secret-key', '', True, 1, mapping_retries=0, trace_level='off')
 
 class Stub:
     def __init__(self, *values):
@@ -20,8 +21,8 @@ class Stub:
         self.calls.append((instruction, payload))
         return schema.model_validate(self.values.pop(0))
 
-def intake(kind='substantive', frameworks=None):
-    return {'kind': kind, 'evidence': [], 'frameworks': frameworks or []}
+def intake(kind='substantive', frameworks=None, concerns=()):
+    return {'kind': kind, 'evidence': [dict(source='input_message',quote=text,function='concern') for text in concerns], 'frameworks': frameworks or []}
 
 def draft(**updates):
     unknowns = updates.pop('unknowns', ['具体的な期限'])
@@ -29,7 +30,7 @@ def draft(**updates):
     unresolved = [{'statement':text,'scope':'alignment','question':questions[0] if i == 0 and questions else None} for i,text in enumerate(unknowns)]
     if questions and not unknowns:
         unresolved = [{'statement':'A premise needs clarification.','scope':'alignment','question':questions[0]}]
-    view = dict(understanding='期限の確認が必要です。', hypotheses=[], premise_gaps=[], unresolved=unresolved)
+    view = dict(understanding={'evidence': []}, hypotheses=[], premise_gaps=[], unresolved=unresolved)
     view.update(updates)
     return {'kind':'mapped', 'fact': [], 'view': view, 'care': None}
 
@@ -38,6 +39,13 @@ def model_json(request, value):
     # Mock the model-facing evidence-ID protocol while keeping fixtures readable.
     body = json.loads(request.content)
     payload = json.loads(body['messages'][1]['content'])
+    if '_extraction_index' in payload:
+        refs = payload['_extraction_index']
+        return json.dumps({**value, 'evidence': [
+            {'ref': next((r for r, item in refs.items()
+                          if item == {'source': e['source'], 'quote': e['quote']}), 'missing-reference'),
+             'function': e.get('function', 'unclear')}
+            for e in value['evidence']]}, ensure_ascii=False)
     registry = payload.get('_evidence_index')
     def convert(node):
         if isinstance(node, list):
@@ -45,6 +53,50 @@ def model_json(request, value):
         if isinstance(node, dict):
             result = {}
             for key,item in node.items():
+                if key == 'unresolved' and isinstance(item, list) and registry is not None:
+                    result[key] = []
+                    for entry in item:
+                        converted = convert({k:v for k,v in entry.items() if k != 'scope'})
+                        if entry['scope'] == 'execution':
+                            converted['dependency'] = {'kind': 'execution_detail', 'target_ref': None}
+                        else:
+                            cited = converted.setdefault('evidence', [])
+                            ref = cited[0]['ref'] if cited else next(iter(registry))
+                            if not cited:
+                                cited.append({'ref': ref})
+                            converted['dependency'] = {'kind': 'comparison_assumption', 'target_ref': ref}
+                            if 'them' in registry[ref]['quote']:
+                                converted['dependency'] = {'kind': 'referent', 'target_ref': ref,
+                                                           'referent_span': 'them'}
+                        result[key].append(converted)
+                    continue
+                if key == 'premise_gaps' and isinstance(item, list) and registry is not None:
+                    # Controlled model replies select cited source positions under
+                    # the 0.5.5 wire protocol; engine-only Stub tests are unchanged.
+                    result[key] = []
+                    for gap in item:
+                        converted = convert({k:v for k,v in gap.items() if k != 'difference'})
+                        cited = [e['ref'] for e in converted['evidence']]
+                        human = {'input_message'} | {f'context.{i}' for i,c in enumerate(payload.get('context', [])) if c['speaker'] == 'human'}
+                        for field, allowed in (('human_premise',human), ('ai_premise',{'ai_interpretation'})):
+                            converted[field] = None if gap[field] is None else next((r for r in cited
+                                if r in registry and registry[r]['source'] in allowed), 'missing-reference')
+                        if gap['kind'] == 'missing_premise':
+                            converted['dependency'] = {'kind': 'comparison_assumption',
+                                'target_ref': converted['ai_premise'] or converted['human_premise']}
+                        result[key].append(converted)
+                    continue
+                if key == 'care' and isinstance(item, list) and registry is not None:
+                    result[key] = []
+                    for care in item:
+                        converted = convert(care)
+                        converted['statement'] = next((r for r,v in registry.items()
+                            if v in care['evidence'] and v['quote'] == care['statement']), 'missing-reference')
+                        result[key].append(converted)
+                    continue
+                if key == 'execution_effect' and registry is not None and item is not None:
+                    result[key] = next((r for r,v in registry.items() if v['quote'] == item), 'missing-reference')
+                    continue
                 if key == 'evidence' and registry is not None:
                     result[key] = []
                     for e in item:
@@ -185,7 +237,7 @@ def test_provider_request_separates_data():
     asyncio.run(run())
 
 def premise(**updates):
-    p = {'statement':'納期優先', 'source':'user_explicit', 'status':'explicit', 'support_state':'not_applicable', 'materiality':'high', 'execution_effect':'期限を基準に調整', 'evidence':[{'source':'input_message','quote':'納期優先'}], 'externally_verified':False}
+    p = {'statement':'納期優先', 'source':'user_explicit', 'status':'explicit', 'support_state':'not_applicable', 'materiality':'high', 'execution_effect':None, 'evidence':[{'source':'input_message','quote':'納期優先'}], 'externally_verified':False}
     p.update(updates)
     return p
 
@@ -196,7 +248,7 @@ def care_premise(**updates):
 
 def test_care_is_interest_not_empathy():
     d = draft(); d['care'] = [care_premise()]
-    r = call({'input_message':'納期優先'}, Stub(intake(), d))
+    r = call({'input_message':'納期優先'}, Stub(intake(concerns=['納期優先']), d))
     assert r.care[0].statement == '納期優先'
     assert r.care[0].support_state == 'not_applicable'
 
@@ -219,7 +271,7 @@ def test_attribution_not_laundered(p):
 @pytest.mark.parametrize('support', ['provided', 'unsupported', 'disputed', 'unknown', 'not_applicable'])
 def test_care_support_contract_through_provider_http(support):
     d = draft(); d['care'] = [care_premise(support_state=support)]
-    replies = [intake(), d]
+    replies = [intake(concerns=['納期優先']), d]
     def respond(request):
         body = json.loads(request.content)
         schema = json.loads(body['messages'][0]['content'].split('Return ONLY a JSON object conforming to this schema:\n', 1)[1])
@@ -247,6 +299,7 @@ def test_care_support_contract_through_provider_http(support):
 def test_preserved_divergence_does_not_require_agreement():
     gap = {'human_premise':'失敗という見方', 'ai_premise':'評価保留', 'difference':'評価は異なるが両論併記が可能', 'evidence':[{'source':'input_message','quote':'失敗'}], 'verification_question':'', 'blocks_execution':False}
     gap['verification_question']='両論を併記する理解で合っていますか。'
+    gap['evidence'].append({'source':'ai_interpretation','quote':'評価保留'})
     d = draft(premise_gaps=[gap],unknowns=[],questions=[])
     r = call({'input_message':'失敗という立場で両論を紹介', 'ai_interpretation':'評価保留で両論を紹介'},Stub(intake(),d))
     assert r.status == 'mapped_with_divergence'
@@ -288,7 +341,7 @@ def test_summary_and_response_status_preserved_for_model():
 def test_default_language_and_unchanged_unicode_over_http():
     with TestClient(create_app(SETTINGS, Stub())) as client:
         result = client.post('/v1/align', json={'input_message': 'こんにちは！'}).json()
-    assert result['schema_version'] == '0.4.0'
+    assert result['schema_version'] == '0.5.0'
     assert result['acknowledgment'] == 'Hello.'
     assert result['meta']['requested_language'] == 'en'
     assert result['observations'][0]['quote'] == 'こんにちは！'
@@ -436,7 +489,10 @@ def test_attribution_errors_locate_violation_without_returning_text(group, p, pa
         d[group] = [{k:v for k,v in p.items() if k != 'execution_effect'}] if group == 'care' else [p]
     request = {'input_message':'納期優先', 'ai_interpretation':'納期優先',
                'context':[{'speaker':'ai','text':'納期優先'}]}
-    replies = [intake(), d]
+    extracted = intake()
+    if group == 'care':
+        extracted['evidence'] = [{**e,'function':'concern'} for e in p['evidence']]
+    replies = [extracted, d]
     transport = httpx.MockTransport(lambda request: httpx.Response(200,json={
         'choices':[{'finish_reason':'stop','message':{'content':model_json(request, replies.pop(0))}}]}))
     async def run():
@@ -483,7 +539,7 @@ def test_care_effect_is_not_generated_or_silently_removed(effect):
     if effect != 'omitted':
         item['execution_effect'] = effect
     d['care'] = [item]
-    replies = [intake(), d]
+    replies = [intake(concerns=['納期優先']), d]
     def respond(request):
         body = json.loads(request.content)
         schema = json.loads(body['messages'][0]['content'].split('Return ONLY a JSON object conforming to this schema:\n',1)[1])
@@ -491,7 +547,7 @@ def test_care_effect_is_not_generated_or_silently_removed(effect):
             care_schema = schema['$defs']['CareDraft']
             assert 'execution_effect' not in care_schema['properties']
             assert care_schema['additionalProperties'] is False
-            assert 'execution_effect' in schema['$defs']['Premise']['required']
+            assert 'execution_effect' not in schema['$defs']['Premise']['required']
         return httpx.Response(200,json={'choices':[{'finish_reason':'stop','message':{'content':model_json(request, replies.pop(0))}}]})
     async def run():
         async with httpx.AsyncClient(transport=httpx.MockTransport(respond)) as client:
@@ -502,7 +558,7 @@ def test_care_effect_is_not_generated_or_silently_removed(effect):
                     if effect == 'omitted':
                         assert response.status_code == 200
                         value = response.json()
-                        assert value['schema_version'] == '0.4.0'
+                        assert value['schema_version'] == '0.5.0'
                         assert value['care'][0]['execution_effect'] is None
                         assert value['care'][0]['statement'] == item['statement']
                         assert value['care'][0]['evidence'] == item['evidence']
@@ -517,7 +573,7 @@ def test_explicit_replacement_is_preserved_as_a_stated_goal():
     text = 'Use synthetic records for the demo.'
     item = care_premise(statement=text,evidence=[{'source':'input_message','quote':text}])
     d = draft(unknowns=[],questions=[]); d['care'] = [item]
-    result = call({'input_message':text},Stub(intake(),d))
+    result = call({'input_message':text},Stub(intake(concerns=[text]),d))
     assert result.care[0].statement == text
     assert result.care[0].execution_effect is None
     assert result.care[0].source == 'user_explicit'
@@ -541,7 +597,7 @@ def transfer_draft(unresolved=None):
 
 @pytest.mark.parametrize('hint', ['context_insufficient','unclear','handshake'])
 def test_extraction_hint_cannot_discard_supplied_ai_comparison(hint):
-    stub = Stub(intake(hint),transfer_draft())
+    stub = Stub(intake(hint,concerns=['Do not send its contents to an external service.']),transfer_draft())
     response = call(TRANSFER_REQUEST,stub)
     assert response.status == 'revision_required'
     assert response.care[0].statement == 'Do not send its contents to an external service.'
@@ -553,18 +609,18 @@ def test_extraction_hint_cannot_discard_supplied_ai_comparison(hint):
 
 
 def test_extracted_boundary_survives_uncertain_route_without_ai_proposal():
-    e = intake('context_insufficient')
-    e['evidence'] = [{'source':'input_message','quote':'No external transfer.'}]
+    e = intake('context_insufficient',concerns=['No external transfer.'])
+    quotes = [{k:v for k,v in item.items() if k != 'function'} for item in e['evidence']]
     d = draft(unknowns=['Which document is meant?'], questions=[])
     d['kind'] = 'context_insufficient'
-    d['care'] = [care_premise(statement='No external transfer.', evidence=e['evidence'])]
+    d['care'] = [care_premise(statement='No external transfer.', evidence=quotes)]
     stub = Stub(e,d)
     response = call({'input_message':'Use that document. No external transfer.'},stub)
     assert response.status == 'needs_clarification'
     assert response.care[0].statement == 'No external transfer.'
     assert len(stub.calls) == 2
     payload = stub.calls[1][1]
-    assert [payload['_evidence_index'][ref] for ref in payload['extracted_statements']] == e['evidence']
+    assert [payload['_evidence_index'][ref] for ref in payload['extracted_statements']] == quotes
 
 
 def test_execution_only_unknown_does_not_block_or_ask():
@@ -579,7 +635,7 @@ def test_execution_only_unknown_does_not_block_or_ask():
 def test_known_conflict_and_separate_alignment_unknown_are_both_preserved():
     issue = {'statement':'A separate redaction instruction has an unclear scope.',
              'scope':'alignment','question':'Which section is covered by the separate redaction instruction?'}
-    r = call(TRANSFER_REQUEST,Stub(intake(),transfer_draft([issue])))
+    r = call(TRANSFER_REQUEST,Stub(intake(concerns=['Do not send its contents to an external service.']),transfer_draft([issue])))
     assert r.status == 'revision_required'
     assert r.view.unknowns == [issue['statement']]
     assert r.view.questions == [issue['question']]
@@ -616,7 +672,8 @@ def test_mapping_can_report_no_interpretable_premises(kind,status):
 def test_mapping_rejects_invalid_evidence_reference(invalid):
     d = draft(unknowns=[]); d['care'] = [care_premise()]
     d['care'][0]['evidence'] = [invalid]
-    payload = {'input_message':'納期優先','_evidence_index':{'q0':{'source':'input_message','quote':'納期優先'}}}
+    d['care'][0]['statement'] = 'q0'
+    payload = {'input_message':'納期優先','_care_evidence_refs':['q0'], '_evidence_index':{'q0':{'source':'input_message','quote':'納期優先'}}}
     async def run():
         transport = httpx.MockTransport(lambda r:httpx.Response(200,json={'choices':[{'finish_reason':'stop','message':{'content':json.dumps(d)}}]}))
         async with httpx.AsyncClient(transport=transport) as client:
@@ -629,7 +686,8 @@ def test_http_two_stages_resolve_original_quotes_and_keep_partial_unknown():
     request = TRANSFER_REQUEST
     quotes = [{'source':'input_message','quote':'Do not send its contents to an external service.'},
               {'source':'ai_interpretation','quote':request['ai_interpretation']}]
-    extracted = intake('context_insufficient'); extracted['evidence'] = quotes
+    extracted = intake('context_insufficient'); extracted['evidence'] = [
+        {**quote,'function':'concern' if quote['source'] == 'input_message' else 'proposal'} for quote in quotes]
     d = transfer_draft([{'statement':'Document contents are not provided.','scope':'execution','question':None}])
     replies = [extracted,d]
     def respond(req):
@@ -709,7 +767,7 @@ def test_observed_japanese_empty_gap_fails_http_without_silent_removal():
             schema = json.loads(body['messages'][0]['content'].split('Return ONLY a JSON object conforming to this schema:\n',1)[1])
             branches = schema['$defs']['Gap']['anyOf']
             assert {b['required'][0] for b in branches} == {'human_premise','ai_premise'}
-            assert all(b['properties'][b['required'][0]] == {'type':'string','pattern':r'\S'} for b in branches)
+            assert all(b['properties'][b['required'][0]]['enum'] for b in branches)
         return httpx.Response(200,json={'choices':[{'finish_reason':'stop','message':{'content':model_json(req,replies.pop(0))}}]})
     async def run():
         async with httpx.AsyncClient(transport=httpx.MockTransport(respond)) as client:

@@ -1,0 +1,16 @@
+{
+  "request_id": "e7374678-5335-4858-bbe8-553ab4e09369",
+  "application_version": "0.5.1",
+  "fixture_kind": "selected exact output excerpts and the omitted input clause; internal extraction was not supplied",
+  "request_fixture": "examples/quality/offline.ja.json",
+  "status": "mapped",
+  "care_statements": ["実在の顧客データは使用しないでください。"],
+  "omitted_goal_from_input": "完全に架空の顧客情報を表示してください。",
+  "contrast_request_id": "f634a32e-53c2-4052-816e-4c192eb30ea4",
+  "contrast_request_fixture": "examples/quality/no-internet.ja.json",
+  "contrast_care_statements": [
+    "デモ用のPCをインターネットに接続しないでください。",
+    "デモで完全に架空の顧客情報を表示してください。",
+    "実在の顧客データは使用しないでください。"
+  ]
+}

@@ -1,0 +1,11 @@
+{
+  "request_id": "9fe8f19d-a4a0-4ae6-80fc-ef957e04b8fa",
+  "application_version": "0.4.4",
+  "fixture_kind": "selected exact response excerpts, not the full response",
+  "request_fixture": "examples/quality/offline.en.json",
+  "execution_effects": [
+    "Fictional customer records will be shown on the demo PC, generated locally, with no real customer data or internet usage.",
+    "The system does not have defined columns or a target number of fictional records to create."
+  ],
+  "understanding": "The AI interprets the request as a directive to show entirely fictional customer data on the offline demo PC, using only local resources and explicitly avoiding any real customer data or internet access. It also notes that the request does not specify which data fields are needed nor how many records should be generated."
+}

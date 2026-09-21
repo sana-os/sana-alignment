@@ -1,0 +1,5 @@
+{
+  "input_message": "The demo PC is not connected to the internet. Display entirely fictional customer information in the demo. Do not use real customer data.",
+  "ai_interpretation": "Disconnect the PC from every network, including the LAN, and display 20 fictional customer records. Assume permission to modify local files. The user did not specify a record count or LAN policy.",
+  "language": "en"
+}

@@ -1,10 +1,35 @@
-# SANA Premise Alignment API — 0.4.2 prototype
+# SANA Premise Alignment API — 0.5.15 prototype
+
+0.5.15 makes correction feedback concrete with the affected reference IDs and
+existing dependency forms. Validation, modes and deadlines are unchanged. One
+normal-HTTP medium run recovered after one correction, and both Dify workflows
+have operator-reported successful runs. See [release notes](docs/RELEASE-0.5.15.md),
+[known limitations](docs/KNOWN-LIMITATIONS.md), and the
+[development evidence archive](docs/validation/README.md), including failed runs.
+
+
+0.5.14 adds low/medium/high processing allowances and bounded local traces for normal
+API and Dify requests. All modes use the same validation. A passing result ends early;
+more calls do not guarantee greater semantic accuracy. See [modes, traces and corrections](docs/PROCESSING-MODES.md)
+and [the update and verification record](docs/QUALITY-0.5.14.md).
+
+
+0.5.2 distinguishes explicit action requests from tentative proposals during extraction.
+Both requests and stated concerns can anchor Care. See [the request classification update](docs/QUALITY-0.5.2.md).
+
+Upgrading from 0.5.0? See [the Care boundary update](docs/QUALITY-0.5.1.md).
+Care now selects original concern clauses; a reported state cannot become a newly worded
+requirement in that field. Response schema remains 0.5.0; the 0.5 Dify parser is unchanged.
+
+Upgrading from 0.4.x? Read [the 0.5 migration guide](docs/MIGRATION-0.5.md).
+Effects may now be null; the overview uses attributed source excerpts. Existing Dify apps
+need the updated Parse response code before using schema 0.5.0.
 
 **Powered by [SANA OS](https://sana-os.org/)**
 
 Surface the premises behind human input and an AI's proposed interpretation before execution.
 The API returns **Fact / View / Care**, quoted evidence, uncertainties, and differences.
-It is a stateless Interpreter: the caller retains responsibility for execution and its rules.
+It carries no conversation state between inference requests; bounded local operational traces are retained by default. The caller retains responsibility for execution and its rules.
 
 English is the default for documentation and generated responses. Inputs and outputs use UTF-8;
 set `language` to request another response language. Evidence stays in its original language.
@@ -37,8 +62,8 @@ docker compose up --build -d
 Or build and run directly:
 
 ```bash
-docker build -t sana-alignment:0.4.2 .
-docker run --rm --name sana-alignment --env-file .env -p 127.0.0.1:8000:8000 sana-alignment:0.4.2
+docker build -t sana-alignment:0.5.15 .
+docker run --rm --name sana-alignment --env-file .env -p 127.0.0.1:8000:8000 sana-alignment:0.5.15
 ```
 
 Open [interactive API documentation](http://localhost:8000/docs).
@@ -77,14 +102,19 @@ The service never performs the submitted task.
 
 ## Two-stage processing
 
-1. **Extract** explicit statements as exact source quotations, without classifying them as
-   Fact, View, or Care. A quotation records what was said, not that it is true.
+1. **Extract** exact clauses with a provisional communicative function: state, request, concern,
+   proposal, other, or unclear. This is narrower than full Fact/View/Care mapping.
+   A quotation records what was said, not that it is true.
 2. **Map** their roles and compare premises using the original request and extracted quotations.
    This stage selects evidence IDs; the server restores the exact source and quote in the response.
 
 The extraction stage's `kind` is a hint, not a gate that can discard a supplied AI comparison,
 context, or extracted statements. Whole-source references remain available to the mapping stage
-so an extraction omission does not remove the original evidence. The public API still returns
+so an extraction omission does not remove the original evidence. Care statements, however,
+must select a clause explicitly labelled request or concern during extraction, with matching evidence.
+Whole-source availability alone cannot supply a Care anchor. A missed or mislabelled concern
+can therefore be omitted; extraction recall and classification require live evaluation.
+The public API still returns
 `source` and `quote`; the internal IDs are not a new client requirement.
 
 Unknowns have a scope. Missing document contents can matter for executing a summary, while an
@@ -104,7 +134,7 @@ Scope and meaning still require evaluation with the chosen model.
 | `language: "ja"` | Generate Japanese prose |
 | Other tags, e.g. `en-GB`, `pt-BR`, `zh-Hant`, `ar` | Request that language; substantive analysis depends on the model |
 | JSON field names, status values, identifiers | Stable English machine-readable identifiers |
-| `evidence[].quote`, `observations[].quote` | Exact source text, never translated |
+| `evidence[].quote`, `observations[].quote`, `care[].statement` | Exact source text, never translated |
 | Character encoding | UTF-8 throughout; no additional character-set packs required |
 
 The tag validator accepts common language/script/region forms and normalizes their casing.
@@ -126,7 +156,7 @@ Translations have not undergone independent native-speaker review.
 | `observations` | Received text and exact supporting quotations with source IDs |
 | `fact` | Factual claims in the task, not independently verified truths |
 | `view.premises` | Interpretations, evaluations, and framings in submitted material |
-| `view.understanding` | The engine's tentative reading |
+| `view.understanding` | Source-labelled original excerpts, or a localized short reply; see `meta.understanding_mode` |
 | `view.hypotheses` | Engine interpretation hypotheses when no AI proposal was supplied; empty in comparison mode |
 | `view.premise_gaps` | Differences between human input and the supplied AI interpretation |
 | `view.unresolved` | Local unknowns, each with `alignment` or `execution` scope and an optional question |
@@ -140,12 +170,25 @@ These are model instructions; schema validation cannot prove semantic classifica
 
 Premises carry `source`, `status`, `support_state`, `materiality`, and `evidence`.
 Care reports `execution_effect: null` (not assessed); the model does not generate this field
-for Care. Goals and constraints remain in `statement`. Effects on proposed execution and conflicts
-belong in View. Fact/View premise effects remain text. A negative constraint does not authorize
+for Care. Its `statement` is an exact extracted concern clause in its original language.
+The mapping stage cannot paraphrase it into a new obligation or add a motive. This checks
+provenance and wording, not whether the extractor's function label is semantically correct.
+Effects on proposed execution and conflicts
+belong in View. Fact/View premise effects default to null; non-null values are exact evidence
+quotes in their source language. They are not new predictions. A negative constraint does not authorize
 a replacement method. Explicitly requested alternatives remain preserved as stated requirements.
 `externally_verified` is always false. Care uses `support_state: "not_applicable"` because a value
 is not a factual claim requiring proof. Source IDs are `input_message`, `ai_interpretation`, and
 `context.N`. Exact quote matching checks provenance, not logical support or truth.
+
+For Fact/View, `support_state` assesses the statement at its stated scope within
+submitted material. `provided` means that material supplies a basis; `unsupported`
+means the assertion exceeds that basis; `disputed` requires an explicit contest in
+the material; `unknown` leaves support undetermined; `not_applicable` represents a
+goal/value/requirement rather than a factual assessment. A supported report that a
+plan assumes a capability does not establish the capability itself. AI origin or
+`externally_verified: false` alone does not imply `unsupported`. These are model
+judgments, not semantic guarantees enforced by exact quote matching.
 
 ## Status and downstream workflows
 
@@ -218,16 +261,29 @@ Lenses organize provisional interpretations; they are not calibrated numeric dia
 
 The provider must implement `/chat/completions`, `messages`, and `choices[0].message.content`.
 Set `LLM_JSON_MODE=false` if it does not support `response_format: {"type":"json_object"}`;
-response schema validation still applies. Extraction followed by mapping uses two LLM calls.
+response schema validation still applies. Extraction followed by mapping normally uses two LLM calls.
 Deterministic standalone greetings use none; an extraction-only short route uses one.
 `meta.stages_completed` reports `[]`, `["extraction"]`, or `["extraction", "mapping"]` on success.
-No automatic retries are performed. Staging does not itself guarantee lower latency or better accuracy.
+Since 0.5.12, `SANA_MAPPING_RETRIES=1` (default) allows one additional mapping call
+after an output-contract failure. Accepted extraction and original sources are reused;
+the complete regenerated mapping must pass the same validation. No target status is
+requested. Set `SANA_MAPPING_RETRIES=0` to disable it. Extraction failures, transport
+errors, rate limits, refusals, incomplete responses and timeouts are not retried.
+Staging or regeneration does not itself guarantee lower latency or better accuracy.
 The model must accommodate the Core, selected lenses, request, and output schema.
 
 For a model server on another computer, use that computer's reachable address in `LLM_BASE_URL`.
 For a server on the Docker Desktop host, `host.docker.internal` is the host name provided by Docker.
 A container's `localhost` refers to the container itself.
 `LLM_TIMEOUT_SECONDS` accepts 1–300 per model call; the total request budget is twice that plus five seconds.
+This total budget is unchanged by retries: at most three model calls share it. A retry
+may be cancelled when that budget expires. API response schema_version remains 0.5.0;
+per-attempt errors, durations and candidate reviews are available in diagnostic v11,
+not added to the public response. See [0.5.12 verification notes](docs/QUALITY-0.5.12.md).
+In 0.5.13, goal-meaning, constraint-scope and comparison-assumption dependencies
+must target an affected premise, not an extracted open topic alone. Genuine
+authority and referent unknowns remain possible alignment issues. See
+[0.5.13 routing checks and limits](docs/QUALITY-0.5.13.md).
 
 | HTTP code | Meaning |
 | --- | --- |
@@ -251,7 +307,7 @@ field path/rule. It does not establish whether nonempty positions or their diffe
 was supplied. The model-visible schema also sets `maxItems: 0` for that request. Comparison
 uncertainties belong in gaps or unresolved items, not a third proposed plan. This structural check
 does not detect arbitrary invented content in other fields; all prose still needs live evaluation.
-Version 0.4.2 keeps response `schema_version: "0.4.0"` and the v0.4 profile; the response fields are unchanged.
+Version 0.5.0 uses response `schema_version: "0.5.0"` and the v0.5 profile; see [migration details](docs/MIGRATION-0.5.md) for nullable quoted effects and extractive overviews.
 A connection failure never becomes a semantic `unknown` response.
 
 ## Development and release status
@@ -270,10 +326,13 @@ See [validation](docs/VALIDATION.md), [live acceptance cases](docs/ACCEPTANCE.md
 [design](docs/DESIGN.md), and [migration from 0.3.0](docs/MIGRATION-0.4.md).
 Tests with mocked providers verify contracts, not the chosen model's understanding.
 The GitHub Actions workflow includes a Docker smoke test; a configured workflow is not evidence
-that CI or live inference has passed. Version 0.4 remains a prototype pending live evaluation.
+that current GitHub CI has passed. Version 0.5.15 remains a prototype with bounded
+live evidence; see the release notes for the precise verification scope.
 
 There is no external fact lookup, RAG, downstream execution, persistent learning, or calibrated Δv.
-The application does not log request bodies or API keys; your provider receives submitted content.
+Metadata tracing is enabled by default; opt-in detail tracing can retain submitted
+content and generated candidates locally. API keys are excluded from these traces.
+Your provider receives submitted content. See the processing-mode guide for retention.
 The bundled configuration is for local use. Public service operation needs its own authentication,
 TLS, quotas, and deployment controls.
 
